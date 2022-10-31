@@ -1,0 +1,20 @@
+# https://cwiki.apache.org/confluence/display/INFRA/.asf.yaml+features+for+git+repositories
+
+github:
+  description: "Asynchronously writes journal and snapshot entries to configured JDBC databases so that Apache Pekko Actors can recover state"
+  homepage: https://pekko.apache.org/
+  labels:
+    - pekko
+    - pekko-persistence
+    - scala
+    - slick
+    - journal
+    - persistence-query
+  
+  features:
+    # Enable wiki for documentation
+    wiki: false
+    # Enable issue management
+    issues: true
+    # Enable projects for project management boards
+    projects: false

@@ -31,7 +31,6 @@ object AkkaSerialization {
 
   def fromRow(serialization: Serialization)(row: JournalAkkaSerializationRow): Try[(PersistentRepr, Long)] = {
     serialization.deserialize(row.eventPayload, row.eventSerId, row.eventSerManifest).flatMap { payload =>
-
       val metadata = for {
         mPayload <- row.metaPayload
         mSerId <- row.metaSerId

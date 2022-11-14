@@ -173,7 +173,6 @@ abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(c
     val journalOps = new ScalaJdbcReadJournalOperations(system)
     val testStartTime = System.currentTimeMillis()
     withTestActors(replyToMessages = true) { (actor1, actor2, actor3) =>
-
       (actor1 ? withTags(1, "number")).futureValue
       (actor2 ? withTags(2, "number")).futureValue
       (actor3 ? withTags(3, "number")).futureValue

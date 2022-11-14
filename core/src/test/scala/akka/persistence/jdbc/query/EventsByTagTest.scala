@@ -127,7 +127,6 @@ abstract class EventsByTagTest(config: String) extends QueryTestSpec(config, con
     val testStartTime = System.currentTimeMillis()
     val journalOps = new ScalaJdbcReadJournalOperations(system)
     withTestActors(replyToMessages = true) { (actor1, actor2, actor3) =>
-
       (actor1 ? withTags(1, "number")).futureValue
       (actor2 ? withTags(2, "number")).futureValue
       (actor3 ? withTags(3, "number")).futureValue

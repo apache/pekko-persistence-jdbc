@@ -66,7 +66,7 @@ class DefaultSlickDatabaseProvider(system: ActorSystem) extends SlickDatabasePro
       case (key, notAnObject) =>
         throw new RuntimeException(
           s"""Expected "akka-persistence-jdbc.shared-databases.$key" to be a config ConfigObject, but got ${notAnObject
-            .valueType()} (${notAnObject.getClass})""")
+              .valueType()} (${notAnObject.getClass})""")
     }
     .toMap
 

@@ -105,15 +105,15 @@ class DefaultSnapshotDao(
       .map(_ => ())(ExecutionContexts.parasitic)
 
   override def deleteAllSnapshots(persistenceId: String): Future[Unit] =
-    db.run(queries.selectAll(persistenceId).delete).map(_ => ())((ExecutionContexts.parasitic))
+    db.run(queries.selectAll(persistenceId).delete).map(_ => ())(ExecutionContexts.parasitic)
 
   override def deleteUpToMaxSequenceNr(persistenceId: String, maxSequenceNr: Long): Future[Unit] =
     db.run(queries.selectByPersistenceIdUpToMaxSequenceNr((persistenceId, maxSequenceNr)).delete)
-      .map(_ => ())((ExecutionContexts.parasitic))
+      .map(_ => ())(ExecutionContexts.parasitic)
 
   override def deleteUpToMaxTimestamp(persistenceId: String, maxTimestamp: Long): Future[Unit] =
     db.run(queries.selectByPersistenceIdUpToMaxTimestamp((persistenceId, maxTimestamp)).delete)
-      .map(_ => ())((ExecutionContexts.parasitic))
+      .map(_ => ())(ExecutionContexts.parasitic)
 
   override def deleteUpToMaxSequenceNrAndMaxTimestamp(
       persistenceId: String,
@@ -123,5 +123,5 @@ class DefaultSnapshotDao(
       queries
         .selectByPersistenceIdUpToMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
         .delete)
-      .map(_ => ())((ExecutionContexts.parasitic))
+      .map(_ => ())(ExecutionContexts.parasitic)
 }

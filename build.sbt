@@ -21,8 +21,7 @@ lazy val core = project
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
     // temporarily disable mima checks
-    mimaPreviousArtifacts := Set.empty
-  )
+    mimaPreviousArtifacts := Set.empty)
 
 lazy val migrator = project
   .in(file("migrator"))
@@ -77,8 +76,7 @@ lazy val docs = project
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
   if (dynverGitDescribeOutput.value.hasNoTags)
-    sLog.value.warn(
-      s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v")
+    sLog.value.warn(s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v")
   s
 }
 

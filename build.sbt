@@ -20,9 +20,8 @@ lazy val core = project
     name := "akka-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
-    mimaPreviousArtifacts := Set(
-      organization.value %% name.value % previousStableVersion.value.getOrElse(
-        throw new Error("Unable to determine previous version for MiMa"))))
+    // temporarily disable mima checks
+    mimaPreviousArtifacts := Set.empty)
 
 lazy val migrator = project
   .in(file("migrator"))
@@ -77,8 +76,7 @@ lazy val docs = project
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
   if (dynverGitDescribeOutput.value.hasNoTags)
-    throw new MessageOnlyException(
-      s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v")
+    sLog.value.warn(s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v")
   s
 }
 

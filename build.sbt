@@ -9,6 +9,7 @@ lazy val `akka-persistence-jdbc` = project
   .disablePlugins(MimaPlugin, SitePlugin)
   .aggregate(core, docs, migrator)
   .settings(publish / skip := true)
+  .settings(MetaInfLicenseNoticeCopy.settings)
 
 lazy val core = project
   .in(file("core"))
@@ -16,6 +17,7 @@ lazy val core = project
   .disablePlugins(SitePlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
+  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "akka-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
@@ -28,6 +30,7 @@ lazy val migrator = project
   .disablePlugins(SitePlugin, MimaPlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
+  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "akka-persistence-jdbc-migrator",
     libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries,
@@ -38,6 +41,7 @@ lazy val migrator = project
 lazy val docs = project
   .enablePlugins(ProjectAutoPlugin, AkkaParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
   .disablePlugins(MimaPlugin)
+  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "Akka Persistence JDBC",
     publish / skip := true,

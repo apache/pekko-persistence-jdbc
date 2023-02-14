@@ -4,14 +4,14 @@ on:
   pull_request:
   push:
     branches:
-      - master
-      - migration-tool # remove before merging to master
+      - main
+      - migration-tool # remove before merging to main
     tags-ignore: [ v.* ]
 
 jobs:
   test:
     name: Build and Test
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -22,7 +22,7 @@ jobs:
           - { java-version: adopt@1.11.0-9, scala-version: 2.13.8,  sbt-opts: '-J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler' }
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 

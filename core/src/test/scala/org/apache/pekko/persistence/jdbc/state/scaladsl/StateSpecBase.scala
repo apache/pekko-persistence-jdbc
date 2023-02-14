@@ -41,7 +41,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   }
 
   val customSerializers = ConfigFactory.parseString("""
-      akka.actor {
+      pekko.actor {
         serializers {
           my-payload = "org.apache.pekko.persistence.jdbc.state.MyPayloadSerializer"
         }

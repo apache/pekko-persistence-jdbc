@@ -4,14 +4,14 @@ on:
   pull_request:
   push:
     branches:
-      - master
-      - migration-tool # remove before merging to master
+      - main
+      - migration-tool # remove before merging to main
     tags-ignore: [ v.* ]
 
 jobs:
    integration-test:
     name: Integration Tests
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +21,7 @@ jobs:
           
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 

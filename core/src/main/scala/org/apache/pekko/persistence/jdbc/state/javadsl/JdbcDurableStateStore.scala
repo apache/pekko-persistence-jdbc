@@ -33,7 +33,7 @@ object JdbcDurableStateStore {
 class JdbcDurableStateStore[A](
     profile: JdbcProfile,
     durableStateConfig: DurableStateTableConfiguration,
-    scalaStore: org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore[A])(implicit ec: ExecutionContext)
+    scalaStore: ScalaJdbcDurableStateStore[A])(implicit ec: ExecutionContext)
     extends DurableStateUpdateStore[A]
     with DurableStateStoreQuery[A] {
 
@@ -50,6 +50,9 @@ class JdbcDurableStateStore[A](
 
   def deleteObject(persistenceId: String): CompletionStage[Done] =
     toJava(scalaStore.deleteObject(persistenceId))
+
+  def deleteObject(persistenceId: String, revision: Long): CompletionStage[Done] =
+    toJava(scalaStore.deleteObject(persistenceId, revision))
 
   def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] =
     scalaStore.currentChanges(tag, offset).asJava

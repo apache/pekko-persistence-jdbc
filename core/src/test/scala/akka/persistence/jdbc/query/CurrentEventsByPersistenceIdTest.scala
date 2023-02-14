@@ -3,14 +3,14 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.Done
-import akka.persistence.Persistence
-import akka.persistence.jdbc.journal.JdbcAsyncWriteJournal
-import akka.persistence.query.Offset
-import akka.persistence.query.{ EventEnvelope, Sequence }
-import akka.testkit.TestProbe
+import org.apache.pekko.Done
+import org.apache.pekko.persistence.Persistence
+import org.apache.pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal
+import org.apache.pekko.persistence.query.Offset
+import org.apache.pekko.persistence.query.{ EventEnvelope, Sequence }
+import org.apache.pekko.testkit.TestProbe
 
 abstract class CurrentEventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps
@@ -173,7 +173,7 @@ abstract class CurrentEventsByPersistenceIdTest(config: String) extends QueryTes
 
   it should "allow updating events (for data migrations)" in withActorSystem { implicit system =>
     if (newDao)
-      pending // https://github.com/akka/akka-persistence-jdbc/issues/469
+      pending // https://github.com/akka/akka-pekko-persistence-jdbc/issues/469
     val journalOps = new JavaDslJdbcReadJournalOperations(system)
     val journal = Persistence(system).journalFor("")
 

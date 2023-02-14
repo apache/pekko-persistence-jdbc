@@ -3,10 +3,10 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query.dao.legacy
+package org.apache.pekko.persistence.jdbc.query.dao.legacy
 
-import akka.persistence.jdbc.TablesTestSpec
-import akka.persistence.jdbc.journal.dao.legacy.JournalTables
+import org.apache.pekko.persistence.jdbc.TablesTestSpec
+import org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalTables
 import slick.jdbc.JdbcProfile
 
 class ReadJournalTablesTest extends TablesTestSpec {

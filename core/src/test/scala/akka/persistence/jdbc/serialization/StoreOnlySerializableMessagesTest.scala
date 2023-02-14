@@ -3,19 +3,19 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.serialization
+package org.apache.pekko.persistence.jdbc.serialization
 
 import scala.concurrent.duration._
 
-import akka.actor.ActorRef
-import akka.actor.Props
-import akka.event.LoggingReceive
-import akka.persistence.PersistentActor
-import akka.persistence.RecoveryCompleted
-import akka.persistence.jdbc.SharedActorSystemTestSpec
-import akka.persistence.jdbc.testkit.internal.H2
-import akka.persistence.jdbc.testkit.internal.SchemaType
-import akka.testkit.TestProbe
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.Props
+import org.apache.pekko.event.LoggingReceive
+import org.apache.pekko.persistence.PersistentActor
+import org.apache.pekko.persistence.RecoveryCompleted
+import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
+import org.apache.pekko.persistence.jdbc.testkit.internal.H2
+import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaType
+import org.apache.pekko.testkit.TestProbe
 
 abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: SchemaType)
     extends SharedActorSystemTestSpec(config) {

@@ -3,9 +3,9 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc
+package org.apache.pekko.persistence.jdbc
 
-import akka.persistence.jdbc.config._
+import org.apache.pekko.persistence.jdbc.config._
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -15,14 +15,14 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
 
   val config = ConfigFactory
     .parseString("""
-      |akka-persistence-jdbc.slick.db {
+      |pekko-persistence-jdbc.slick.db {
       |  host = <not used>
       |  port = <not used>
       |  name = <not used>
       |}
       |
       |jdbc-journal {
-      |  class = "akka.persistence.jdbc.journal.JdbcAsyncWriteJournal"
+      |  class = "org.apache.pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal"
       |
       |  tables {
       |    journal {
@@ -51,7 +51,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |
       |  serialization = on // alter only when using a custom dao
       |
-      |  dao = "akka.persistence.jdbc.dao.bytea.ByteArrayJournalDao"
+      |  dao = "org.apache.pekko.persistence.jdbc.dao.bytea.ByteArrayJournalDao"
       |
       |  slick {
       |    profile = "slick.jdbc.PostgresProfile"
@@ -62,7 +62,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |      port = ${?POSTGRES_PORT}
       |      name = "docker"
       |
-      |      url = "jdbc:postgresql://"${akka-persistence-jdbc.slick.db.host}":"${akka-persistence-jdbc.slick.db.port}"/"${akka-persistence-jdbc.slick.db.name}
+      |      url = "jdbc:postgresql://"${pekko-persistence-jdbc.slick.db.host}":"${pekko-persistence-jdbc.slick.db.port}"/"${pekko-persistence-jdbc.slick.db.name}
       |      user = "docker"
       |      password = "docker"
       |      driver = "org.postgresql.Driver"
@@ -94,7 +94,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |
       |# the akka-persistence-snapshot-store in use
       |jdbc-snapshot-store {
-      |  class = "akka.persistence.jdbc.snapshot.JdbcSnapshotStore"
+      |  class = "org.apache.pekko.persistence.jdbc.snapshot.JdbcSnapshotStore"
       |
       |  tables {
       |    snapshot {
@@ -111,7 +111,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |
       |  serialization = on // alter only when using a custom dao
       |
-      |  dao = "akka.persistence.jdbc.dao.bytea.ByteArraySnapshotDao"
+      |  dao = "org.apache.pekko.persistence.jdbc.dao.bytea.ByteArraySnapshotDao"
       |
       |  slick {
       |    profile = "slick.jdbc.PostgresProfile"
@@ -122,7 +122,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |      port = ${?POSTGRES_PORT}
       |      name = "docker"
       |
-      |      url = "jdbc:postgresql://"${akka-persistence-jdbc.slick.db.host}":"${akka-persistence-jdbc.slick.db.port}"/"${akka-persistence-jdbc.slick.db.name}
+      |      url = "jdbc:postgresql://"${pekko-persistence-jdbc.slick.db.host}":"${pekko-persistence-jdbc.slick.db.port}"/"${pekko-persistence-jdbc.slick.db.name}
       |      user = "docker"
       |      password = "docker"
       |      driver = "org.postgresql.Driver"
@@ -154,7 +154,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |
       |# the akka-persistence-query provider in use
       |jdbc-read-journal {
-      |  class = "akka.persistence.jdbc.query.JdbcReadJournalProvider"
+      |  class = "org.apache.pekko.persistence.jdbc.query.JdbcReadJournalProvider"
       |
       |  # New events are retrieved (polled) with this interval.
       |  refresh-interval = "1s"
@@ -165,7 +165,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |
       |  serialization = on // alter only when using a custom dao
       |
-      |  dao = "akka.persistence.jdbc.dao.bytea.ByteArrayJournalDao"
+      |  dao = "org.apache.pekko.persistence.jdbc.dao.bytea.ByteArrayJournalDao"
       |
       |  tables {
       |    journal {
@@ -192,7 +192,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |      port = ${?POSTGRES_PORT}
       |      name = "docker"
       |
-      |      url = "jdbc:postgresql://"${akka-persistence-jdbc.slick.db.host}":"${akka-persistence-jdbc.slick.db.port}"/"${akka-persistence-jdbc.slick.db.name}
+      |      url = "jdbc:postgresql://"${pekko-persistence-jdbc.slick.db.host}":"${pekko-persistence-jdbc.slick.db.port}"/"${pekko-persistence-jdbc.slick.db.name}
       |      user = "docker"
       |      password = "docker"
       |      driver = "org.postgresql.Driver"

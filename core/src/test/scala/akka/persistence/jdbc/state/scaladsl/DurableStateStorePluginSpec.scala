@@ -1,13 +1,13 @@
-package akka.persistence.jdbc.state.scaladsl
+package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import com.typesafe.config.{ Config, ConfigFactory }
-import akka.actor._
+import org.apache.pekko.actor._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
-import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
-import akka.persistence.state.DurableStateStoreRegistry
+import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+import org.apache.pekko.persistence.state.DurableStateStoreRegistry
 import slick.jdbc.{ H2Profile, JdbcProfile }
 
 abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)

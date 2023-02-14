@@ -3,10 +3,10 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.persistence.jdbc.query.TaggingEventAdapter.TagEvent
-import akka.persistence.journal.{ Tagged, WriteEventAdapter }
+import org.apache.pekko.persistence.jdbc.query.TaggingEventAdapter.TagEvent
+import org.apache.pekko.persistence.journal.{ Tagged, WriteEventAdapter }
 
 object TaggingEventAdapter {
   case class TagEvent(payload: Any, tags: Set[String])

@@ -3,7 +3,7 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.state.scaladsl
+package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.{ ExecutionContext, Future }

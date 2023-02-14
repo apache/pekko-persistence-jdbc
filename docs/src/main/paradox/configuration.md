@@ -47,7 +47,7 @@ A `dropIfExists` variant is also available.
 
 ## Reference Configuration
 
-akka-persistence-jdbc provides the defaults as part of the @extref:[reference.conf](github:/core/src/main/resources/reference.conf). This file documents all the values which can be configured.
+pekko-persistence-jdbc provides the defaults as part of the @extref:[reference.conf](github:/core/src/main/resources/reference.conf). This file documents all the values which can be configured.
 
 There are several possible ways to configure loading your database connections. Options will be explained below.
 
@@ -102,7 +102,7 @@ needs to be configured in the application.conf. In addition, you might want to c
 the database to be closed automatically:
 
 ```hocon
-akka-persistence-jdbc {
+pekko-persistence-jdbc {
   database-provider-fqcn = "com.mypackage.CustomSlickDatabaseProvider"
 }
 jdbc-journal {
@@ -131,7 +131,7 @@ jdbc-journal {
 When using the `use-shared-db = slick` setting, the follow configuration can serve as an example:
 
 ```hocon
-akka-persistence-jdbc {
+pekko-persistence-jdbc {
   shared-databases {
     slick {
       profile = "slick.jdbc.PostgresProfile$"

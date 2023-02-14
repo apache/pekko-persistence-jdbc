@@ -3,12 +3,12 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.Done
-import akka.persistence.query.{ EventEnvelope, NoOffset, Sequence }
-import akka.pattern.ask
-import akka.persistence.jdbc.query.EventAdapterTest.{ Event, EventRestored, TaggedAsyncEvent, TaggedEvent }
+import org.apache.pekko.Done
+import org.apache.pekko.persistence.query.{ EventEnvelope, NoOffset, Sequence }
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.persistence.jdbc.query.EventAdapterTest.{ Event, EventRestored, TaggedAsyncEvent, TaggedEvent }
 import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 
 import scala.concurrent.duration._

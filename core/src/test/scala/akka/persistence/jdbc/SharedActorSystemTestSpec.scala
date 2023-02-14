@@ -3,15 +3,15 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc
+package org.apache.pekko.persistence.jdbc
 
-import akka.actor.ActorSystem
-import akka.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
-import akka.persistence.jdbc.query.javadsl.JdbcReadJournal
-import akka.persistence.jdbc.util.DropCreate
-import akka.persistence.jdbc.db.SlickExtension
-import akka.serialization.SerializationExtension
-import akka.util.Timeout
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal
+import org.apache.pekko.persistence.jdbc.util.DropCreate
+import org.apache.pekko.persistence.jdbc.db.SlickExtension
+import org.apache.pekko.serialization.SerializationExtension
+import org.apache.pekko.util.Timeout
 import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
 import org.scalatest.BeforeAndAfterAll
 

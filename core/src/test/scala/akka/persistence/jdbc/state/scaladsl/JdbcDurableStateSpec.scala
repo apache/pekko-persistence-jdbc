@@ -3,16 +3,16 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.state.scaladsl
+package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import com.typesafe.config.{ Config, ConfigFactory }
-import akka.actor._
-import akka.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
+import org.apache.pekko.actor._
+import org.apache.pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
 import OffsetSyntax._
-import akka.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
-import akka.persistence.query.UpdatedDurableState
-import akka.persistence.query.{ NoOffset, Offset, Sequence }
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
+import org.apache.pekko.persistence.query.UpdatedDurableState
+import org.apache.pekko.persistence.query.{ NoOffset, Offset, Sequence }
+import org.apache.pekko.stream.scaladsl.Sink
 import org.scalatest.time.Millis
 import org.scalatest.time.Seconds
 import org.scalatest.time.Span

@@ -3,11 +3,11 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.configuration
+package org.apache.pekko.persistence.jdbc.configuration
 
-import akka.actor.ActorSystem
-import akka.persistence.jdbc.SimpleSpec
-import akka.persistence.jdbc.db.SlickExtension
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.persistence.jdbc.SimpleSpec
+import org.apache.pekko.persistence.jdbc.db.SlickExtension
 import com.typesafe.config.ConfigFactory
 
 class JNDIConfigTest extends SimpleSpec {

@@ -3,7 +3,7 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
 abstract class CurrentPersistenceIdsTest(config: String) extends QueryTestSpec(config) {
   it should "not find any persistenceIds for empty journal" in withActorSystem { implicit system =>

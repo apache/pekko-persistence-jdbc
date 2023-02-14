@@ -3,9 +3,9 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.journal.dao.legacy
+package org.apache.pekko.persistence.jdbc.journal.dao.legacy
 
-import akka.persistence.jdbc.TablesTestSpec
+import org.apache.pekko.persistence.jdbc.TablesTestSpec
 import slick.jdbc.JdbcProfile
 
 class JournalTablesTest extends TablesTestSpec {

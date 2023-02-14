@@ -3,22 +3,22 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.state.scaladsl
+package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import akka.NotUsed
-import akka.actor.ExtendedActorSystem
-import akka.pattern.ask
-import akka.persistence.jdbc.config.DurableStateTableConfiguration
-import akka.persistence.query.DurableStateChange
-import akka.persistence.query.Offset
-import akka.persistence.state.scaladsl.GetObjectResult
-import akka.stream.scaladsl.Source
-import akka.testkit.TestProbe
-import akka.util.Timeout
+import org.apache.pekko.NotUsed
+import org.apache.pekko.actor.ExtendedActorSystem
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import org.apache.pekko.persistence.query.DurableStateChange
+import org.apache.pekko.persistence.query.Offset
+import org.apache.pekko.persistence.state.scaladsl.GetObjectResult
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko.util.Timeout
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
-import akka.serialization.Serialization
+import org.apache.pekko.serialization.Serialization
 
 object TestProbeDurableStateStoreQuery {
   case class StateInfoSequence(offset: Long, limit: Long)

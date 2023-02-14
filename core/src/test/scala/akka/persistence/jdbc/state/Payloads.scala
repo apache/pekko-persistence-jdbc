@@ -3,9 +3,9 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.state
+package org.apache.pekko.persistence.jdbc.state
 
-import akka.serialization._
+import org.apache.pekko.serialization._
 
 final case class MyPayload(data: String)
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.state.scaladsl
+package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import com.typesafe.config.{ Config, ConfigFactory }
 import scala.concurrent.duration._
@@ -14,13 +14,13 @@ import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time._
 
-import akka.actor._
-import akka.persistence.jdbc.db.SlickDatabase
-import akka.persistence.jdbc.config._
-import akka.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
-import akka.persistence.jdbc.util.DropCreate
-import akka.serialization.SerializationExtension
-import akka.util.Timeout
+import org.apache.pekko.actor._
+import org.apache.pekko.persistence.jdbc.db.SlickDatabase
+import org.apache.pekko.persistence.jdbc.config._
+import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
+import org.apache.pekko.persistence.jdbc.util.DropCreate
+import org.apache.pekko.serialization.SerializationExtension
+import org.apache.pekko.util.Timeout
 
 abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     extends AnyWordSpecLike
@@ -43,10 +43,10 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   val customSerializers = ConfigFactory.parseString("""
       akka.actor {
         serializers {
-          my-payload = "akka.persistence.jdbc.state.MyPayloadSerializer"
+          my-payload = "org.apache.pekko.persistence.jdbc.state.MyPayloadSerializer"
         }
         serialization-bindings {
-          "akka.persistence.jdbc.state.MyPayload" = my-payload
+          "org.apache.pekko.persistence.jdbc.state.MyPayload" = my-payload
         }
       }
     """)
@@ -75,8 +75,8 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     // needed for integration test where we use postgres-shared-db-application.conf
     SlickDatabase.database(
       config,
-      new SlickConfiguration(config.getConfig("akka-persistence-jdbc.shared-databases.slick")),
-      "akka-persistence-jdbc.shared-databases.slick.db")
+      new SlickConfiguration(config.getConfig("pekko-persistence-jdbc.shared-databases.slick")),
+      "pekko-persistence-jdbc.shared-databases.slick.db")
   }
 
   lazy val durableStateConfig = new DurableStateTableConfiguration(cfg)
@@ -92,7 +92,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     try {
       f(system)
     } finally {
-      system.actorSelection("system/" + "akka-persistence-jdbc-durable-state-sequence-actor").resolveOne().onComplete {
+      system.actorSelection("system/" + "pekko-persistence-jdbc-durable-state-sequence-actor").resolveOne().onComplete {
         case Success(actorRef) => {
           system.stop(actorRef)
           Thread.sleep(1000)

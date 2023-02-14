@@ -3,12 +3,12 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.persistence.jdbc.query.EventsByTagTest._
-import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import akka.persistence.query.{ NoOffset, PersistenceQuery }
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.persistence.jdbc.query.EventsByTagTest._
+import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import org.apache.pekko.persistence.query.{ NoOffset, PersistenceQuery }
+import org.apache.pekko.stream.scaladsl.Sink
 
 class MultipleReadJournalTest
     extends QueryTestSpec("h2-two-read-journals-application.conf", configOverrides)

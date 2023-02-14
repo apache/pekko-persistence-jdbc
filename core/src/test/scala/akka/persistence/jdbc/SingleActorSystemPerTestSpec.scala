@@ -3,14 +3,14 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc
+package org.apache.pekko.persistence.jdbc
 
-import akka.actor.ActorSystem
-import akka.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration }
-import akka.persistence.jdbc.query.javadsl.JdbcReadJournal
-import akka.persistence.jdbc.util.DropCreate
-import akka.persistence.jdbc.db.SlickDatabase
-import akka.util.Timeout
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration }
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal
+import org.apache.pekko.persistence.jdbc.util.DropCreate
+import org.apache.pekko.persistence.jdbc.db.SlickDatabase
+import org.apache.pekko.util.Timeout
 import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
 import org.scalatest.BeforeAndAfterEach
 import slick.jdbc.JdbcBackend.Database
@@ -40,7 +40,7 @@ abstract class SingleActorSystemPerTestSpec(val config: Config)
     else List(journalConfig.journalTableConfiguration.tableName)
   val profile = if (cfg.hasPath("slick.profile")) {
     SlickDatabase.profile(cfg, "slick")
-  } else SlickDatabase.profile(config, "akka-persistence-jdbc.shared-databases.slick")
+  } else SlickDatabase.profile(config, "pekko-persistence-jdbc.shared-databases.slick")
   val readJournalConfig = new ReadJournalConfig(config.getConfig(JdbcReadJournal.Identifier))
 
   // The db is initialized in the before and after each bocks
@@ -52,8 +52,8 @@ abstract class SingleActorSystemPerTestSpec(val config: Config)
       } else
         SlickDatabase.database(
           config,
-          new SlickConfiguration(config.getConfig("akka-persistence-jdbc.shared-databases.slick")),
-          "akka-persistence-jdbc.shared-databases.slick.db")
+          new SlickConfiguration(config.getConfig("pekko-persistence-jdbc.shared-databases.slick")),
+          "pekko-persistence-jdbc.shared-databases.slick.db")
 
       dbOpt = Some(newDb)
       newDb

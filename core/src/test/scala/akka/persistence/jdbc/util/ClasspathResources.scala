@@ -3,7 +3,7 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.util
+package org.apache.pekko.persistence.jdbc.util
 
 import java.io.InputStream
 

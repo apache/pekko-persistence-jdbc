@@ -3,19 +3,19 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.actor.{ ActorRef, ActorSystem }
-import akka.pattern.ask
-import akka.persistence.jdbc.config.JournalSequenceRetrievalConfig
-import akka.persistence.jdbc.journal.dao.legacy.{ JournalRow, JournalTables }
-import akka.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
-import akka.persistence.jdbc.query.dao.TestProbeReadJournalDao
-import akka.persistence.jdbc.SharedActorSystemTestSpec
-import akka.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
-import akka.serialization.SerializationExtension
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.testkit.TestProbe
+import org.apache.pekko.actor.{ ActorRef, ActorSystem }
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
+import org.apache.pekko.persistence.jdbc.journal.dao.legacy.{ JournalRow, JournalTables }
+import org.apache.pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
+import org.apache.pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao
+import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
+import org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
+import org.apache.pekko.serialization.SerializationExtension
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.testkit.TestProbe
 import org.slf4j.LoggerFactory
 import slick.jdbc.{ JdbcBackend, JdbcCapabilities }
 

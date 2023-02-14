@@ -3,9 +3,9 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.snapshot.dao.legacy
+package org.apache.pekko.persistence.jdbc.snapshot.dao.legacy
 
-import akka.persistence.jdbc.TablesTestSpec
+import org.apache.pekko.persistence.jdbc.TablesTestSpec
 import slick.jdbc.JdbcProfile
 
 class SnapshotTablesTest extends TablesTestSpec {

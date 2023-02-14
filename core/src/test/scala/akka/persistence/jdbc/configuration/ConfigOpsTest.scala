@@ -3,10 +3,10 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.configuration
+package org.apache.pekko.persistence.jdbc.configuration
 
-import akka.persistence.jdbc.SimpleSpec
-import akka.persistence.jdbc.util.ConfigOps
+import org.apache.pekko.persistence.jdbc.SimpleSpec
+import org.apache.pekko.persistence.jdbc.util.ConfigOps
 import ConfigOps._
 import com.typesafe.config.ConfigFactory
 

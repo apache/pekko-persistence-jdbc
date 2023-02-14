@@ -3,16 +3,16 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.Done
-import akka.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent }
-import akka.persistence.query.{ EventEnvelope, Sequence }
+import org.apache.pekko.Done
+import org.apache.pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent }
+import org.apache.pekko.persistence.query.{ EventEnvelope, Sequence }
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-import akka.pattern.ask
-import akka.persistence.query.Offset
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.persistence.query.Offset
 
 abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps
@@ -304,7 +304,7 @@ abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(c
   }
 
   it should "find a large number of events quickly" in withActorSystem { implicit system =>
-    import akka.pattern.ask
+    import org.apache.pekko.pattern.ask
     import system.dispatcher
     val journalOps = new JavaDslJdbcReadJournalOperations(system)
     withTestActors(replyToMessages = true) { (actor1, _, _) =>

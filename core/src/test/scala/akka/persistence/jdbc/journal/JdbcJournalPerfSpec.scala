@@ -3,17 +3,17 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.journal
+package org.apache.pekko.persistence.jdbc.journal
 
-import akka.actor.Props
-import akka.persistence.CapabilityFlag
-import akka.persistence.jdbc.config._
-import akka.persistence.jdbc.db.SlickExtension
-import akka.persistence.jdbc.testkit.internal.{ H2, SchemaType }
-import akka.persistence.jdbc.util.{ ClasspathResources, DropCreate }
-import akka.persistence.journal.JournalPerfSpec
-import akka.persistence.journal.JournalPerfSpec.{ BenchActor, Cmd, ResetCounter }
-import akka.testkit.TestProbe
+import org.apache.pekko.actor.Props
+import org.apache.pekko.persistence.CapabilityFlag
+import org.apache.pekko.persistence.jdbc.config._
+import org.apache.pekko.persistence.jdbc.db.SlickExtension
+import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
+import org.apache.pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
+import org.apache.pekko.persistence.journal.JournalPerfSpec
+import org.apache.pekko.persistence.journal.JournalPerfSpec.{ BenchActor, Cmd, ResetCounter }
+import org.apache.pekko.testkit.TestProbe
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures

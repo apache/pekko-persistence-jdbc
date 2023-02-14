@@ -3,20 +3,20 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query.dao
+package org.apache.pekko.persistence.jdbc.query.dao
 
-import akka.NotUsed
-import akka.persistence.jdbc.query.dao.TestProbeReadJournalDao.JournalSequence
-import akka.persistence.PersistentRepr
-import akka.stream.scaladsl.Source
-import akka.testkit.TestProbe
-import akka.util.Timeout
-import akka.pattern.ask
+import org.apache.pekko.NotUsed
+import org.apache.pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao.JournalSequence
+import org.apache.pekko.persistence.PersistentRepr
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko.util.Timeout
+import org.apache.pekko.pattern.ask
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.Try
-import akka.actor.Scheduler
+import org.apache.pekko.actor.Scheduler
 
 object TestProbeReadJournalDao {
   case class JournalSequence(offset: Long, limit: Long)

@@ -3,8 +3,8 @@ project.description: Snapshot builds of Akka Projection are provided via the Son
 ---
 # Snapshots
 
-[snapshots-badge]:  https://img.shields.io/nexus/s/com.lightbend.akka/akka-persistence-jdbc_2.13?server=https%3A%2F%2Foss.sonatype.org
-[snapshots]:        https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/akka-persistence-jdbc_2.13/
+[snapshots-badge]:  https://img.shields.io/nexus/s/com.lightbend.apache/incubator-pekko-persistence-jdbc_2.13?server=https%3A%2F%2Foss.sonatype.org
+[snapshots]:        https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/apache/incubator-pekko-persistence-jdbc_2.13/
 
 Snapshots are published to the Sonatype Snapshot repository after every successful build on master.
 Add the following to your project build definition to resolve Akka Persistence JDBC's snapshots:
@@ -42,10 +42,10 @@ Gradle
 
 ## Documentation
 
-The [snapshot documentation](https://doc.akka.io/docs/akka-persistence-jdbc/snapshot) is updated with every snapshot build.
+The [snapshot documentation](https://pekko.apache.org/docs/pekko-persistence-jdbc/snapshot) is updated with every snapshot build.
 
 ## Versions
 
 Latest published snapshot version is [![snapshots-badge][]][snapshots]
 
-The snapshot repository is cleaned from time to time with no further notice. Check [Sonatype snapshots Akka Projection files](https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/akka-persistence-jdbc_2.13/) to see what versions are currently available.
+The snapshot repository is cleaned from time to time with no further notice. Check [Sonatype snapshots Akka Projection files](https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/apache/incubator-pekko-persistence-jdbc_2.13/) to see what versions are currently available.

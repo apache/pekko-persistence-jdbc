@@ -3,10 +3,10 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.persistence.query.NoOffset
-import akka.pattern._
+import org.apache.pekko.persistence.query.NoOffset
+import org.apache.pekko.pattern._
 
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers

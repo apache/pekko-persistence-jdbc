@@ -3,13 +3,13 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.util
+package org.apache.pekko.persistence.jdbc.util
 
 import java.sql.Statement
 
-import akka.annotation.InternalApi
-import akka.persistence.jdbc.testkit.internal.SchemaType
-import akka.persistence.jdbc.testkit.internal.SchemaUtilsImpl
+import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaType
+import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
 import com.typesafe.config.Config
 import org.slf4j.LoggerFactory
 import slick.jdbc.JdbcBackend.Database

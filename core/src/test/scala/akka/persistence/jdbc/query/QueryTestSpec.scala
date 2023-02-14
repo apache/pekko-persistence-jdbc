@@ -3,32 +3,32 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.query
+package org.apache.pekko.persistence.jdbc.query
 
-import akka.actor.{ ActorRef, ActorSystem, Props, Stash, Status }
-import akka.pattern.ask
-import akka.event.LoggingReceive
-import akka.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
-import akka.persistence.jdbc.SingleActorSystemPerTestSpec
-import akka.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent, TaggedEvent }
-import akka.persistence.jdbc.query.javadsl.{ JdbcReadJournal => JavaJdbcReadJournal }
-import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import akka.persistence.journal.Tagged
-import akka.persistence.query.{ EventEnvelope, Offset, PersistenceQuery }
-import akka.stream.scaladsl.Sink
-import akka.stream.testkit.TestSubscriber
-import akka.stream.testkit.javadsl.{ TestSink => JavaSink }
-import akka.stream.testkit.scaladsl.TestSink
-import akka.stream.{ Materializer, SystemMaterializer }
+import org.apache.pekko.actor.{ ActorRef, ActorSystem, Props, Stash, Status }
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.event.LoggingReceive
+import org.apache.pekko.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
+import org.apache.pekko.persistence.jdbc.SingleActorSystemPerTestSpec
+import org.apache.pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent, TaggedEvent }
+import org.apache.pekko.persistence.jdbc.query.javadsl.{ JdbcReadJournal => JavaJdbcReadJournal }
+import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import org.apache.pekko.persistence.journal.Tagged
+import org.apache.pekko.persistence.query.{ EventEnvelope, Offset, PersistenceQuery }
+import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko.stream.testkit.TestSubscriber
+import org.apache.pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
+import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
 import com.typesafe.config.ConfigValue
 import scala.concurrent.Future
 import scala.concurrent.duration.{ FiniteDuration, _ }
 
-import akka.persistence.jdbc.testkit.internal.H2
-import akka.persistence.jdbc.testkit.internal.MySQL
-import akka.persistence.jdbc.testkit.internal.Oracle
-import akka.persistence.jdbc.testkit.internal.Postgres
-import akka.persistence.jdbc.testkit.internal.SqlServer
+import org.apache.pekko.persistence.jdbc.testkit.internal.H2
+import org.apache.pekko.persistence.jdbc.testkit.internal.MySQL
+import org.apache.pekko.persistence.jdbc.testkit.internal.Oracle
+import org.apache.pekko.persistence.jdbc.testkit.internal.Postgres
+import org.apache.pekko.persistence.jdbc.testkit.internal.SqlServer
 
 trait ReadJournalOperations {
   def withCurrentPersistenceIds(within: FiniteDuration = 60.second)(f: TestSubscriber.Probe[String] => Unit): Unit
@@ -288,8 +288,8 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
 
   def pendingIfOracleWithLegacy(): Unit = {
     if (profile == slick.jdbc.OracleProfile && readJournalConfig.pluginConfig.dao == classOf[
-        akka.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
-      pending // TODO https://github.com/akka/akka-persistence-jdbc/issues/673
+        pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
+      pending // TODO https://github.com/akka/akka-pekko-persistence-jdbc/issues/673
   }
 
   def setupEmpty(persistenceId: Int, replyToMessages: Boolean)(implicit system: ActorSystem): ActorRef = {

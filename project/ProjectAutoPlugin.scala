@@ -16,16 +16,16 @@ object ProjectAutoPlugin extends AutoPlugin {
       organization := "com.lightbend.akka",
       organizationName := "Lightbend Inc.",
       organizationHomepage := Some(url("https://www.lightbend.com/")),
-      homepage := Some(url("https://doc.akka.io/docs/akka-persistence-jdbc/current/")),
+      homepage := Some(url("https://pekko.apache.org/docs/pekko-persistence-jdbc/current/")),
       scmInfo := Some(
-        ScmInfo(url("https://github.com/akka/akka-persistence-jdbc"), "git@github.com:akka/akka-persistence-jdbc.git")),
+        ScmInfo(url("https://github.com/apache/incubator-pekko-persistence-jdbc"), "git@github.com:apache/incubator-pekko-persistence-jdbc.git")),
       developers += Developer(
         "contributors",
         "Contributors",
         "https://gitter.im/akka/dev",
-        url("https://github.com/akka/akka-persistence-jdbc/graphs/contributors")),
+        url("https://github.com/apache/incubator-pekko-persistence-jdbc/graphs/contributors")),
       licenses := Seq("Apache-2.0" -> url("https://opensource.org/licenses/Apache-2.0")),
-      description := "A plugin for storing events in an event journal akka-persistence-jdbc",
+      description := "A plugin for storing events in an event journal pekko-persistence-jdbc",
       startYear := Some(2014))
 
   override val trigger: PluginTrigger = allRequirements
@@ -68,13 +68,13 @@ object ProjectAutoPlugin extends AutoPlugin {
       "-sourcepath",
       (baseDirectory in ThisBuild).value.toString,
       "-skip-packages",
-      "akka.pattern", // for some reason Scaladoc creates this
+      "pekko.pattern", // for some reason Scaladoc creates this
       "-doc-source-url", {
         val branch = if (isSnapshot.value) "master" else s"v${version.value}"
-        s"https://github.com/akka/akka-persistence-jdbc/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
+        s"https://github.com/apache/incubator-pekko-persistence-jdbc/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
       },
       "-doc-canonical-base-url",
-      "https://doc.akka.io/api/akka-persistence-jdbc/current/"),
+      "https://doc.akka.io/api/pekko-persistence-jdbc/current/"),
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
     headerLicense := Some(HeaderLicense.Custom("""|Copyright (C) 2014 - 2019 Dennis Vriend <https://github.com/dnvriend>

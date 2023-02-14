@@ -3,34 +3,34 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc;
+package org.apache.pekko.persistence.jdbc;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
 // #create
-import akka.persistence.jdbc.testkit.javadsl.SchemaUtils;
+import org.apache.pekko.persistence.jdbc.testkit.javadsl.SchemaUtils;
 // #create
 // #read-journal
-import akka.persistence.query.*;
-import akka.persistence.jdbc.query.javadsl.JdbcReadJournal;
+import org.apache.pekko.persistence.query.*;
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
 // #read-journal
 // #persistence-ids
-import akka.stream.javadsl.Source;
-import akka.persistence.query.PersistenceQuery;
-import akka.persistence.jdbc.query.javadsl.JdbcReadJournal;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.persistence.query.PersistenceQuery;
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
 // #persistence-ids
 // #events-by-persistence-id
-import akka.stream.javadsl.Source;
-import akka.persistence.query.PersistenceQuery;
-import akka.persistence.query.EventEnvelope;
-import akka.persistence.jdbc.query.javadsl.JdbcReadJournal;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.persistence.query.PersistenceQuery;
+import org.apache.pekko.persistence.query.EventEnvelope;
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
 // #events-by-persistence-id
 // #events-by-tag
-import akka.stream.javadsl.Source;
-import akka.persistence.query.PersistenceQuery;
-import akka.persistence.query.EventEnvelope;
-import akka.persistence.jdbc.query.javadsl.JdbcReadJournal;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.persistence.query.PersistenceQuery;
+import org.apache.pekko.persistence.query.EventEnvelope;
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
 // #events-by-tag
 
 import java.util.concurrent.CompletionStage;

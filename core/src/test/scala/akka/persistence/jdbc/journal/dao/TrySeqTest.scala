@@ -3,10 +3,10 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.journal.dao
+package org.apache.pekko.persistence.jdbc.journal.dao
 
-import akka.persistence.jdbc.util.TrySeq
-import akka.persistence.jdbc.SimpleSpec
+import org.apache.pekko.persistence.jdbc.util.TrySeq
+import org.apache.pekko.persistence.jdbc.SimpleSpec
 
 import scala.collection.immutable._
 import scala.util.{ Failure, Success }

@@ -1,8 +1,8 @@
-package akka.persistence.jdbc.state
+package org.apache.pekko.persistence.jdbc.state
 
 import scala.concurrent.Future
-import akka.actor.ActorSystem
-import akka.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.Done
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 
@@ -10,7 +10,7 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
 
   def create(): Unit = {
     // #create
-    import akka.persistence.jdbc.testkit.scaladsl.SchemaUtils
+    import org.apache.pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 
     implicit val system: ActorSystem = ActorSystem("example")
     val _: Future[Done] = SchemaUtils.createIfNotExists()
@@ -21,8 +21,8 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     implicit val system: ActorSystem = ActorSystem()
 
     // #jdbc-durable-state-store
-    import akka.persistence.state.DurableStateStoreRegistry
-    import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+    import org.apache.pekko.persistence.state.DurableStateStoreRegistry
+    import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
     val store = DurableStateStoreRegistry
       .get(system)
       .durableStateStoreFor[JdbcDurableStateStore[String]](JdbcDurableStateStore.Identifier)
@@ -33,9 +33,9 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     implicit val system: ActorSystem = ActorSystem()
 
     // #get-object
-    import akka.persistence.state.DurableStateStoreRegistry
-    import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
-    import akka.persistence.state.scaladsl.GetObjectResult
+    import org.apache.pekko.persistence.state.DurableStateStoreRegistry
+    import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+    import org.apache.pekko.persistence.state.scaladsl.GetObjectResult
 
     val store = DurableStateStoreRegistry
       .get(system)
@@ -51,9 +51,9 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     implicit val e = system.dispatcher
 
     // #upsert-get-object
-    import akka.persistence.state.DurableStateStoreRegistry
-    import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
-    import akka.persistence.state.scaladsl.GetObjectResult
+    import org.apache.pekko.persistence.state.DurableStateStoreRegistry
+    import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+    import org.apache.pekko.persistence.state.scaladsl.GetObjectResult
 
     val store = DurableStateStoreRegistry
       .get(system)
@@ -78,8 +78,8 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     implicit val system: ActorSystem = ActorSystem()
 
     // #delete-object
-    import akka.persistence.state.DurableStateStoreRegistry
-    import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+    import org.apache.pekko.persistence.state.DurableStateStoreRegistry
+    import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
 
     val store = DurableStateStoreRegistry
       .get(system)
@@ -94,11 +94,11 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     implicit val system: ActorSystem = ActorSystem()
 
     // #current-changes
-    import akka.NotUsed
-    import akka.stream.scaladsl.Source
-    import akka.persistence.state.DurableStateStoreRegistry
-    import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
-    import akka.persistence.query.{ DurableStateChange, NoOffset }
+    import org.apache.pekko.NotUsed
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.persistence.state.DurableStateStoreRegistry
+    import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+    import org.apache.pekko.persistence.query.{ DurableStateChange, NoOffset }
 
     val store = DurableStateStoreRegistry
       .get(system)
@@ -113,11 +113,11 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     implicit val system: ActorSystem = ActorSystem()
 
     // #changes
-    import akka.NotUsed
-    import akka.stream.scaladsl.Source
-    import akka.persistence.state.DurableStateStoreRegistry
-    import akka.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
-    import akka.persistence.query.{ DurableStateChange, NoOffset }
+    import org.apache.pekko.NotUsed
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.persistence.state.DurableStateStoreRegistry
+    import org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
+    import org.apache.pekko.persistence.query.{ DurableStateChange, NoOffset }
 
     val store = DurableStateStoreRegistry
       .get(system)

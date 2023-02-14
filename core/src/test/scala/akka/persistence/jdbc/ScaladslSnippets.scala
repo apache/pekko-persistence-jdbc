@@ -3,10 +3,10 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc
+package org.apache.pekko.persistence.jdbc
 
-import akka.{ Done, NotUsed }
-import akka.actor.ActorSystem
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
 
 import scala.concurrent.Future
 
@@ -14,7 +14,7 @@ object ScaladslSnippets {
 
   def create(): Unit = {
     // #create
-    import akka.persistence.jdbc.testkit.scaladsl.SchemaUtils
+    import org.apache.pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 
     implicit val system: ActorSystem = ActorSystem("example")
     val done: Future[Done] = SchemaUtils.createIfNotExists()
@@ -25,8 +25,8 @@ object ScaladslSnippets {
     implicit val system: ActorSystem = ActorSystem()
 
     // #read-journal
-    import akka.persistence.query.PersistenceQuery
-    import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
+    import org.apache.pekko.persistence.query.PersistenceQuery
+    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -37,9 +37,9 @@ object ScaladslSnippets {
     implicit val system: ActorSystem = ActorSystem()
 
     // #persistence-ids
-    import akka.stream.scaladsl.Source
-    import akka.persistence.query.PersistenceQuery
-    import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.persistence.query.PersistenceQuery
+    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -54,9 +54,9 @@ object ScaladslSnippets {
     implicit val system: ActorSystem = ActorSystem()
 
     // #events-by-persistence-id
-    import akka.stream.scaladsl.Source
-    import akka.persistence.query.{ EventEnvelope, PersistenceQuery }
-    import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
+    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -72,9 +72,9 @@ object ScaladslSnippets {
   def eventsByTag(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
     // #events-by-tag
-    import akka.stream.scaladsl.Source
-    import akka.persistence.query.{ EventEnvelope, PersistenceQuery }
-    import akka.persistence.jdbc.query.scaladsl.JdbcReadJournal
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
+    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)

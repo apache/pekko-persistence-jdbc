@@ -3,20 +3,20 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc.state.scaladsl
+package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
 import com.typesafe.config.{ Config, ConfigFactory }
-import akka.actor.{ ActorRef, ActorSystem, ExtendedActorSystem }
-import akka.pattern.ask
-import akka.persistence.jdbc.SharedActorSystemTestSpec
-import akka.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.VisitedElement
-import akka.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.{ GetMaxGlobalOffset, MaxGlobalOffset }
-import akka.persistence.jdbc.testkit.internal.{ H2, SchemaType }
-import akka.testkit.TestProbe
-import akka.util.Timeout
+import org.apache.pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem }
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
+import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.VisitedElement
+import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.{ GetMaxGlobalOffset, MaxGlobalOffset }
+import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
+import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko.util.Timeout
 import org.scalatest.concurrent.Eventually
 
 abstract class DurableStateSequenceActorTest(config: Config, schemaType: SchemaType)
@@ -359,7 +359,7 @@ class MockDurableStateSequenceActorTest extends SharedActorSystemTestSpec {
     }
   }
 
-  import akka.persistence.jdbc.config.DurableStateTableConfiguration
+  import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
   def withTestProbeDurableStateSequenceActor(
       batchSize: Int,
       maxTries: Int,

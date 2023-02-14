@@ -3,11 +3,11 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package akka.persistence.jdbc
+package org.apache.pekko.persistence.jdbc
 
-import akka.actor.{ ActorRef, ActorSystem }
-import akka.persistence.jdbc.util.ClasspathResources
-import akka.testkit.TestProbe
+import org.apache.pekko.actor.{ ActorRef, ActorSystem }
+import org.apache.pekko.persistence.jdbc.util.ClasspathResources
+import org.apache.pekko.testkit.TestProbe
 import org.scalatest._
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.flatspec.AnyFlatSpec

@@ -8,12 +8,12 @@ package org.apache.pekko.persistence.jdbc.migrator
 import org.apache.pekko.Done
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.AkkaSerialization
+import org.apache.pekko.persistence.jdbc.PekkoSerialization
 import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
 import org.apache.pekko.persistence.jdbc.db.SlickExtension
 import org.apache.pekko.persistence.jdbc.journal.dao.JournalQueries
 import org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalAkkaSerializationRow, TagRow }
+import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
 import org.apache.pekko.persistence.jdbc.migrator.JournalMigrator.{ JournalConfig, ReadJournalConfig }
 import org.apache.pekko.persistence.jdbc.query.dao.legacy.ReadJournalQueries
 import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
@@ -96,24 +96,24 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
     .run()
 
   /**
-   * serialize the PersistentRepr and construct a JournalAkkaSerializationRow and set of matching tags
+   * serialize the PersistentRepr and construct a JournalPekkoSerializationRow and set of matching tags
    *
    * @param repr the PersistentRepr
    * @param tags the tags
    * @param ordering the ordering of the PersistentRepr
-   * @return the tuple of JournalAkkaSerializationRow and set of tags
+   * @return the tuple of JournalPekkoSerializationRow and set of tags
    */
   private def serialize(
       repr: PersistentRepr,
       tags: Set[String],
-      ordering: Long): (JournalAkkaSerializationRow, Set[String]) = {
+      ordering: Long): (JournalPekkoSerializationRow, Set[String]) = {
 
-    val serializedPayload: AkkaSerialization.AkkaSerialized =
-      AkkaSerialization.serialize(serialization, repr.payload).get
+    val serializedPayload: PekkoSerialization.PekkoSerialized =
+      PekkoSerialization.serialize(serialization, repr.payload).get
 
-    val serializedMetadata: Option[AkkaSerialization.AkkaSerialized] =
-      repr.metadata.flatMap(m => AkkaSerialization.serialize(serialization, m).toOption)
-    val row: JournalAkkaSerializationRow = JournalAkkaSerializationRow(
+    val serializedMetadata: Option[PekkoSerialization.PekkoSerialized] =
+      repr.metadata.flatMap(m => PekkoSerialization.serialize(serialization, m).toOption)
+    val row: JournalPekkoSerializationRow = JournalPekkoSerializationRow(
       ordering,
       repr.deleted,
       repr.persistenceId,
@@ -132,7 +132,7 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
   }
 
   private def writeJournalRowsStatements(
-      journalSerializedRow: JournalAkkaSerializationRow,
+      journalSerializedRow: JournalPekkoSerializationRow,
       tags: Set[String]): DBIO[Unit] = {
     val journalInsert: DBIO[Long] = newJournalQueries.JournalTable
       .returning(newJournalQueries.JournalTable.map(_.ordering))

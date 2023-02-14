@@ -2,7 +2,7 @@
 
 The plugin relies on @extref[Slick](slick:) to do create the SQL dialect for the database in use, therefore the following must be configured in `application.conf`
 
-Configure `akka-persistence`:
+Configure `pekko-persistence`:
 
 - instruct akka persistence to use the `jdbc-journal` plugin,
 - instruct akka persistence to use the `jdbc-snapshot-store` plugin,

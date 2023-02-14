@@ -254,22 +254,22 @@ object MigratorSpec {
           persist(AccountCreated(balance)) { (event: AccountCreated) =>
             updateState(event)
             saveSnapshot()
-            sender() ! akka.actor.Status.Success(event)
+            sender() ! org.apache.pekko.actor.Status.Success(event)
           }
         case Deposit(balance) =>
           persist(Deposited(balance)) { (event: Deposited) =>
             updateState(event)
             saveSnapshot()
-            sender() ! akka.actor.Status.Success(event)
+            sender() ! org.apache.pekko.actor.Status.Success(event)
           }
         case Withdraw(balance) =>
           persist(Withdrawn(balance)) { (event: Withdrawn) =>
             updateState(event)
             saveSnapshot()
-            sender() ! akka.actor.Status.Success(event)
+            sender() ! org.apache.pekko.actor.Status.Success(event)
           }
         case State =>
-          sender() ! akka.actor.Status.Success(state)
+          sender() ! org.apache.pekko.actor.Status.Success(state)
       }
 
     def updateState(event: AccountEvent): Unit = event match {

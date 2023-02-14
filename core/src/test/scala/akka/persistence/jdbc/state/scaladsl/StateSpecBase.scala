@@ -67,7 +67,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     .getConfig("jdbc-durable-state-store")
     .withFallback(system.settings.config.getConfig("jdbc-durable-state-store"))
     .withFallback(config.getConfig("jdbc-durable-state-store"))
-    .withFallback(customSerializers.getConfig("akka.actor"))
+    .withFallback(customSerializers.getConfig("pekko.actor"))
 
   lazy val db = if (cfg.hasPath("slick.profile")) {
     SlickDatabase.database(cfg, new SlickConfiguration(cfg.getConfig("slick")), "slick.db")

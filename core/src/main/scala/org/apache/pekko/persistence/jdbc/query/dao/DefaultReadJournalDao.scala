@@ -6,7 +6,7 @@
 package org.apache.pekko.persistence.jdbc.query.dao
 import org.apache.pekko.NotUsed
 import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.AkkaSerialization
+import org.apache.pekko.persistence.jdbc.PekkoSerialization
 import org.apache.pekko.persistence.jdbc.config.ReadJournalConfig
 import org.apache.pekko.persistence.jdbc.journal.dao.{ BaseJournalDaoWithReadMessages, H2Compat }
 import org.apache.pekko.serialization.Serialization
@@ -43,7 +43,7 @@ class DefaultReadJournalDao(
     Source
       .fromPublisher(db.stream(queries.eventsByTag((tag, offset, maxOffset, correctMaxForH2Driver(max))).result))
       .map(row =>
-        AkkaSerialization.fromRow(serialization)(row).map { case (repr, ordering) => (repr, Set.empty, ordering) })
+        PekkoSerialization.fromRow(serialization)(row).map { case (repr, ordering) => (repr, Set.empty, ordering) })
   }
 
   override def journalSequence(offset: Long, limit: Long): Source[Long, NotUsed] =
@@ -61,6 +61,6 @@ class DefaultReadJournalDao(
       .fromPublisher(
         db.stream(
           queries.messagesQuery((persistenceId, fromSequenceNr, toSequenceNr, correctMaxForH2Driver(max))).result))
-      .map(AkkaSerialization.fromRow(serialization)(_))
+      .map(PekkoSerialization.fromRow(serialization)(_))
 
 }

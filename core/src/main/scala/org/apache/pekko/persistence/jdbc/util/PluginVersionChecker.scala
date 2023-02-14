@@ -13,7 +13,7 @@ private[jdbc] object PluginVersionChecker {
     try {
       Class.forName("org.apache.pekko.persistence.jdbc.util.DefaultSlickDatabaseProvider")
       throw new RuntimeException(
-        "Old version of Akka Persistence JDBC found on the classpath. Remove `com.github.dnvriend:pekko-persistence-jdbc` from the classpath..")
+        "Old version of Apache Pekko Persistence JDBC found on the classpath. Remove `com.github.dnvriend:pekko-persistence-jdbc` from the classpath..")
     } catch {
       case _: ClassNotFoundException =>
       // All good! That's intentional.

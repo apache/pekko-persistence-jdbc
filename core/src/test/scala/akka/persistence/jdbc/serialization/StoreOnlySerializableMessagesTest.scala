@@ -34,7 +34,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
 
     override val receiveCommand: Receive = LoggingReceive { case msg =>
       persist(msg) { _ =>
-        sender ! akka.actor.Status.Success("")
+        sender ! org.apache.pekko.actor.Status.Success("")
       }
     }
 
@@ -65,7 +65,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
       val tp = TestProbe()
       recover.expectMsg(RecoveryCompleted)
       tp.send(actor, "foo") // strings are serializable
-      tp.expectMsg(akka.actor.Status.Success(""))
+      tp.expectMsg(org.apache.pekko.actor.Status.Success(""))
       failure.expectNoMessage(100.millis)
       rejected.expectNoMessage(100.millis)
     }
@@ -104,7 +104,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
       val tp = TestProbe()
       recover.expectMsg(RecoveryCompleted)
       tp.send(actor, "foo")
-      tp.expectMsg(akka.actor.Status.Success(""))
+      tp.expectMsg(org.apache.pekko.actor.Status.Success(""))
       tp.send(actor, new NotSerializable) // the NotSerializable class cannot be serialized
       tp.expectNoMessage(300.millis) // the handler should not have been called, because persist has failed
       // the actor should call the OnPersistRejected

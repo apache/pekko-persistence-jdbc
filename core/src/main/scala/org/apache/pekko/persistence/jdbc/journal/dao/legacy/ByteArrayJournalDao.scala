@@ -6,7 +6,12 @@
 package org.apache.pekko.persistence.jdbc.journal.dao.legacy
 
 import org.apache.pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
-import org.apache.pekko.persistence.jdbc.journal.dao.{ BaseDao, BaseJournalDaoWithReadMessages, H2Compat, JournalDaoWithUpdates }
+import org.apache.pekko.persistence.jdbc.journal.dao.{
+  BaseDao,
+  BaseJournalDaoWithReadMessages,
+  H2Compat,
+  JournalDaoWithUpdates
+}
 import org.apache.pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
 import org.apache.pekko.serialization.Serialization

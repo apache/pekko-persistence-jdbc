@@ -8,7 +8,7 @@ package org.apache.pekko.persistence.jdbc
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.persistence.PersistentRepr
 import org.apache.pekko.persistence.jdbc.state.DurableStateTables
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.JournalAkkaSerializationRow
+import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
 import org.apache.pekko.serialization.{ Serialization, Serializers }
 
 import scala.util.{ Success, Try }
@@ -17,19 +17,19 @@ import scala.util.{ Success, Try }
  * INTERNAL API
  */
 @InternalApi
-object AkkaSerialization {
+object PekkoSerialization {
 
-  case class AkkaSerialized(serId: Int, serManifest: String, payload: Array[Byte])
+  case class PekkoSerialized(serId: Int, serManifest: String, payload: Array[Byte])
 
-  def serialize(serialization: Serialization, payload: Any): Try[AkkaSerialized] = {
+  def serialize(serialization: Serialization, payload: Any): Try[PekkoSerialized] = {
     val p2 = payload.asInstanceOf[AnyRef]
     val serializer = serialization.findSerializerFor(p2)
     val serManifest = Serializers.manifestFor(serializer, p2)
     val serialized = serialization.serialize(p2)
-    serialized.map(payload => AkkaSerialized(serializer.identifier, serManifest, payload))
+    serialized.map(payload => PekkoSerialized(serializer.identifier, serManifest, payload))
   }
 
-  def fromRow(serialization: Serialization)(row: JournalAkkaSerializationRow): Try[(PersistentRepr, Long)] = {
+  def fromRow(serialization: Serialization)(row: JournalPekkoSerializationRow): Try[(PersistentRepr, Long)] = {
     serialization.deserialize(row.eventPayload, row.eventSerId, row.eventSerManifest).flatMap { payload =>
       val metadata = for {
         mPayload <- row.metaPayload

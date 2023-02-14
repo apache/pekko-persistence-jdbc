@@ -13,20 +13,21 @@ object ProjectAutoPlugin extends AutoPlugin {
 
   override def globalSettings =
     Seq(
-      organization := "com.lightbend.akka",
-      organizationName := "Lightbend Inc.",
-      organizationHomepage := Some(url("https://www.lightbend.com/")),
+      organization := "org.apache.pekko",
+      organizationName := "Apache Software Foundation",
+      organizationHomepage := Some(url("https://www.apache.org/")),
       homepage := Some(url("https://pekko.apache.org/docs/pekko-persistence-jdbc/current/")),
       scmInfo := Some(
-        ScmInfo(url("https://github.com/apache/incubator-pekko-persistence-jdbc"), "git@github.com:apache/incubator-pekko-persistence-jdbc.git")),
+        ScmInfo(url("https://github.com/apache/incubator-pekko-persistence-jdbc"),
+          "git@github.com:apache/incubator-pekko-persistence-jdbc.git")),
       developers += Developer(
         "contributors",
         "Contributors",
-        "https://gitter.im/akka/dev",
+        "dev@pekko.apache.org",
         url("https://github.com/apache/incubator-pekko-persistence-jdbc/graphs/contributors")),
       licenses := Seq("Apache-2.0" -> url("https://opensource.org/licenses/Apache-2.0")),
       description := "A plugin for storing events in an event journal pekko-persistence-jdbc",
-      startYear := Some(2014))
+      startYear := Some(2022))
 
   override val trigger: PluginTrigger = allRequirements
 
@@ -62,7 +63,7 @@ object ProjectAutoPlugin extends AutoPlugin {
     scalacOptions += "-Ydelambdafy:method",
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
-      "Akka Persistence JDBC",
+      "Apache Pekko Persistence JDBC",
       "-doc-version",
       version.value,
       "-sourcepath",
@@ -74,14 +75,14 @@ object ProjectAutoPlugin extends AutoPlugin {
         s"https://github.com/apache/incubator-pekko-persistence-jdbc/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
       },
       "-doc-canonical-base-url",
-      "https://doc.akka.io/api/pekko-persistence-jdbc/current/"),
+      "https://pekko.apache.org/api/pekko-persistence-jdbc/current/"),
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
     headerLicense := Some(HeaderLicense.Custom("""|Copyright (C) 2014 - 2019 Dennis Vriend <https://github.com/dnvriend>
            |Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
            |""".stripMargin)),
     resolvers += Resolver.jcenterRepo,
-    sonatypeProfileName := "com.lightbend")
+    sonatypeProfileName := "org.apache.pekko")
 
   val disciplineScalacOptions = Set(
 //    "-Xfatal-warnings",

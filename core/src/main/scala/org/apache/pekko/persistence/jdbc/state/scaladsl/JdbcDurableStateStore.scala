@@ -14,7 +14,7 @@ import org.apache.pekko.{ Done, NotUsed }
 import org.apache.pekko.actor.ExtendedActorSystem
 import org.apache.pekko.pattern.ask
 import org.apache.pekko.persistence.state.scaladsl.{ DurableStateUpdateStore, GetObjectResult }
-import org.apache.pekko.persistence.jdbc.AkkaSerialization
+import org.apache.pekko.persistence.jdbc.PekkoSerialization
 import org.apache.pekko.persistence.jdbc.state.DurableStateQueries
 import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import org.apache.pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
@@ -63,7 +63,7 @@ class JdbcDurableStateStore[A](
       rows.headOption match {
         case Some(row) =>
           GetObjectResult(
-            AkkaSerialization.fromDurableStateRow(serialization)(row).toOption.asInstanceOf[Option[A]],
+            PekkoSerialization.fromDurableStateRow(serialization)(row).toOption.asInstanceOf[Option[A]],
             row.revision)
 
         case None =>
@@ -75,7 +75,7 @@ class JdbcDurableStateStore[A](
   def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): Future[Done] = {
     require(revision > 0)
     val row =
-      AkkaSerialization.serialize(serialization, value).map { serialized =>
+      PekkoSerialization.serialize(serialization, value).map { serialized =>
         DurableStateTables.DurableStateRow(
           0, // insert 0 for autoinc columns
           persistenceId,
@@ -102,6 +102,9 @@ class JdbcDurableStateStore[A](
   }
 
   def deleteObject(persistenceId: String): Future[Done] =
+    db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
+
+  def deleteObject(persistenceId: String, revision: Long): Future[Done] =
     db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
 
   def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
@@ -193,7 +196,7 @@ class JdbcDurableStateStore[A](
     Source.fromPublisher(db.stream(queries.stateStoreStateQuery((offset, limit)).result))
 
   private def toDurableStateChange(row: DurableStateTables.DurableStateRow): Try[DurableStateChange[A]] = {
-    AkkaSerialization
+    PekkoSerialization
       .fromDurableStateRow(serialization)(row)
       .map(payload =>
         new UpdatedDurableState(

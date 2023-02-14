@@ -12,7 +12,7 @@ import org.apache.pekko.serialization.Serialization
 import org.apache.pekko.stream.Materializer
 import SnapshotTables._
 import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.persistence.jdbc.AkkaSerialization
+import org.apache.pekko.persistence.jdbc.PekkoSerialization
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Success, Try }
@@ -47,8 +47,8 @@ class DefaultSnapshotDao(
   }
 
   private def serializeSnapshot(meta: SnapshotMetadata, snapshot: Any): Try[SnapshotRow] = {
-    val serializedMetadata = meta.metadata.flatMap(m => AkkaSerialization.serialize(serialization, m).toOption)
-    AkkaSerialization
+    val serializedMetadata = meta.metadata.flatMap(m => PekkoSerialization.serialize(serialization, m).toOption)
+    PekkoSerialization
       .serialize(serialization, payload = snapshot)
       .map(serializedSnapshot =>
         SnapshotRow(

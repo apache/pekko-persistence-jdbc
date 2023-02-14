@@ -7,7 +7,7 @@ project.description: Snapshot builds of Akka Projection are provided via the Son
 [snapshots]:        https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/apache/incubator-pekko-persistence-jdbc_2.13/
 
 Snapshots are published to the Sonatype Snapshot repository after every successful build on master.
-Add the following to your project build definition to resolve Akka Persistence JDBC's snapshots:
+Add the following to your project build definition to resolve Apache Pekko Persistence JDBC's snapshots:
 
 ## Configure repository
 

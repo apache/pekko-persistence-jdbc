@@ -37,7 +37,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       whenReady {
         stateStoreString.upsertObject("p123", 1, "a valid string", "t123")
       } { v =>
-        v shouldBe akka.Done
+        v shouldBe org.apache.pekko.Done
       }
     }
     "support composite upsert-fetch-repeat loop" in {
@@ -45,11 +45,11 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         for {
 
           n <- stateStoreString.upsertObject("p234", 1, "a valid string", "t123")
-          _ = n shouldBe akka.Done
+          _ = n shouldBe org.apache.pekko.Done
           g <- stateStoreString.getObject("p234")
           _ = g.value shouldBe Some("a valid string")
           u <- stateStoreString.upsertObject("p234", 2, "updated valid string", "t123")
-          _ = u shouldBe akka.Done
+          _ = u shouldBe org.apache.pekko.Done
           h <- stateStoreString.getObject("p234")
 
         } yield h
@@ -62,7 +62,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         (for {
 
           n <- stateStoreString.upsertObject("p345", 1, "a valid string", "t123")
-          _ = n shouldBe akka.Done
+          _ = n shouldBe org.apache.pekko.Done
           g <- stateStoreString.getObject("p345")
           _ = g.value shouldBe Some("a valid string")
           u <- stateStoreString.upsertObject("p345", 1, "updated valid string", "t123")
@@ -96,7 +96,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       whenReady {
         stateStoreString.deleteObject("p123")
       } { v =>
-        v shouldBe akka.Done
+        v shouldBe org.apache.pekko.Done
         whenReady {
           stateStoreString.getObject("p123")
         } { v =>
@@ -121,7 +121,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       whenReady {
         stateStorePayload.upsertObject("p123", 1, MyPayload("a valid string"), "t123")
       } { v =>
-        v shouldBe akka.Done
+        v shouldBe org.apache.pekko.Done
       }
     }
     "support composite upsert-fetch-repeat loop" in {
@@ -129,11 +129,11 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         for {
 
           n <- stateStorePayload.upsertObject("p234", 1, MyPayload("a valid string"), "t123")
-          _ = n shouldBe akka.Done
+          _ = n shouldBe org.apache.pekko.Done
           g <- stateStorePayload.getObject("p234")
           _ = g.value shouldBe Some(MyPayload("a valid string"))
           u <- stateStorePayload.upsertObject("p234", 2, MyPayload("updated valid string"), "t123")
-          _ = u shouldBe akka.Done
+          _ = u shouldBe org.apache.pekko.Done
           h <- stateStorePayload.getObject("p234")
 
         } yield h
@@ -145,7 +145,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       whenReady {
         stateStorePayload.deleteObject("p234")
       } { v =>
-        v shouldBe akka.Done
+        v shouldBe org.apache.pekko.Done
         whenReady {
           stateStorePayload.getObject("p234")
         } { v =>

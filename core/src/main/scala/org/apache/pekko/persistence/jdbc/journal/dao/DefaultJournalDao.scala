@@ -7,9 +7,9 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko.NotUsed
 import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.persistence.jdbc.AkkaSerialization
+import org.apache.pekko.persistence.jdbc.PekkoSerialization
 import org.apache.pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.JournalAkkaSerializationRow
+import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
 import org.apache.pekko.persistence.journal.Tagged
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
 import org.apache.pekko.serialization.Serialization
@@ -32,7 +32,7 @@ class DefaultJournalDao(
     val profile: JdbcProfile,
     val journalConfig: JournalConfig,
     serialization: Serialization)(implicit val ec: ExecutionContext, val mat: Materializer)
-    extends BaseDao[(JournalAkkaSerializationRow, Set[String])]
+    extends BaseDao[(JournalPekkoSerializationRow, Set[String])]
     with BaseJournalDaoWithReadMessages
     with JournalDao
     with H2Compat {
@@ -41,7 +41,7 @@ class DefaultJournalDao(
 
   override def baseDaoConfig: BaseDaoConfig = journalConfig.daoConfig
 
-  override def writeJournalRows(xs: immutable.Seq[(JournalAkkaSerializationRow, Set[String])]): Future[Unit] = {
+  override def writeJournalRows(xs: immutable.Seq[(JournalPekkoSerializationRow, Set[String])]): Future[Unit] = {
     db.run(queries.writeJournalRows(xs).transactionally).map(_ => ())(ExecutionContexts.parasitic)
   }
 
@@ -69,20 +69,20 @@ class DefaultJournalDao(
 
   override def asyncWriteMessages(messages: immutable.Seq[AtomicWrite]): Future[immutable.Seq[Try[Unit]]] = {
 
-    def serializeAtomicWrite(aw: AtomicWrite): Try[Seq[(JournalAkkaSerializationRow, Set[String])]] = {
+    def serializeAtomicWrite(aw: AtomicWrite): Try[Seq[(JournalPekkoSerializationRow, Set[String])]] = {
       Try(aw.payload.map(serialize))
     }
 
-    def serialize(pr: PersistentRepr): (JournalAkkaSerializationRow, Set[String]) = {
+    def serialize(pr: PersistentRepr): (JournalPekkoSerializationRow, Set[String]) = {
 
       val (updatedPr, tags) = pr.payload match {
         case Tagged(payload, tags) => (pr.withPayload(payload), tags)
         case _                     => (pr, Set.empty[String])
       }
 
-      val serializedPayload = AkkaSerialization.serialize(serialization, updatedPr.payload).get
-      val serializedMetadata = updatedPr.metadata.flatMap(m => AkkaSerialization.serialize(serialization, m).toOption)
-      val row = JournalAkkaSerializationRow(
+      val serializedPayload = PekkoSerialization.serialize(serialization, updatedPr.payload).get
+      val serializedMetadata = updatedPr.metadata.flatMap(m => PekkoSerialization.serialize(serialization, m).toOption)
+      val row = JournalPekkoSerializationRow(
         Long.MinValue,
         updatedPr.deleted,
         updatedPr.persistenceId,
@@ -102,7 +102,7 @@ class DefaultJournalDao(
 
     val serializedTries = messages.map(serializeAtomicWrite)
 
-    val rowsToWrite: Seq[(JournalAkkaSerializationRow, Set[String])] = for {
+    val rowsToWrite: Seq[(JournalPekkoSerializationRow, Set[String])] = for {
       serializeTry <- serializedTries
       row <- serializeTry.getOrElse(Seq.empty)
     } yield row
@@ -122,6 +122,6 @@ class DefaultJournalDao(
       .fromPublisher(
         db.stream(
           queries.messagesQuery((persistenceId, fromSequenceNr, toSequenceNr, correctMaxForH2Driver(max))).result))
-      .map(AkkaSerialization.fromRow(serialization)(_))
+      .map(PekkoSerialization.fromRow(serialization)(_))
   }
 }

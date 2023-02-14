@@ -1,10 +1,10 @@
 # Overview
 
-The Akka Persistence JDBC plugin allows for using JDBC-compliant databases as backend for @extref:[Akka Persistence](akka:persistence.html) and @extref:[Akka Persistence Query](akka:persistence-query.html).
+The Apache Pekko Persistence JDBC plugin allows for using JDBC-compliant databases as backend for @extref:[Apache Pekko Persistence](pekko:persistence.html) and @extref:[Apache Pekko Persistence Query](pekko:persistence-query.html).
 
-pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It implements the full akka-persistence-query API and is therefore very useful for implementing DDD-style application models using Akka and Scala for creating reactive applications.
+pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It implements the full pekko-persistence-query API and is therefore very useful for implementing DDD-style application models using Akka and Scala for creating reactive applications.
 
-Akka Persistence JDBC requires Akka $akka.version$ or later. It uses @extref:[Slick](slick:) $slick.version$ internally to access the database via JDBC, this does not require user code to make use of Slick.
+Apache Pekko Persistence JDBC requires Akka $pekko.version$ or later. It uses @extref:[Slick](slick:) $slick.version$ internally to access the database via JDBC, this does not require user code to make use of Slick.
 
 ## Version history
 
@@ -19,13 +19,13 @@ See the full release history at [GitHub releases](https://github.com/apache/incu
 ## Module info
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.apache.pekko
   artifact=pekko-persistence-jdbc_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-persistence-query_$scala.binary.version$
+  artifact2=pekko-persistence-query_$scala.binary.version$
   version2=AkkaVersion
   symbol3=SlickVersion
   value3=$slick.version$
@@ -45,7 +45,7 @@ Contributions via GitHub pull requests are gladly accepted from their original a
 
 ## Code of Conduct
 
-Contributors all agree to follow the [Lightbend Community Code of Conduct](https://www.lightbend.com/conduct).
+Contributors all agree to follow the [Apache Community Code of Conduct](https://www.apache.org/foundation/policies/conduct.html).
 
 ## License
 

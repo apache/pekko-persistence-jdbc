@@ -84,7 +84,7 @@ class AkkaPersistenceConfigTest extends AnyFlatSpec with Matchers {
           |  }
           |}
           |
-          |# the akka-persistence-snapshot-store in use
+          |# the pekko-persistence-snapshot-store in use
           |jdbc-snapshot-store {
           |  class = "org.apache.pekko.persistence.jdbc.snapshot.JdbcSnapshotStore"
           |
@@ -142,7 +142,7 @@ class AkkaPersistenceConfigTest extends AnyFlatSpec with Matchers {
           |  }
           |}
           |
-          |# the akka-persistence-query provider in use
+          |# the pekko-persistence-query provider in use
           |jdbc-read-journal {
           |  class = "org.apache.pekko.persistence.jdbc.query.JdbcReadJournalProvider"
           |

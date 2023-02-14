@@ -7,14 +7,14 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalAkkaSerializationRow, TagRow }
+import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
 
 /**
  * INTERNAL API
  */
 @InternalApi
 object JournalTables {
-  case class JournalAkkaSerializationRow(
+  case class JournalPekkoSerializationRow(
       ordering: Long,
       deleted: Boolean,
       persistenceId: String,
@@ -46,7 +46,7 @@ trait JournalTables {
   def tagTableCfg: EventTagTableConfiguration
 
   class JournalEvents(_tableTag: Tag)
-      extends Table[JournalAkkaSerializationRow](
+      extends Table[JournalPekkoSerializationRow](
         _tableTag,
         _schemaName = journalTableCfg.schemaName,
         _tableName = journalTableCfg.tableName) {
@@ -64,7 +64,7 @@ trait JournalTables {
         eventSerManifest,
         metaPayload,
         metaSerId,
-        metaSerManifest) <> (JournalAkkaSerializationRow.tupled, JournalAkkaSerializationRow.unapply)
+        metaSerManifest) <> (JournalPekkoSerializationRow.tupled, JournalPekkoSerializationRow.unapply)
 
     val ordering: Rep[Long] = column[Long](journalTableCfg.columnNames.ordering, O.AutoInc)
     val persistenceId: Rep[String] =

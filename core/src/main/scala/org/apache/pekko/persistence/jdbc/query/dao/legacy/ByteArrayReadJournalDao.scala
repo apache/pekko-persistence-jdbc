@@ -42,7 +42,7 @@ trait BaseByteArrayReadJournalDao extends ReadJournalDao with BaseJournalDaoWith
       max: Long): Source[Try[(PersistentRepr, Set[String], Long)], NotUsed] = {
 
     val publisher = db.stream(queries.eventsByTag((s"%$tag%", offset, maxOffset, correctMaxForH2Driver(max))).result)
-    // applies workaround for https://github.com/akka/akka-pekko-persistence-jdbc/issues/168
+    // applies workaround for https://github.com/akka/akka-persistence-jdbc/issues/168
     Source
       .fromPublisher(publisher)
       .via(perfectlyMatchTag(tag, readJournalConfig.pluginConfig.tagSeparator))
@@ -76,7 +76,7 @@ trait BaseByteArrayReadJournalDao extends ReadJournalDao with BaseJournalDaoWith
 object TagFilterFlow {
   /*
    * Returns a Flow that retains every event with tags that perfectly match passed tag.
-   * This is a workaround for bug https://github.com/akka/akka-pekko-persistence-jdbc/issues/168
+   * This is a workaround for bug https://github.com/akka/akka-persistence-jdbc/issues/168
    */
   private[dao] def perfectlyMatchTag(tag: String, separator: String) =
     Flow[JournalRow].filter(_.tags.exists(tags => tags.split(separator).contains(tag)))
@@ -136,7 +136,7 @@ trait OracleReadJournalDao extends ReadJournalDao {
             )
             WHERE rownum <= $max""".as[JournalRow]
 
-      // applies workaround for https://github.com/akka/akka-pekko-persistence-jdbc/issues/168
+      // applies workaround for https://github.com/akka/akka-persistence-jdbc/issues/168
       Source
         .fromPublisher(db.stream(selectStatement))
         .via(perfectlyMatchTag(tag, readJournalConfig.pluginConfig.tagSeparator))

@@ -13,7 +13,10 @@ import org.apache.pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem }
 import org.apache.pekko.pattern.ask
 import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
 import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.VisitedElement
-import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.{ GetMaxGlobalOffset, MaxGlobalOffset }
+import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.{
+  GetMaxGlobalOffset,
+  MaxGlobalOffset
+}
 import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
 import org.apache.pekko.testkit.TestProbe
 import org.apache.pekko.util.Timeout

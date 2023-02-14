@@ -121,13 +121,13 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
   import system.dispatcher
 
   def withCurrentPersistenceIds(within: FiniteDuration)(f: TestSubscriber.Probe[String] => Unit): Unit = {
-    val sink: akka.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
+    val sink: org.apache.pekko.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
     val tp = readJournal.currentPersistenceIds().runWith(sink, mat)
     tp.within(within)(f(tp))
   }
 
   def withPersistenceIds(within: FiniteDuration)(f: TestSubscriber.Probe[String] => Unit): Unit = {
-    val sink: akka.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
+    val sink: org.apache.pekko.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
     val tp = readJournal.persistenceIds().runWith(sink, mat)
     tp.within(within)(f(tp))
   }
@@ -135,7 +135,8 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
   def withCurrentEventsByPersistenceId(
       within: FiniteDuration)(persistenceId: String, fromSequenceNr: Long = 0, toSequenceNr: Long = Long.MaxValue)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: akka.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] = JavaSink.probe(system)
+    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+      JavaSink.probe(system)
     val tp = readJournal.currentEventsByPersistenceId(persistenceId, fromSequenceNr, toSequenceNr).runWith(sink, mat)
     tp.within(within)(f(tp))
   }
@@ -143,21 +144,24 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
   def withEventsByPersistenceId(
       within: FiniteDuration)(persistenceId: String, fromSequenceNr: Long, toSequenceNr: Long)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: akka.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] = JavaSink.probe(system)
+    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+      JavaSink.probe(system)
     val tp = readJournal.eventsByPersistenceId(persistenceId, fromSequenceNr, toSequenceNr).runWith(sink, mat)
     tp.within(within)(f(tp))
   }
 
   def withCurrentEventsByTag(within: FiniteDuration)(tag: String, offset: Offset)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: akka.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] = JavaSink.probe(system)
+    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+      JavaSink.probe(system)
     val tp = readJournal.currentEventsByTag(tag, offset).runWith(sink, mat)
     tp.within(within)(f(tp))
   }
 
   def withEventsByTag(within: FiniteDuration)(tag: String, offset: Offset)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: akka.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] = JavaSink.probe(system)
+    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+      JavaSink.probe(system)
     val tp = readJournal.eventsByTag(tag, offset).runWith(sink, mat)
     tp.within(within)(f(tp))
   }
@@ -237,26 +241,26 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
         case event: Int =>
           persist(event) { (event: Int) =>
             updateState(event)
-            if (replyToMessages) sender() ! akka.actor.Status.Success(event)
+            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success(event)
           }
 
         case event @ Tagged(payload: Int, tags) =>
           persist(event) { _ =>
             updateState(payload)
-            if (replyToMessages) sender() ! akka.actor.Status.Success((payload, tags))
+            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success((payload, tags))
           }
         case event: Event =>
           persist(event) { evt =>
-            if (replyToMessages) sender() ! akka.actor.Status.Success(evt)
+            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success(evt)
           }
 
         case event @ TaggedEvent(payload: Event, tag) =>
           persist(event) { _ =>
-            if (replyToMessages) sender() ! akka.actor.Status.Success((payload, tag))
+            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success((payload, tag))
           }
         case event @ TaggedAsyncEvent(payload: Event, tag) =>
           persistAsync(event) { _ =>
-            if (replyToMessages) sender() ! akka.actor.Status.Success((payload, tag))
+            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success((payload, tag))
           }
       }
 
@@ -288,8 +292,8 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
 
   def pendingIfOracleWithLegacy(): Unit = {
     if (profile == slick.jdbc.OracleProfile && readJournalConfig.pluginConfig.dao == classOf[
-        pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
-      pending // TODO https://github.com/akka/akka-pekko-persistence-jdbc/issues/673
+        org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
+      pending // TODO https://github.com/akka/akka-persistence-jdbc/issues/673
   }
 
   def setupEmpty(persistenceId: Int, replyToMessages: Boolean)(implicit system: ActorSystem): ActorRef = {

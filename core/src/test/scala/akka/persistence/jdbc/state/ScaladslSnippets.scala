@@ -62,11 +62,11 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     val v: Future[GetObjectResult[String]] =
       for {
         n <- store.upsertObject("p234", 1, "a valid string", "t123")
-        _ = n shouldBe akka.Done
+        _ = n shouldBe org.apache.pekko.Done
         g <- store.getObject("p234")
         _ = g.value shouldBe Some("a valid string")
         u <- store.upsertObject("p234", 2, "updated valid string", "t123")
-        _ = u shouldBe akka.Done
+        _ = u shouldBe org.apache.pekko.Done
         h <- store.getObject("p234")
       } yield h
 

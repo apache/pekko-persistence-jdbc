@@ -6,7 +6,7 @@
 package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalAkkaSerializationRow, TagRow }
+import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
@@ -23,7 +23,7 @@ class JournalQueries(
   private val insertAndReturn = JournalTable.returning(JournalTable.map(_.ordering))
   private val TagTableC = Compiled(TagTable)
 
-  def writeJournalRows(xs: Seq[(JournalAkkaSerializationRow, Set[String])])(implicit ec: ExecutionContext) = {
+  def writeJournalRows(xs: Seq[(JournalPekkoSerializationRow, Set[String])])(implicit ec: ExecutionContext) = {
     val sorted = xs.sortBy(event => event._1.sequenceNumber)
     if (sorted.exists(_._2.nonEmpty)) {
       // only if there are any tags

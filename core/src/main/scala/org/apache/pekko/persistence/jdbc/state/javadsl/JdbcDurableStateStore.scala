@@ -7,18 +7,16 @@ package org.apache.pekko.persistence.jdbc.state.javadsl
 
 import java.util.Optional
 import java.util.concurrent.CompletionStage
-
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext
-
 import org.apache.pekko.annotation.ApiMayChange
 import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
 import org.apache.pekko.persistence.jdbc.state.DurableStateQueries
 import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import org.apache.pekko.persistence.jdbc.state.scaladsl.{ JdbcDurableStateStore => ScalaJdbcDurableStateStore }
 import org.apache.pekko.persistence.query.{ DurableStateChange, Offset }
 import org.apache.pekko.persistence.query.javadsl.DurableStateStoreQuery
+import org.apache.pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
 import org.apache.pekko.stream.javadsl.Source
 import slick.jdbc.JdbcProfile
 

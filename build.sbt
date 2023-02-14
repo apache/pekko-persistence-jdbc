@@ -44,14 +44,14 @@ val themeSettings = Seq(
   // allow access to snapshots for pekko-sbt-paradox
   resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/"),
   pekkoParadoxGithub := "https://github.com/apache/incubator-pekko-persistence-jdbc")
-*/
+ */
 
 lazy val docs = project
   .enablePlugins(ProjectAutoPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
   .disablePlugins(MimaPlugin)
   .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
-    name := "Akka Persistence JDBC",
+    name := "Apache Pekko Persistence JDBC",
     publish / skip := true,
     makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
@@ -69,7 +69,7 @@ lazy val docs = project
         else "v" + version.value}/%s",
       // Slick
       "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",
-      // Akka
+      // Pekko
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
       "scaladoc.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/current/",
       "javadoc.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/current/",

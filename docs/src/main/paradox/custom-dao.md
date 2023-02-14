@@ -1,7 +1,7 @@
 # Custom DAO Implementation
 
 The plugin supports loading a custom DAO for the journal and snapshot. You should implement a custom Data Access Object (DAO) if you wish to alter the default persistency strategy in
-any way, but wish to reuse all the logic that the plugin already has in place, eg. the Akka Persistence Query API. For example, the default persistency strategy that the plugin
+any way, but wish to reuse all the logic that the plugin already has in place, eg. the Apache Pekko Persistence Query API. For example, the default persistency strategy that the plugin
 supports serializes journal and snapshot messages using a serializer of your choice and stores them as byte arrays in the database.
 
 By means of configuration in `application.conf` a DAO can be configured, below the default DAOs are shown:

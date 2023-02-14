@@ -6,7 +6,7 @@
 package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.{decodeTags, encodeTags}
+import org.apache.pekko.persistence.jdbc.journal.dao.legacy.{ decodeTags, encodeTags }
 
 class TagsSerializationTest extends SharedActorSystemTestSpec {
   "Encode" should "no tags" in {

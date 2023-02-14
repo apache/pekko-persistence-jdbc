@@ -5,7 +5,7 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.{Done, NotUsed}
+import org.apache.pekko.{ Done, NotUsed }
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import org.apache.pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils

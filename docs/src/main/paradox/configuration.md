@@ -35,10 +35,10 @@ For testing purposes the journal and snapshot tables can be created programmatic
 
 
 Scala
-:  @@snip[snip](/core/src/test/scala/akka/persistence/jdbc/ScaladslSnippets.scala) { #create }
+:  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #create }
 
 Java
-:  @@snip[snip](/core/src/test/java/akka/persistence/jdbc/JavadslSnippets.java) { #create }
+:  @@snip[snip](/core/src/test/java/org/apache/pekko/persistence/jdbc/JavadslSnippets.java) { #create }
 
 A `dropIfExists` variant is also available.
 
@@ -94,7 +94,7 @@ SQL Server
 ### Customized loading of the db connection
 
 It is also possible to load a custom database connection. 
-In order to do so a custom implementation of @extref:[SlickDatabaseProvider](github:/core/src/main/scala/akka/persistence/jdbc/db/SlickExtension.scala)
+In order to do so a custom implementation of @extref:[SlickDatabaseProvider](github:/core/src/main/scala/org/apache/pekko/persistence/jdbc/db/SlickExtension.scala)
 needs to be created. The methods that need to be implemented supply the Slick `Database` and `Profile` to the journals.
 
 To enable your custom `SlickDatabaseProvider`, the fully qualified class name of the `SlickDatabaseProvider`

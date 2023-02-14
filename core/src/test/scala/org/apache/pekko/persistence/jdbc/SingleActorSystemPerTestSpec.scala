@@ -7,8 +7,8 @@ package org.apache.pekko.persistence.jdbc
 
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.util.Timeout
-import com.typesafe.config.{Config, ConfigFactory, ConfigValue}
-import org.apache.pekko.persistence.jdbc.config.{JournalConfig, ReadJournalConfig, SlickConfiguration}
+import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
+import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration }
 import org.apache.pekko.persistence.jdbc.db.SlickDatabase
 import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import org.apache.pekko.persistence.jdbc.util.DropCreate

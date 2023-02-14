@@ -5,8 +5,8 @@
 
 package org.apache.pekko.persistence.jdbc.configuration
 
-import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.pekko.persistence.jdbc.config.{JournalConfig, ReadJournalConfig, SlickConfiguration, SnapshotConfig}
+import com.typesafe.config.{ Config, ConfigFactory }
+import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration, SnapshotConfig }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

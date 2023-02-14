@@ -6,8 +6,7 @@
 package org.apache.pekko.persistence.jdbc
 package journal.dao.legacy
 
-import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
-import org.apache.pekko.persistence.{AtomicWrite, PersistentRepr}
+import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
 
 import scala.collection.immutable._
 

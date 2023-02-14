@@ -3,11 +3,11 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package org.apache.pekko.persistence.jdbc.journal.dao
+package org.apache.pekko.persistence.jdbc
+package journal.dao.legacy
 
 import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer
-import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
+import org.apache.pekko.persistence.{AtomicWrite, PersistentRepr}
 
 import scala.collection.immutable._
 

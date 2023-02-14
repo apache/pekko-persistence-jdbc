@@ -4,17 +4,17 @@ on:
   pull_request:
   push:
     branches:
-      - master
-      - migration-tool # remove before merging to master
+      - main
+      - migration-tool # remove before merging to main
     tags-ignore: [ v.* ]
 
 jobs:
   check-code-style:
     name: Check Code Style
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # we don't know what commit the last tag was it's safer to get entire repo so previousStableVersion resolves
           fetch-depth: 0
@@ -39,10 +39,10 @@ jobs:
 
   check-code-compilation:
     name: Check Code Compilation
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -66,10 +66,10 @@ jobs:
 
   check-docs:
     name: Check Docs
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 

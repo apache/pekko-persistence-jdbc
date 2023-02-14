@@ -5,8 +5,10 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.{Done, NotUsed}
 import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import org.apache.pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 
 import scala.concurrent.Future
 
@@ -14,7 +16,6 @@ object ScaladslSnippets {
 
   def create(): Unit = {
     // #create
-    import org.apache.pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 
     implicit val system: ActorSystem = ActorSystem("example")
     val done: Future[Done] = SchemaUtils.createIfNotExists()
@@ -26,7 +27,6 @@ object ScaladslSnippets {
 
     // #read-journal
     import org.apache.pekko.persistence.query.PersistenceQuery
-    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -39,7 +39,6 @@ object ScaladslSnippets {
     // #persistence-ids
     import org.apache.pekko.stream.scaladsl.Source
     import org.apache.pekko.persistence.query.PersistenceQuery
-    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -56,7 +55,6 @@ object ScaladslSnippets {
     // #events-by-persistence-id
     import org.apache.pekko.stream.scaladsl.Source
     import org.apache.pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
-    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -74,7 +72,6 @@ object ScaladslSnippets {
     // #events-by-tag
     import org.apache.pekko.stream.scaladsl.Source
     import org.apache.pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
-    import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)

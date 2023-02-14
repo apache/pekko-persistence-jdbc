@@ -5,14 +5,14 @@
 
 package org.apache.pekko.persistence.jdbc.journal
 
+import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.pekko.persistence.CapabilityFlag
-import org.apache.pekko.persistence.jdbc.config._
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
-import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
-import org.apache.pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import org.apache.pekko.persistence.journal.JournalSpec
-import com.typesafe.config.{ Config, ConfigFactory }
-import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
+import org.apache.pekko.persistence.jdbc.config.JournalConfig
+import org.apache.pekko.persistence.jdbc.db.SlickExtension
+import org.apache.pekko.persistence.jdbc.testkit.internal.{H2, SchemaType}
+import org.apache.pekko.persistence.jdbc.util.{ClasspathResources, DropCreate}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatest.concurrent.ScalaFutures
 
 import scala.concurrent.duration._

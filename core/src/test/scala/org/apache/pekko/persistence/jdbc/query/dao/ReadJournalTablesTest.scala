@@ -3,7 +3,7 @@
  * Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package org.apache.pekko.persistence.jdbc.query.dao.legacy
+package org.apache.pekko.persistence.jdbc.query.dao
 
 import org.apache.pekko.persistence.jdbc.TablesTestSpec
 import org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalTables

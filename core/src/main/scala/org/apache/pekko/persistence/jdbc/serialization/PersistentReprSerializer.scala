@@ -14,7 +14,7 @@ import scala.collection.immutable._
 
 import scala.util.Try
 
-@deprecated("use Akka Serialization for the payloads instead", since = "5.0.0")
+@deprecated("use Apache Pekko Serialization for the payloads instead", since = "5.0.0")
 trait PersistentReprSerializer[T] {
 
   /**
@@ -45,7 +45,7 @@ trait PersistentReprSerializer[T] {
   def deserialize(t: T): Try[(PersistentRepr, Set[String], Long)]
 }
 
-@deprecated("use Akka Serialization for the payloads instead", since = "5.0.0")
+@deprecated("use Apache Pekko Serialization for the payloads instead", since = "5.0.0")
 trait FlowPersistentReprSerializer[T] extends PersistentReprSerializer[T] {
 
   /**

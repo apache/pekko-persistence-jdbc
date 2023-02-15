@@ -34,7 +34,7 @@ class SlickExtensionImpl(system: ExtendedActorSystem) extends Extension {
 
 /**
  * User overridable database provider.
- * Since this provider is called from an akka extension it must be thread safe!
+ * Since this provider is called from an Apache Pekko extension it must be thread safe!
  *
  * A SlickDatabaseProvider is loaded using reflection,
  * The instance is created using the following:

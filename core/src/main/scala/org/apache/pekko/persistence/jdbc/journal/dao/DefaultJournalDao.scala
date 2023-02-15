@@ -24,7 +24,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
 /**
- * A [[JournalDao]] that uses Akka serialization to serialize the payload and store
+ * A [[JournalDao]] that uses Apache Pekko serialization to serialize the payload and store
  * the manifest and serializer id used.
  */
 class DefaultJournalDao(

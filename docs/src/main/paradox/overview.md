@@ -2,19 +2,13 @@
 
 The Apache Pekko Persistence JDBC plugin allows for using JDBC-compliant databases as backend for @extref:[Apache Pekko Persistence](pekko:persistence.html) and @extref:[Apache Pekko Persistence Query](pekko:persistence-query.html).
 
-pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It implements the full pekko-persistence-query API and is therefore very useful for implementing DDD-style application models using Akka and Scala for creating reactive applications.
+pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It implements the full pekko-persistence-query API and is therefore very useful for implementing DDD-style application models using Apache Pekko and Scala for creating reactive applications.
 
-Apache Pekko Persistence JDBC requires Akka $pekko.version$ or later. It uses @extref:[Slick](slick:) $slick.version$ internally to access the database via JDBC, this does not require user code to make use of Slick.
+Apache Pekko Persistence JDBC requires Apache Pekko $pekko.version$ or later. It uses @extref:[Slick](slick:) $slick.version$ internally to access the database via JDBC, this does not require user code to make use of Slick.
 
 ## Version history
 
-| Description | Version | Akka version |
-|-------------|---------|--------------|
-| New database schema, see @ref:[Migration](migration.md) | [5.0.0](https://github.com/apache/incubator-pekko-persistence-jdbc/releases) | Akka 2.6.+ |
-| First release within the Akka organization | [4.0.0](https://github.com/apache/incubator-pekko-persistence-jdbc/releases/tag/v4.0.0) | Akka 2.6.+ |
-| Requires Akka 2.5.0 | [3.5.3+](https://github.com/apache/incubator-pekko-persistence-jdbc/releases/tag/v3.5.3) | Akka 2.5.23+ or 2.6.x |
-
-See the full release history at [GitHub releases](https://github.com/apache/incubator-pekko-persistence-jdbc/releases).
+There have been no Apache Pekko Persistence JDBC releases yet.
 
 ## Module info
 
@@ -22,11 +16,11 @@ See the full release history at [GitHub releases](https://github.com/apache/incu
   group=org.apache.pekko
   artifact=pekko-persistence-jdbc_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-persistence-query_$scala.binary.version$
-  version2=AkkaVersion
+  version2=PekkoVersion
   symbol3=SlickVersion
   value3=$slick.version$
   group3=com.typesafe.slick

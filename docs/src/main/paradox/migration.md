@@ -1,39 +1,5 @@
 # Migration
 
-## Migrating to version 6.0.0
-
-**Release `6.0.0` updates H2 to version 2.1.212 which is not compatible to the previous 1.4.200***
-
-H2 has undergone considerable changes that broke backwards compatibility to make H2 SQL Standard compliant.
-For migration please refer to the H2 [migration guide](http://www.h2database.com/html/migration-to-v2.html)
-
-
-## Migrating to version 5.0.0
-
-**Release `5.0.0` introduces a new schema and serialization that is not compatible with older versions.** 
-
-The previous version was wrapping the event payload with Akka's `PersistentRepr`, while in 5.0.0 the serialized event payload is persisted directly into the column. In order to migrate to the new schema, a migration tool capable of reading the serialized representation of `PersistentRepr` is required. That [tool doesn't exist yet](https://github.com/akka/akka-persistence-jdbc/issues/317), therefore, the new schema can only be used with new applications.
-
-If you have existing data override the DAO to continue using the old schema:
-
-```hocon
-# Use the DAOs for the legacy (pre 5.0) database schema
-
-jdbc-journal {
-  dao = "org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao"
-}
-
-jdbc-snapshot-store {
-  dao = "org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao"
-}
-
-jdbc-read-journal {
-  dao = "org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao"
-}
-```
-
-If you have re-configured the `schemaName`, `tableName` and `columnNames` through configuration settings then you will need to move them to a new key.
-
-* key `jdbc-journal.tables.journal` becomes `jdbc-journal.tables.legacy_journal`
-* key `jdbc-snapshot-store.tables.snapshot` becomes `jdbc-snapshot-store.tables.legacy_snapshot`
-* key `jdbc-read-journal.tables.journal` becomes `jdbc-read-journal.tables.legacy_journal`
+* There are no Apache Pekko Persistence JDBC releases yet
+* If you are looking to migrate from [Akka Persistence JDBC](https://doc.akka.io/docs/akka-persistence-jdbc/current/migration.html), you should upgrade to v5.1.x before attempting to migrate to Pekko's equivalent.
+* We will provide a more detailed migration guide for switching from Akka Persistence JDBC to Pekko Persistence JDBC but the Core [Pekko Migration page](https://pekko.apache.org/docs/pekko/current//project/migration-guides.html) can help, in the interim.

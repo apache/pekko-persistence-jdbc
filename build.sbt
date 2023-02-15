@@ -1,9 +1,10 @@
 import com.lightbend.paradox.apidoc.ApidocPlugin.autoImport.apidocRootPackage
+import org.apache.pekko.PekkoParadoxPlugin.autoImport._
+import sbt.Keys._
 
-// FIXME remove switching to final Akka version
-ThisBuild / resolvers += "Akka Snapshots".at("https://oss.sonatype.org/content/repositories/snapshots/")
+ThisBuild / resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
 
-lazy val `akka-persistence-jdbc` = project
+lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
@@ -19,7 +20,7 @@ lazy val core = project
   .settings(Defaults.itSettings)
   .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
-    name := "akka-persistence-jdbc",
+    name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
     // temporarily disable mima checks
@@ -32,50 +33,58 @@ lazy val migrator = project
   .settings(Defaults.itSettings)
   .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
-    name := "akka-persistence-jdbc-migrator",
+    name := "pekko-persistence-jdbc-migrator",
     libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries,
     // TODO remove this when ready to publish it
     publish / skip := true)
   .dependsOn(core % "compile->compile;test->test")
 
+/*
+val themeSettings = Seq(
+  // allow access to snapshots for pekko-sbt-paradox
+  resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/"),
+  pekkoParadoxGithub := "https://github.com/apache/incubator-pekko-persistence-jdbc")
+ */
+
 lazy val docs = project
-  .enablePlugins(ProjectAutoPlugin, AkkaParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
+  .enablePlugins(ProjectAutoPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
   .disablePlugins(MimaPlugin)
   .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
-    name := "Akka Persistence JDBC",
+    name := "Apache Pekko Persistence JDBC",
     publish / skip := true,
     makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
-    Preprocess / siteSubdirName := s"api/akka-persistence-jdbc/${if (isSnapshot.value) "snapshot"
+    Preprocess / siteSubdirName := s"api/pekko-persistence-jdbc/${if (isSnapshot.value) "snapshot"
       else version.value}",
     Preprocess / sourceDirectory := (LocalRootProject / ScalaUnidoc / unidoc / target).value,
-    Paradox / siteSubdirName := s"docs/akka-persistence-jdbc/${if (isSnapshot.value) "snapshot" else version.value}",
+    Paradox / siteSubdirName := s"docs/pekko-persistence-jdbc/${if (isSnapshot.value) "snapshot" else version.value}",
     Compile / paradoxProperties ++= Map(
-      "project.url" -> "https://doc.akka.io/docs/akka-persistence-jdbc/current/",
-      "github.base_url" -> "https://github.com/akka/akka-persistence-jdbc/",
-      "canonical.base_url" -> "https://doc.akka.io/docs/akka-persistence-jdbc/current",
-      "akka.version" -> Dependencies.AkkaVersion,
+      "project.url" -> "https://pekko.apache.org/docs/pekko-persistence-jdbc/current/",
+      "github.base_url" -> "https://github.com/apache/incubator-pekko-persistence-jdbc/",
+      "canonical.base_url" -> "https://pekko.apache.org/docs/pekko-persistence-jdbc/current",
+      "pekko.version" -> "current",
       "slick.version" -> Dependencies.SlickVersion,
-      "extref.github.base_url" -> s"https://github.com/akka/akka-persistence-jdbc/blob/${if (isSnapshot.value) "master"
+      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-persistence-jdbc/blob/${if (isSnapshot.value) "master"
         else "v" + version.value}/%s",
       // Slick
       "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",
-      // Akka
-      "extref.akka.base_url" -> s"https://doc.akka.io/docs/akka/${Dependencies.AkkaBinaryVersion}/%s",
-      "scaladoc.akka.base_url" -> s"https://doc.akka.io/api/akka/${Dependencies.AkkaBinaryVersion}/",
-      "javadoc.akka.base_url" -> s"https://doc.akka.io/japi/akka/${Dependencies.AkkaBinaryVersion}/",
-      "javadoc.akka.link_style" -> "direct",
+      // Pekko
+      "extref.pekko.base_url" -> "https://pekko.apache.org/docs/pekko/current/%s",
+      "scaladoc.base_url" -> "https://pekko.apache.org/api/pekko-persistence-jdbc/current/",
+      "scaladoc.pekko.base_url" -> "https://pekko.apache.org/api/pekko/current/",
+      "javadoc.pekko.base_url" -> "https://pekko.apache.org/japi/pekko/current/",
+      "javadoc.pekko.link_style" -> "direct",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",
       // Scala
       "scaladoc.scala.base_url" -> s"https://www.scala-lang.org/api/${scalaBinaryVersion.value}.x/",
-      "scaladoc.akka.persistence.jdbc.base_url" -> s"/${(Preprocess / siteSubdirName).value}/"),
+      "scaladoc.pekko.persistence.jdbc.base_url" -> s"/${(Preprocess / siteSubdirName).value}/"),
     paradoxGroups := Map("Language" -> Seq("Java", "Scala")),
     resolvers += Resolver.jcenterRepo,
     publishRsyncArtifacts += makeSite.value -> "www/",
     publishRsyncHost := "akkarepo@gustav.akka.io",
-    apidocRootPackage := "akka")
+    apidocRootPackage := "org.apache.pekko")
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value

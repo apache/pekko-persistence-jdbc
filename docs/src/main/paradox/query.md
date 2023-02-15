@@ -2,13 +2,13 @@
 
 ## How to get the ReadJournal
 
-The `ReadJournal` is retrieved via the `akka.persistence.query.PersistenceQuery` extension:
+The `ReadJournal` is retrieved via the `org.apache.pekko.persistence.query.PersistenceQuery` extension:
 
 Scala
-:  @@snip[snip](/core/src/test/scala/akka/persistence/jdbc/ScaladslSnippets.scala) { #read-journal }
+:  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #read-journal }
 
 Java
-: @@snip[snip](/core/src/test/java/akka/persistence/jdbc/JavadslSnippets.java) { #read-journal }
+: @@snip[snip](/core/src/test/java/org/apache/pekko/persistence/jdbc/JavadslSnippets.java) { #read-journal }
 
 ## Persistence Query Plugin
 
@@ -19,10 +19,10 @@ The plugin supports the following queries:
 `allPersistenceIds` and `currentPersistenceIds` are used for retrieving all persistenceIds of all persistent actors.
 
 Scala
-:  @@snip[snip](/core/src/test/scala/akka/persistence/jdbc/ScaladslSnippets.scala) { #persistence-ids }
+:  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #persistence-ids }
 
 Java
-:  @@snip[snip](/core/src/test/java/akka/persistence/jdbc/JavadslSnippets.java) { #persistence-ids }
+:  @@snip[snip](/core/src/test/java/org/apache/pekko/persistence/jdbc/JavadslSnippets.java) { #persistence-ids }
 
 The returned event stream is unordered and you can expect different order for multiple executions of the query.
 
@@ -40,10 +40,10 @@ The stream is completed with failure if there is a failure in executing the quer
 a specific PersistentActor identified by persistenceId.
 
 Scala
-:  @@snip[snip](/core/src/test/scala/akka/persistence/jdbc/ScaladslSnippets.scala) { #events-by-persistence-id }
+:  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #events-by-persistence-id }
 
 Java
-:  @@snip[snip](/core/src/test/java/akka/persistence/jdbc/JavadslSnippets.java) { #events-by-persistence-id }
+:  @@snip[snip](/core/src/test/java/org/apache/pekko/persistence/jdbc/JavadslSnippets.java) { #events-by-persistence-id }
 
 You can retrieve a subset of all events by specifying `fromSequenceNr` and `toSequenceNr` or use `0L` and `Long.MaxValue` respectively to retrieve all events. Note that the corresponding sequence number of each event is provided in the `EventEnvelope`, which makes it possible to resume the stream at a later point from a given sequence number.
 
@@ -57,7 +57,7 @@ The stream is completed with failure if there is a failure in executing the quer
 `tag`, e.g. all domain events of an Aggregate Root type.
 
 Scala
-:  @@snip[snip](/core/src/test/scala/akka/persistence/jdbc/ScaladslSnippets.scala) { #events-by-tag }
+:  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #events-by-tag }
 
 Java
-:  @@snip[snip](/core/src/test/java/akka/persistence/jdbc/JavadslSnippets.java) { #events-by-tag }
+:  @@snip[snip](/core/src/test/java/org/apache/pekko/persistence/jdbc/JavadslSnippets.java) { #events-by-tag }

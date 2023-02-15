@@ -10,9 +10,7 @@ Please note that the H2 database is not recommended to be used as a production d
 
 ## Documentation
 
-* [current Akka Persistence JDBC documentation](https://doc.akka.io/docs/akka-persistence-jdbc/current/)
-* [Akka Persistence JDBC 3.5.x documentation](https://doc.akka.io/docs/akka-persistence-jdbc/3.5/)
-* [Snapshot documentation](https://doc.akka.io/docs/akka-persistence-jdbc/snapshot/)
+* [current Apache Pekko Persistence JDBC documentation](https://pekko.apache.org/docs/pekko-persistence-jdbc/current/)
 
 ## Release notes
 

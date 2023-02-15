@@ -17,7 +17,7 @@ jobs:
       matrix:
         include:
           - { name: "Postgres", extraOpts: '' }
-          - { name: "Postgres (old dao)", extraOpts: ' -Djdbc-journal.dao=akka.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao -Djdbc-snapshot-store.dao=akka.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao -Djdbc-read-journal.dao=akka.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao' }
+          - { name: "Postgres (old dao)", extraOpts: ' -Djdbc-journal.dao=org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao -Djdbc-snapshot-store.dao=org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao -Djdbc-read-journal.dao=org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao' }
           
     steps:
       - name: Checkout
@@ -43,7 +43,7 @@ jobs:
         run: ./scripts/launch-postgres.sh
 
       - name: Run Integration tests for  ${{ matrix.name }}
-        run: sbt "++2.13.8 It/testOnly akka.persistence.jdbc.integration.Postgres*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
+        run: sbt "++2.13.8 It/testOnly org.apache.pekko.persistence.jdbc.integration.Postgres*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
 
       - name: Print logs on failure
         if: ${{ failure() }}

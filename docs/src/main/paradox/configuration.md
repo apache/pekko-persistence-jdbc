@@ -2,7 +2,7 @@
 
 The plugin relies on @extref[Slick](slick:) to do create the SQL dialect for the database in use, therefore the following must be configured in `application.conf`
 
-Configure `akka-persistence`:
+Configure `pekko-persistence`:
 
 - instruct akka persistence to use the `jdbc-journal` plugin,
 - instruct akka persistence to use the `jdbc-snapshot-store` plugin,
@@ -35,10 +35,10 @@ For testing purposes the journal and snapshot tables can be created programmatic
 
 
 Scala
-:  @@snip[snip](/core/src/test/scala/akka/persistence/jdbc/ScaladslSnippets.scala) { #create }
+:  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #create }
 
 Java
-:  @@snip[snip](/core/src/test/java/akka/persistence/jdbc/JavadslSnippets.java) { #create }
+:  @@snip[snip](/core/src/test/java/org/apache/pekko/persistence/jdbc/JavadslSnippets.java) { #create }
 
 A `dropIfExists` variant is also available.
 
@@ -47,7 +47,7 @@ A `dropIfExists` variant is also available.
 
 ## Reference Configuration
 
-akka-persistence-jdbc provides the defaults as part of the @extref:[reference.conf](github:/core/src/main/resources/reference.conf). This file documents all the values which can be configured.
+pekko-persistence-jdbc provides the defaults as part of the @extref:[reference.conf](github:/core/src/main/resources/reference.conf). This file documents all the values which can be configured.
 
 There are several possible ways to configure loading your database connections. Options will be explained below.
 
@@ -94,7 +94,7 @@ SQL Server
 ### Customized loading of the db connection
 
 It is also possible to load a custom database connection. 
-In order to do so a custom implementation of @extref:[SlickDatabaseProvider](github:/core/src/main/scala/akka/persistence/jdbc/db/SlickExtension.scala)
+In order to do so a custom implementation of @extref:[SlickDatabaseProvider](github:/core/src/main/scala/org/apache/pekko/persistence/jdbc/db/SlickExtension.scala)
 needs to be created. The methods that need to be implemented supply the Slick `Database` and `Profile` to the journals.
 
 To enable your custom `SlickDatabaseProvider`, the fully qualified class name of the `SlickDatabaseProvider`
@@ -102,7 +102,7 @@ needs to be configured in the application.conf. In addition, you might want to c
 the database to be closed automatically:
 
 ```hocon
-akka-persistence-jdbc {
+pekko-persistence-jdbc {
   database-provider-fqcn = "com.mypackage.CustomSlickDatabaseProvider"
 }
 jdbc-journal {
@@ -131,7 +131,7 @@ jdbc-journal {
 When using the `use-shared-db = slick` setting, the follow configuration can serve as an example:
 
 ```hocon
-akka-persistence-jdbc {
+pekko-persistence-jdbc {
   shared-databases {
     slick {
       profile = "slick.jdbc.PostgresProfile$"

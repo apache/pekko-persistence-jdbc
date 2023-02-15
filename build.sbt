@@ -39,15 +39,13 @@ lazy val migrator = project
     publish / skip := true)
   .dependsOn(core % "compile->compile;test->test")
 
-/*
-val themeSettings = Seq(
+lazy val themeSettings = Seq(
   // allow access to snapshots for pekko-sbt-paradox
   resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/"),
   pekkoParadoxGithub := "https://github.com/apache/incubator-pekko-persistence-jdbc")
- */
 
 lazy val docs = project
-  .enablePlugins(ProjectAutoPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
+  .enablePlugins(ProjectAutoPlugin, PekkoParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
   .disablePlugins(MimaPlugin)
   .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
@@ -85,6 +83,7 @@ lazy val docs = project
     publishRsyncArtifacts += makeSite.value -> "www/",
     publishRsyncHost := "akkarepo@gustav.akka.io",
     apidocRootPackage := "org.apache.pekko")
+  .settings(themeSettings)
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value

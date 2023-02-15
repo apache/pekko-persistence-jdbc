@@ -24,7 +24,7 @@ trait JournalDao extends JournalDaoWithReadMessages {
   def highestSequenceNr(persistenceId: String, fromSequenceNr: Long): Future[Long]
 
   /**
-   * @see [[akka.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
+   * @see [[org.apache.pekko.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
    */
   def asyncWriteMessages(messages: Seq[AtomicWrite]): Future[Seq[Try[Unit]]]
 }

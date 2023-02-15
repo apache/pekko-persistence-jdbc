@@ -2,7 +2,7 @@
 
 ## How to get the ReadJournal
 
-The `ReadJournal` is retrieved via the `akka.persistence.query.PersistenceQuery` extension:
+The `ReadJournal` is retrieved via the `org.apache.pekko.persistence.query.PersistenceQuery` extension:
 
 Scala
 :  @@snip[snip](/core/src/test/scala/org/apache/pekko/persistence/jdbc/ScaladslSnippets.scala) { #read-journal }

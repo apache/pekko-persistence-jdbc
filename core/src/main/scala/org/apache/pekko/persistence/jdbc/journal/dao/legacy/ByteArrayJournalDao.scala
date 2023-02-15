@@ -62,7 +62,7 @@ trait BaseByteArrayJournalDao
   }
 
   /**
-   * @see [[akka.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
+   * @see [[org.apache.pekko.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
    */
   def asyncWriteMessages(messages: Seq[AtomicWrite]): Future[Seq[Try[Unit]]] = {
     val serializedTries: Seq[Try[Seq[JournalRow]]] = serializer.serialize(messages)
@@ -81,7 +81,7 @@ trait BaseByteArrayJournalDao
 
   override def delete(persistenceId: String, maxSequenceNr: Long): Future[Unit] = {
     // We should keep journal record with highest sequence number in order to be compliant
-    // with @see [[akka.persistence.journal.JournalSpec]]
+    // with @see [[org.apache.pekko.persistence.journal.JournalSpec]]
     val actions: DBIOAction[Unit, NoStream, Effect.Write with Effect.Read] = for {
       _ <- queries.markJournalMessagesAsDeleted(persistenceId, maxSequenceNr)
       highestMarkedSequenceNr <- highestMarkedSequenceNr(persistenceId)

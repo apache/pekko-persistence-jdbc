@@ -34,7 +34,7 @@ object JdbcAsyncWriteJournal {
    * Extra Plugin API: May be used to issue in-place updates for events.
    * To be used only for data migrations such as "encrypt all events" and similar operations.
    *
-   * The write payload may be wrapped in a [[akka.persistence.journal.Tagged]],
+   * The write payload may be wrapped in a [[org.apache.pekko.persistence.journal.Tagged]],
    * in which case the new tags will overwrite the existing tags of the event.
    */
   final case class InPlaceUpdateEvent(persistenceId: String, seqNr: Long, write: AnyRef)

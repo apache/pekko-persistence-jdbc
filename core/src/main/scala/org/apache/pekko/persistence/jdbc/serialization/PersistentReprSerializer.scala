@@ -18,7 +18,7 @@ import scala.util.Try
 trait PersistentReprSerializer[T] {
 
   /**
-   * An akka.persistence.AtomicWrite contains a Sequence of events (with metadata, the PersistentRepr)
+   * An org.apache.pekko.persistence.AtomicWrite contains a Sequence of events (with metadata, the PersistentRepr)
    * that must all be persisted or all fail, what makes the operation atomic. The function converts
    * each AtomicWrite to a Try[Seq[T]].
    * The Try denotes whether there was a problem with the AtomicWrite or not.

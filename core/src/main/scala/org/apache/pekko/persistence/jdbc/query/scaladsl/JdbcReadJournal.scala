@@ -150,7 +150,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
    * The `EventEnvelope` also provides the `offset` that corresponds to the `ordering` column in
    * the Journal table. The `ordering` is a sequential id number that uniquely identifies the
    * position of each event, also across different `persistenceId`. The `Offset` type is
-   * `akka.persistence.query.Sequence` with the `ordering` as the offset value. This is the
+   * `org.apache.pekko.persistence.query.Sequence` with the `ordering` as the offset value. This is the
    * same `ordering` number as is used in the offset of the `eventsByTag` query.
    *
    * The returned event stream is ordered by `sequenceNr`.
@@ -290,7 +290,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
    *
    * For pekko-persistence-jdbc the `offset` corresponds to the `ordering` column in the Journal table.
    * The `ordering` is a sequential id number that uniquely identifies the position of each event within
-   * the event stream. The `Offset` type is `akka.persistence.query.Sequence` with the `ordering` as the
+   * the event stream. The `Offset` type is `org.apache.pekko.persistence.query.Sequence` with the `ordering` as the
    * offset value.
    *
    * The returned event stream is ordered by `offset`.

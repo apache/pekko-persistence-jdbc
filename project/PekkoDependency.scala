@@ -36,7 +36,7 @@ object PekkoDependency {
       case Some(pekkoSources) =>
         Sources(pekkoSources)
       case None =>
-        Option(System.getProperty("pekko.http.build.pekko.version")) match {
+        Option(System.getProperty("pekko.build.pekko.version")) match {
           case Some("main")        => mainSnapshot
           case Some("release-1.0") =>
             // Don't 'downgrade' building even if pekko.sources asks for it

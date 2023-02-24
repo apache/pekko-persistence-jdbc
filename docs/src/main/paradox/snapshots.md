@@ -3,7 +3,7 @@ project.description: Snapshot builds of Apache Pekko Persistence JDBC are provid
 ---
 # Snapshots
 
-[snapshots]:        https://https://repository.apache.org/content/groups/snapshots/org/apache/pekko/pekko-persistence-jdbc_2.13/
+[snapshots]:        https://repository.apache.org/content/groups/snapshots/org/apache/pekko/pekko-persistence-jdbc_2.13/
 
 Snapshots are published to the Apache Snapshot repository every night.
 

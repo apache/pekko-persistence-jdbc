@@ -66,7 +66,7 @@ trait CopyrightHeader extends AutoPlugin {
       val formatted = existingText match {
         case Some(currentText) if isValidCopyrightAnnotated(currentText) =>
           currentText
-        case Some(currentText) if isOnlyLightbendOrEpflCopyrightAnnotated(currentText) =>
+        case Some(currentText) if isLightbendCopyrighted(currentText) =>
           HeaderCommentStyle.cStyleBlockComment.commentCreator(text, existingText) + NewLine * 2 + currentText
         case Some(currentText) =>
           throw new IllegalStateException(s"Unable to detect copyright for header:[${currentText}]")
@@ -98,18 +98,11 @@ trait CopyrightHeader extends AutoPlugin {
     StringUtils.containsIgnoreCase(text, "www.apache.org/licenses/license-2.0") ||
     StringUtils.contains(text, "Apache-2.0")
 
-  private def isLAMPCopyrighted(text: String): Boolean =
-    StringUtils.containsIgnoreCase(text, "lamp/epfl")
-
   private def isLightbendCopyrighted(text: String): Boolean =
     StringUtils.containsIgnoreCase(text, "lightbend inc.")
 
   private def isValidCopyrightAnnotated(text: String): Boolean = {
     isApacheCopyrighted(text)
-  }
-
-  private def isOnlyLightbendOrEpflCopyrightAnnotated(text: String): Boolean = {
-    (isLightbendCopyrighted(text) || isLAMPCopyrighted(text)) && !isApacheCopyrighted(text)
   }
 }
 

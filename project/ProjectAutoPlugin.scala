@@ -1,3 +1,12 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
 import com.geirsson.CiReleasePlugin
 import de.heikoseeberger.sbtheader.HeaderPlugin
 import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport.{ headerLicense, HeaderLicense }
@@ -67,7 +76,7 @@ object ProjectAutoPlugin extends AutoPlugin {
       "-doc-version",
       version.value,
       "-sourcepath",
-      (baseDirectory in ThisBuild).value.toString,
+      (ThisBuild / baseDirectory).value.toString,
       "-skip-packages",
       "pekko.pattern", // for some reason Scaladoc creates this
       "-doc-source-url", {
@@ -78,9 +87,6 @@ object ProjectAutoPlugin extends AutoPlugin {
       "https://pekko.apache.org/api/pekko-persistence-jdbc/current/"),
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
-    headerLicense := Some(HeaderLicense.Custom("""|Copyright (C) 2014 - 2019 Dennis Vriend <https://github.com/dnvriend>
-           |Copyright (C) 2019 - 2021 Lightbend Inc. <https://www.lightbend.com>
-           |""".stripMargin)),
     resolvers += Resolver.jcenterRepo,
     sonatypeProfileName := "org.apache.pekko")
 

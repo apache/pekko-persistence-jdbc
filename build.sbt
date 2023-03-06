@@ -42,7 +42,7 @@ lazy val migrator = project
 lazy val themeSettings = Seq(
   // allow access to snapshots for pekko-sbt-paradox
   resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/"),
-  pekkoParadoxGithub := "https://github.com/apache/incubator-pekko-persistence-jdbc")
+  pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-persistence-jdbc"))
 
 lazy val docs = project
   .enablePlugins(ProjectAutoPlugin, PekkoParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)

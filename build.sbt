@@ -12,7 +12,6 @@ lazy val `pekko-persistence-jdbc` = project
   .disablePlugins(MimaPlugin, SitePlugin)
   .aggregate(core, docs, migrator)
   .settings(publish / skip := true)
-  .settings(MetaInfLicenseNoticeCopy.settings)
 
 lazy val core = project
   .in(file("core"))
@@ -20,7 +19,6 @@ lazy val core = project
   .disablePlugins(SitePlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
-  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
@@ -33,7 +31,6 @@ lazy val migrator = project
   .disablePlugins(SitePlugin, MimaPlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
-  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "pekko-persistence-jdbc-migrator",
     libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries,
@@ -49,7 +46,6 @@ lazy val themeSettings = Seq(
 lazy val docs = project
   .enablePlugins(ProjectAutoPlugin, PekkoParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin)
   .disablePlugins(MimaPlugin)
-  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "Apache Pekko Persistence JDBC",
     publish / skip := true,

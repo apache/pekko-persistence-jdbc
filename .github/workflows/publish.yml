@@ -26,7 +26,6 @@ jobs:
 
       - name: Publish
         run: |-
-        # cp .jvmopts-ci .jvmopts
           sbt +publish
         env:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}

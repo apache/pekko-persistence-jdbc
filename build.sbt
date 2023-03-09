@@ -4,13 +4,14 @@ import sbt.Keys._
 
 ThisBuild / resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
 
+ThisBuild / apacheSonatypeProjectProfile := "pekko"
+
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
   .aggregate(core, docs, migrator)
   .settings(publish / skip := true)
-  .settings(MetaInfLicenseNoticeCopy.settings)
 
 lazy val core = project
   .in(file("core"))
@@ -18,7 +19,6 @@ lazy val core = project
   .disablePlugins(SitePlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
-  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
@@ -31,7 +31,6 @@ lazy val migrator = project
   .disablePlugins(SitePlugin, MimaPlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
-  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "pekko-persistence-jdbc-migrator",
     libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries,
@@ -45,9 +44,8 @@ lazy val themeSettings = Seq(
   pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-persistence-jdbc"))
 
 lazy val docs = project
-  .enablePlugins(ProjectAutoPlugin, PekkoParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
+  .enablePlugins(ProjectAutoPlugin, PekkoParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin)
   .disablePlugins(MimaPlugin)
-  .settings(MetaInfLicenseNoticeCopy.settings)
   .settings(
     name := "Apache Pekko Persistence JDBC",
     publish / skip := true,
@@ -80,8 +78,6 @@ lazy val docs = project
       "scaladoc.pekko.persistence.jdbc.base_url" -> s"/${(Preprocess / siteSubdirName).value}/"),
     paradoxGroups := Map("Language" -> Seq("Java", "Scala")),
     resolvers += Resolver.jcenterRepo,
-    publishRsyncArtifacts += makeSite.value -> "www/",
-    publishRsyncHost := "akkarepo@gustav.akka.io",
     apidocRootPackage := "org.apache.pekko")
   .settings(themeSettings)
 
@@ -103,4 +99,4 @@ TaskKey[Unit]("verifyCodeFmt") := {
   }
 }
 
-addCommandAlias("verifyCodeStyle", "headerCheck; verifyCodeFmt")
+addCommandAlias("verifyCodeStyle", "headerCheckAll; verifyCodeFmt")

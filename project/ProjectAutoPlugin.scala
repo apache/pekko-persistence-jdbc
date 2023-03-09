@@ -8,23 +8,19 @@
  */
 
 import com.geirsson.CiReleasePlugin
-import de.heikoseeberger.sbtheader.HeaderPlugin
-import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport.{ headerLicense, HeaderLicense }
 import sbt.Keys._
 import sbt._
 import sbt.plugins.JvmPlugin
-import xerial.sbt.Sonatype.autoImport.sonatypeProfileName
+import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
+import SonatypeApachePlugin.autoImport.apacheSonatypeDisclaimerFile
 
 object ProjectAutoPlugin extends AutoPlugin {
   object autoImport {}
 
-  override val requires = JvmPlugin && HeaderPlugin && CiReleasePlugin
+  override val requires = JvmPlugin && CiReleasePlugin && SonatypeApachePlugin
 
   override def globalSettings =
     Seq(
-      organization := "org.apache.pekko",
-      organizationName := "Apache Software Foundation",
-      organizationHomepage := Some(url("https://www.apache.org/")),
       homepage := Some(url("https://pekko.apache.org/docs/pekko-persistence-jdbc/current/")),
       scmInfo := Some(
         ScmInfo(url("https://github.com/apache/incubator-pekko-persistence-jdbc"),
@@ -34,7 +30,6 @@ object ProjectAutoPlugin extends AutoPlugin {
         "Contributors",
         "dev@pekko.apache.org",
         url("https://github.com/apache/incubator-pekko-persistence-jdbc/graphs/contributors")),
-      licenses := Seq("Apache-2.0" -> url("https://opensource.org/licenses/Apache-2.0")),
       description := "A plugin for storing events in an event journal pekko-persistence-jdbc",
       startYear := Some(2022))
 
@@ -88,7 +83,7 @@ object ProjectAutoPlugin extends AutoPlugin {
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
     resolvers += Resolver.jcenterRepo,
-    sonatypeProfileName := "org.apache.pekko")
+    apacheSonatypeDisclaimerFile := Some((LocalRootProject / baseDirectory).value / "DISCLAIMER"))
 
   val disciplineScalacOptions = Set(
 //    "-Xfatal-warnings",

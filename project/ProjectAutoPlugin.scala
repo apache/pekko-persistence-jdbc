@@ -7,17 +7,18 @@
  * This file is part of the Apache Pekko project, derived from Akka.
  */
 
-import com.geirsson.CiReleasePlugin
 import sbt.Keys._
 import sbt._
 import sbt.plugins.JvmPlugin
 import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
 import SonatypeApachePlugin.autoImport.apacheSonatypeDisclaimerFile
+import sbtdynver.DynVerPlugin
+import sbtdynver.DynVerPlugin.autoImport.dynverSonatypeSnapshots
 
 object ProjectAutoPlugin extends AutoPlugin {
   object autoImport {}
 
-  override val requires = JvmPlugin && CiReleasePlugin && SonatypeApachePlugin
+  override val requires = JvmPlugin && SonatypeApachePlugin && DynVerPlugin
 
   override def globalSettings =
     Seq(
@@ -84,6 +85,9 @@ object ProjectAutoPlugin extends AutoPlugin {
     Test / testOptions += Tests.Argument("-oDF"),
     resolvers += Resolver.jcenterRepo,
     apacheSonatypeDisclaimerFile := Some((LocalRootProject / baseDirectory).value / "DISCLAIMER"))
+
+  override lazy val buildSettings = Seq(
+    dynverSonatypeSnapshots := true)
 
   val disciplineScalacOptions = Set(
 //    "-Xfatal-warnings",

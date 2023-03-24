@@ -50,7 +50,7 @@ object ProjectAutoPlugin extends AutoPlugin {
       "-Xlog-reflective-calls",
       "-language:higherKinds",
       "-language:implicitConversions",
-      "-target:jvm-1.8"),
+      "-release:8"),
     Compile / scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 13)) =>
         disciplineScalacOptions -- Set(

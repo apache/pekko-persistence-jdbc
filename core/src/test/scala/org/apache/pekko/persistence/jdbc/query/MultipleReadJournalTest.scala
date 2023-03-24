@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.persistence.jdbc.query.EventsByTagTest._
-import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import org.apache.pekko.persistence.query.{ NoOffset, PersistenceQuery }
-import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko
+import pekko.persistence.jdbc.query.EventsByTagTest._
+import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.query.{ NoOffset, PersistenceQuery }
+import pekko.stream.scaladsl.Sink
 
 class MultipleReadJournalTest
     extends QueryTestSpec("h2-two-read-journals-application.conf", configOverrides)

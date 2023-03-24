@@ -15,19 +15,20 @@
 package org.apache.pekko.persistence.jdbc.query
 package scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ExtendedActorSystem
-import org.apache.pekko.persistence.jdbc.config.ReadJournalConfig
-import org.apache.pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
-import org.apache.pekko.persistence.jdbc.journal.dao.FlowControl
-import org.apache.pekko.persistence.query.scaladsl._
-import org.apache.pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
-import org.apache.pekko.persistence.{ Persistence, PersistentRepr }
-import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ExtendedActorSystem
+import pekko.persistence.jdbc.config.ReadJournalConfig
+import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
+import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.journal.dao.FlowControl
+import pekko.persistence.query.scaladsl._
+import pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
+import pekko.persistence.{ Persistence, PersistentRepr }
+import pekko.serialization.{ Serialization, SerializationExtension }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.util.Timeout
 import com.typesafe.config.Config
 import slick.jdbc.JdbcBackend._
 import slick.jdbc.JdbcProfile
@@ -36,9 +37,9 @@ import scala.collection.immutable._
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success }
-import org.apache.pekko.actor.Scheduler
-import org.apache.pekko.persistence.jdbc.query.dao.ReadJournalDao
-import org.apache.pekko.persistence.jdbc.util.PluginVersionChecker
+import pekko.actor.Scheduler
+import pekko.persistence.jdbc.query.dao.ReadJournalDao
+import pekko.persistence.jdbc.util.PluginVersionChecker
 
 object JdbcReadJournal {
   final val Identifier = "jdbc-read-journal"
@@ -233,7 +234,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
       tag: String,
       offset: Long,
       terminateAfterOffset: Option[Long]): Source[EventEnvelope, NotUsed] = {
-    import org.apache.pekko.pattern.ask
+    import pekko.pattern.ask
     import FlowControl._
     implicit val askTimeout: Timeout = Timeout(readJournalConfig.journalSequenceRetrievalConfiguration.askTimeout)
     val batchSize = readJournalConfig.maxBufferSize
@@ -275,7 +276,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
           case Stop     => Future.successful(None)
           case Continue => retrieveNextBatch()
           case ContinueDelayed =>
-            org.apache.pekko.pattern.after(readJournalConfig.refreshInterval, system.scheduler)(retrieveNextBatch())
+            pekko.pattern.after(readJournalConfig.refreshInterval, system.scheduler)(retrieveNextBatch())
         }
       }
       .mapConcat(identity)

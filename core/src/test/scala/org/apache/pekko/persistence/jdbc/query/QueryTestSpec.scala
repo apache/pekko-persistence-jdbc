@@ -14,30 +14,31 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.actor.{ ActorRef, ActorSystem, Props, Stash, Status }
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.event.LoggingReceive
-import org.apache.pekko.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
-import org.apache.pekko.persistence.jdbc.SingleActorSystemPerTestSpec
-import org.apache.pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent, TaggedEvent }
-import org.apache.pekko.persistence.jdbc.query.javadsl.{ JdbcReadJournal => JavaJdbcReadJournal }
-import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import org.apache.pekko.persistence.journal.Tagged
-import org.apache.pekko.persistence.query.{ EventEnvelope, Offset, PersistenceQuery }
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.stream.testkit.TestSubscriber
-import org.apache.pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
+import org.apache.pekko
+import pekko.actor.{ ActorRef, ActorSystem, Props, Stash, Status }
+import pekko.pattern.ask
+import pekko.event.LoggingReceive
+import pekko.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
+import pekko.persistence.jdbc.SingleActorSystemPerTestSpec
+import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent, TaggedEvent }
+import pekko.persistence.jdbc.query.javadsl.{ JdbcReadJournal => JavaJdbcReadJournal }
+import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.journal.Tagged
+import pekko.persistence.query.{ EventEnvelope, Offset, PersistenceQuery }
+import pekko.stream.scaladsl.Sink
+import pekko.stream.testkit.TestSubscriber
+import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.{ Materializer, SystemMaterializer }
 import com.typesafe.config.ConfigValue
 import scala.concurrent.Future
 import scala.concurrent.duration.{ FiniteDuration, _ }
 
-import org.apache.pekko.persistence.jdbc.testkit.internal.H2
-import org.apache.pekko.persistence.jdbc.testkit.internal.MySQL
-import org.apache.pekko.persistence.jdbc.testkit.internal.Oracle
-import org.apache.pekko.persistence.jdbc.testkit.internal.Postgres
-import org.apache.pekko.persistence.jdbc.testkit.internal.SqlServer
+import pekko.persistence.jdbc.testkit.internal.H2
+import pekko.persistence.jdbc.testkit.internal.MySQL
+import pekko.persistence.jdbc.testkit.internal.Oracle
+import pekko.persistence.jdbc.testkit.internal.Postgres
+import pekko.persistence.jdbc.testkit.internal.SqlServer
 
 trait ReadJournalOperations {
   def withCurrentPersistenceIds(within: FiniteDuration = 60.second)(f: TestSubscriber.Probe[String] => Unit): Unit
@@ -130,13 +131,13 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
   import system.dispatcher
 
   def withCurrentPersistenceIds(within: FiniteDuration)(f: TestSubscriber.Probe[String] => Unit): Unit = {
-    val sink: org.apache.pekko.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
+    val sink: pekko.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
     val tp = readJournal.currentPersistenceIds().runWith(sink, mat)
     tp.within(within)(f(tp))
   }
 
   def withPersistenceIds(within: FiniteDuration)(f: TestSubscriber.Probe[String] => Unit): Unit = {
-    val sink: org.apache.pekko.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
+    val sink: pekko.stream.javadsl.Sink[String, TestSubscriber.Probe[String]] = JavaSink.probe(system)
     val tp = readJournal.persistenceIds().runWith(sink, mat)
     tp.within(within)(f(tp))
   }
@@ -144,7 +145,7 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
   def withCurrentEventsByPersistenceId(
       within: FiniteDuration)(persistenceId: String, fromSequenceNr: Long = 0, toSequenceNr: Long = Long.MaxValue)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+    val sink: pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
       JavaSink.probe(system)
     val tp = readJournal.currentEventsByPersistenceId(persistenceId, fromSequenceNr, toSequenceNr).runWith(sink, mat)
     tp.within(within)(f(tp))
@@ -153,7 +154,7 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
   def withEventsByPersistenceId(
       within: FiniteDuration)(persistenceId: String, fromSequenceNr: Long, toSequenceNr: Long)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+    val sink: pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
       JavaSink.probe(system)
     val tp = readJournal.eventsByPersistenceId(persistenceId, fromSequenceNr, toSequenceNr).runWith(sink, mat)
     tp.within(within)(f(tp))
@@ -161,7 +162,7 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
 
   def withCurrentEventsByTag(within: FiniteDuration)(tag: String, offset: Offset)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+    val sink: pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
       JavaSink.probe(system)
     val tp = readJournal.currentEventsByTag(tag, offset).runWith(sink, mat)
     tp.within(within)(f(tp))
@@ -169,7 +170,7 @@ class JavaDslJdbcReadJournalOperations(readJournal: javadsl.JdbcReadJournal)(
 
   def withEventsByTag(within: FiniteDuration)(tag: String, offset: Offset)(
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
-    val sink: org.apache.pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
+    val sink: pekko.stream.javadsl.Sink[EventEnvelope, TestSubscriber.Probe[EventEnvelope]] =
       JavaSink.probe(system)
     val tp = readJournal.eventsByTag(tag, offset).runWith(sink, mat)
     tp.within(within)(f(tp))
@@ -250,26 +251,26 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
         case event: Int =>
           persist(event) { (event: Int) =>
             updateState(event)
-            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success(event)
+            if (replyToMessages) sender() ! pekko.actor.Status.Success(event)
           }
 
         case event @ Tagged(payload: Int, tags) =>
           persist(event) { _ =>
             updateState(payload)
-            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success((payload, tags))
+            if (replyToMessages) sender() ! pekko.actor.Status.Success((payload, tags))
           }
         case event: Event =>
           persist(event) { evt =>
-            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success(evt)
+            if (replyToMessages) sender() ! pekko.actor.Status.Success(evt)
           }
 
         case event @ TaggedEvent(payload: Event, tag) =>
           persist(event) { _ =>
-            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success((payload, tag))
+            if (replyToMessages) sender() ! pekko.actor.Status.Success((payload, tag))
           }
         case event @ TaggedAsyncEvent(payload: Event, tag) =>
           persistAsync(event) { _ =>
-            if (replyToMessages) sender() ! org.apache.pekko.actor.Status.Success((payload, tag))
+            if (replyToMessages) sender() ! pekko.actor.Status.Success((payload, tag))
           }
       }
 
@@ -301,7 +302,7 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
 
   def pendingIfOracleWithLegacy(): Unit = {
     if (profile == slick.jdbc.OracleProfile && readJournalConfig.pluginConfig.dao == classOf[
-        org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
+        pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
       pending // TODO https://github.com/akka/akka-persistence-jdbc/issues/673
   }
 

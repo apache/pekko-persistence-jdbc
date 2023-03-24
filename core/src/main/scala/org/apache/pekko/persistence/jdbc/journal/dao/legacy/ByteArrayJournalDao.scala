@@ -14,19 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao.legacy
 
-import org.apache.pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
-import org.apache.pekko.persistence.jdbc.journal.dao.{
-  BaseDao,
-  BaseJournalDaoWithReadMessages,
-  H2Compat,
-  JournalDaoWithUpdates
-}
-import org.apache.pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
-import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.serialization.Serialization
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
+import pekko.persistence.jdbc.journal.dao.{ BaseDao, BaseJournalDaoWithReadMessages, H2Compat, JournalDaoWithUpdates }
+import pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
+import pekko.persistence.{ AtomicWrite, PersistentRepr }
+import pekko.serialization.Serialization
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.Source
+import pekko.{ Done, NotUsed }
 import org.slf4j.LoggerFactory
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
@@ -71,7 +67,7 @@ trait BaseByteArrayJournalDao
   }
 
   /**
-   * @see [[org.apache.pekko.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
+   * @see [[pekko.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
    */
   def asyncWriteMessages(messages: Seq[AtomicWrite]): Future[Seq[Try[Unit]]] = {
     val serializedTries: Seq[Try[Seq[JournalRow]]] = serializer.serialize(messages)
@@ -90,7 +86,7 @@ trait BaseByteArrayJournalDao
 
   override def delete(persistenceId: String, maxSequenceNr: Long): Future[Unit] = {
     // We should keep journal record with highest sequence number in order to be compliant
-    // with @see [[org.apache.pekko.persistence.journal.JournalSpec]]
+    // with @see [[pekko.persistence.journal.JournalSpec]]
     val actions: DBIOAction[Unit, NoStream, Effect.Write with Effect.Read] = for {
       _ <- queries.markJournalMessagesAsDeleted(persistenceId, maxSequenceNr)
       highestMarkedSequenceNr <- highestMarkedSequenceNr(persistenceId)

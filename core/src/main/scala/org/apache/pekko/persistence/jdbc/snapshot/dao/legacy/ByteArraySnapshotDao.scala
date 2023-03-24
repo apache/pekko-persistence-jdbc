@@ -14,12 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao.legacy
 
-import org.apache.pekko.persistence.SnapshotMetadata
-import org.apache.pekko.persistence.jdbc.config.SnapshotConfig
-import org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
-import org.apache.pekko.persistence.jdbc.snapshot.dao.SnapshotDao
-import org.apache.pekko.serialization.Serialization
-import org.apache.pekko.stream.Materializer
+import org.apache.pekko
+import pekko.persistence.SnapshotMetadata
+import pekko.persistence.jdbc.config.SnapshotConfig
+import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
+import pekko.persistence.jdbc.snapshot.dao.SnapshotDao
+import pekko.serialization.Serialization
+import pekko.stream.Materializer
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
 
 import scala.concurrent.{ ExecutionContext, Future }

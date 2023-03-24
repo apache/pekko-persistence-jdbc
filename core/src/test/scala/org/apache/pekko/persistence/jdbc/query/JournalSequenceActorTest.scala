@@ -14,17 +14,18 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.actor.{ ActorRef, ActorSystem }
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.{ JournalRow, JournalTables }
-import org.apache.pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
-import org.apache.pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao
-import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
-import org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
-import org.apache.pekko.serialization.SerializationExtension
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko
+import pekko.actor.{ ActorRef, ActorSystem }
+import pekko.pattern.ask
+import pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
+import pekko.persistence.jdbc.journal.dao.legacy.{ JournalRow, JournalTables }
+import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
+import pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao
+import pekko.persistence.jdbc.SharedActorSystemTestSpec
+import pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
+import pekko.serialization.SerializationExtension
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.TestProbe
 import org.slf4j.LoggerFactory
 import slick.jdbc.{ JdbcBackend, JdbcCapabilities }
 

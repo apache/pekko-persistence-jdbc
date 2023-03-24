@@ -14,9 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
+import pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
 
 /**
  * INTERNAL API

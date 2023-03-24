@@ -9,10 +9,11 @@
 
 package org.apache.pekko.persistence.jdbc.migrator
 
-import org.apache.pekko.Done
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.jdbc.db.SlickDatabase
-import org.apache.pekko.persistence.jdbc.migrator.MigratorSpec._
+import org.apache.pekko
+import pekko.Done
+import pekko.pattern.ask
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.migrator.MigratorSpec._
 
 abstract class JournalMigratorTest(configName: String) extends MigratorSpec(configName) {
 

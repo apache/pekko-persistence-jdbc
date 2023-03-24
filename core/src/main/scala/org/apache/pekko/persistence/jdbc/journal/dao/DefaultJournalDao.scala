@@ -14,16 +14,17 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.persistence.jdbc.PekkoSerialization
-import org.apache.pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
-import org.apache.pekko.persistence.journal.Tagged
-import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.serialization.Serialization
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.persistence.jdbc.PekkoSerialization
+import pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
+import pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
+import pekko.persistence.journal.Tagged
+import pekko.persistence.{ AtomicWrite, PersistentRepr }
+import pekko.serialization.Serialization
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.Source
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 

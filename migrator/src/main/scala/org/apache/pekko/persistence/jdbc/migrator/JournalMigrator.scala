@@ -14,19 +14,20 @@
 
 package org.apache.pekko.persistence.jdbc.migrator
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.PekkoSerialization
-import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalQueries
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
-import org.apache.pekko.persistence.jdbc.migrator.JournalMigrator.{ JournalConfig, ReadJournalConfig }
-import org.apache.pekko.persistence.jdbc.query.dao.legacy.ReadJournalQueries
-import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.persistence.PersistentRepr
+import pekko.persistence.jdbc.PekkoSerialization
+import pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
+import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.journal.dao.JournalQueries
+import pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer
+import pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
+import pekko.persistence.jdbc.migrator.JournalMigrator.{ JournalConfig, ReadJournalConfig }
+import pekko.persistence.jdbc.query.dao.legacy.ReadJournalQueries
+import pekko.serialization.{ Serialization, SerializationExtension }
+import pekko.stream.scaladsl.Source
 import org.slf4j.{ Logger, LoggerFactory }
 import slick.jdbc._
 

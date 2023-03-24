@@ -15,12 +15,13 @@
 package org.apache.pekko.persistence.jdbc
 package query
 
-import org.apache.pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
-import org.apache.pekko.pattern.pipe
-import org.apache.pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
-import org.apache.pekko.persistence.jdbc.query.dao.ReadJournalDao
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko
+import pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
+import pekko.pattern.pipe
+import pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
+import pekko.persistence.jdbc.query.dao.ReadJournalDao
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.Sink
 
 import scala.collection.immutable.NumericRange
 import scala.concurrent.duration.FiniteDuration

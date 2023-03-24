@@ -14,12 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
-import org.apache.pekko.persistence.jdbc.config.{
-  EventJournalTableConfiguration,
-  EventTagTableConfiguration,
-  ReadJournalConfig
-}
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables
+import org.apache.pekko
+import pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration, ReadJournalConfig }
+import pekko.persistence.jdbc.journal.dao.JournalTables
 import slick.jdbc.JdbcProfile
 
 class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJournalConfig) extends JournalTables {

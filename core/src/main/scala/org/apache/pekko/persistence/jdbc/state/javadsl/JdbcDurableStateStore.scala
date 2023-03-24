@@ -18,15 +18,16 @@ import java.util.Optional
 import java.util.concurrent.CompletionStage
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.persistence.jdbc.state.DurableStateQueries
-import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import org.apache.pekko.persistence.jdbc.state.scaladsl.{ JdbcDurableStateStore => ScalaJdbcDurableStateStore }
-import org.apache.pekko.persistence.query.{ DurableStateChange, Offset }
-import org.apache.pekko.persistence.query.javadsl.DurableStateStoreQuery
-import org.apache.pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.annotation.ApiMayChange
+import pekko.{ Done, NotUsed }
+import pekko.persistence.jdbc.state.DurableStateQueries
+import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.jdbc.state.scaladsl.{ JdbcDurableStateStore => ScalaJdbcDurableStateStore }
+import pekko.persistence.query.{ DurableStateChange, Offset }
+import pekko.persistence.query.javadsl.DurableStateStoreQuery
+import pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
+import pekko.stream.javadsl.Source
 import slick.jdbc.JdbcProfile
 
 object JdbcDurableStateStore {

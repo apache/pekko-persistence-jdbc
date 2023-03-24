@@ -15,13 +15,14 @@
 package org.apache.pekko.persistence.jdbc.snapshot.dao
 
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
-import org.apache.pekko.persistence.SnapshotMetadata
-import org.apache.pekko.persistence.jdbc.config.SnapshotConfig
-import org.apache.pekko.serialization.Serialization
-import org.apache.pekko.stream.Materializer
+import org.apache.pekko
+import pekko.persistence.SnapshotMetadata
+import pekko.persistence.jdbc.config.SnapshotConfig
+import pekko.serialization.Serialization
+import pekko.stream.Materializer
 import SnapshotTables._
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.persistence.jdbc.PekkoSerialization
+import pekko.dispatch.ExecutionContexts
+import pekko.persistence.jdbc.PekkoSerialization
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Success, Try }

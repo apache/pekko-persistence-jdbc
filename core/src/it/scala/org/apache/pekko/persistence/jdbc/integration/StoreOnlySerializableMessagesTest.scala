@@ -9,11 +9,12 @@
 
 package org.apache.pekko.persistence.jdbc.integration
 
-import org.apache.pekko.persistence.jdbc.serialization.StoreOnlySerializableMessagesTest
-import org.apache.pekko.persistence.jdbc.testkit.internal.MySQL
-import org.apache.pekko.persistence.jdbc.testkit.internal.Oracle
-import org.apache.pekko.persistence.jdbc.testkit.internal.Postgres
-import org.apache.pekko.persistence.jdbc.testkit.internal.SqlServer
+import org.apache.pekko
+import pekko.persistence.jdbc.serialization.StoreOnlySerializableMessagesTest
+import pekko.persistence.jdbc.testkit.internal.MySQL
+import pekko.persistence.jdbc.testkit.internal.Oracle
+import pekko.persistence.jdbc.testkit.internal.Postgres
+import pekko.persistence.jdbc.testkit.internal.SqlServer
 
 class PostgresStoreOnlySerializableMessagesTest
     extends StoreOnlySerializableMessagesTest("postgres-application.conf", Postgres)

@@ -9,22 +9,23 @@
 
 package org.apache.pekko.persistence.jdbc.migrator
 
-import org.apache.pekko.actor.{ ActorRef, ActorSystem, Props, Stash }
-import org.apache.pekko.event.LoggingReceive
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.jdbc.SimpleSpec
-import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, SlickConfiguration }
-import org.apache.pekko.persistence.jdbc.db.SlickDatabase
-import org.apache.pekko.persistence.jdbc.migrator.MigratorSpec._
-import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import org.apache.pekko.persistence.jdbc.testkit.internal._
-import org.apache.pekko.persistence.journal.EventSeq.single
-import org.apache.pekko.persistence.journal.{ EventAdapter, EventSeq, Tagged }
-import org.apache.pekko.persistence.query.PersistenceQuery
-import org.apache.pekko.persistence.{ PersistentActor, SaveSnapshotSuccess, SnapshotMetadata, SnapshotOffer }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.actor.{ ActorRef, ActorSystem, Props, Stash }
+import pekko.event.LoggingReceive
+import pekko.pattern.ask
+import pekko.persistence.jdbc.SimpleSpec
+import pekko.persistence.jdbc.config.{ JournalConfig, SlickConfiguration }
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.migrator.MigratorSpec._
+import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.jdbc.testkit.internal._
+import pekko.persistence.journal.EventSeq.single
+import pekko.persistence.journal.{ EventAdapter, EventSeq, Tagged }
+import pekko.persistence.query.PersistenceQuery
+import pekko.persistence.{ PersistentActor, SaveSnapshotSuccess, SnapshotMetadata, SnapshotOffer }
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.Sink
+import pekko.util.Timeout
 import com.typesafe.config.{ Config, ConfigFactory, ConfigValue, ConfigValueFactory }
 import org.scalatest.BeforeAndAfterEach
 import org.slf4j.{ Logger, LoggerFactory }
@@ -263,22 +264,22 @@ object MigratorSpec {
           persist(AccountCreated(balance)) { (event: AccountCreated) =>
             updateState(event)
             saveSnapshot()
-            sender() ! org.apache.pekko.actor.Status.Success(event)
+            sender() ! pekko.actor.Status.Success(event)
           }
         case Deposit(balance) =>
           persist(Deposited(balance)) { (event: Deposited) =>
             updateState(event)
             saveSnapshot()
-            sender() ! org.apache.pekko.actor.Status.Success(event)
+            sender() ! pekko.actor.Status.Success(event)
           }
         case Withdraw(balance) =>
           persist(Withdrawn(balance)) { (event: Withdrawn) =>
             updateState(event)
             saveSnapshot()
-            sender() ! org.apache.pekko.actor.Status.Success(event)
+            sender() ! pekko.actor.Status.Success(event)
           }
         case State =>
-          sender() ! org.apache.pekko.actor.Status.Success(state)
+          sender() ! pekko.actor.Status.Success(state)
       }
 
     def updateState(event: AccountEvent): Unit = event match {

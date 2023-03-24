@@ -14,11 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao.legacy
 
-import org.apache.pekko.persistence.SnapshotMetadata
-import org.apache.pekko.persistence.jdbc.serialization.SnapshotSerializer
-import org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
-import org.apache.pekko.persistence.serialization.Snapshot
-import org.apache.pekko.serialization.Serialization
+import org.apache.pekko
+import pekko.persistence.SnapshotMetadata
+import pekko.persistence.jdbc.serialization.SnapshotSerializer
+import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
+import pekko.persistence.serialization.Snapshot
+import pekko.serialization.Serialization
 
 import scala.util.Try
 

@@ -14,9 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.actor.{ ActorRef, ActorSystem }
-import org.apache.pekko.persistence.jdbc.util.ClasspathResources
-import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko
+import pekko.actor.{ ActorRef, ActorSystem }
+import pekko.persistence.jdbc.util.ClasspathResources
+import pekko.testkit.TestProbe
 import org.scalatest._
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.flatspec.AnyFlatSpec

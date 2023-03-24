@@ -19,25 +19,26 @@ import scala.concurrent.duration._
 import scala.util.Try
 
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.actor.ExtendedActorSystem
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.state.scaladsl.{ DurableStateUpdateStore, GetObjectResult }
-import org.apache.pekko.persistence.jdbc.PekkoSerialization
-import org.apache.pekko.persistence.jdbc.state.DurableStateQueries
-import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import org.apache.pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
-import org.apache.pekko.persistence.query.{ DurableStateChange, Offset }
-import org.apache.pekko.persistence.query.scaladsl.DurableStateStoreQuery
-import org.apache.pekko.persistence.jdbc.journal.dao.FlowControl
-import org.apache.pekko.serialization.Serialization
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.actor.ExtendedActorSystem
+import pekko.pattern.ask
+import pekko.persistence.state.scaladsl.{ DurableStateUpdateStore, GetObjectResult }
+import pekko.persistence.jdbc.PekkoSerialization
+import pekko.persistence.jdbc.state.DurableStateQueries
+import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
+import pekko.persistence.query.{ DurableStateChange, Offset }
+import pekko.persistence.query.scaladsl.DurableStateStoreQuery
+import pekko.persistence.jdbc.journal.dao.FlowControl
+import pekko.serialization.Serialization
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.util.Timeout
 import DurableStateSequenceActor._
 import OffsetSyntax._
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.persistence.query.UpdatedDurableState
+import pekko.annotation.ApiMayChange
+import pekko.persistence.query.UpdatedDurableState
 
 object JdbcDurableStateStore {
   val Identifier = "jdbc-durable-state-store"
@@ -192,7 +193,7 @@ class JdbcDurableStateStore[A](
             case Stop     => Future.successful(None)
             case Continue => retrieveNextBatch()
             case ContinueDelayed =>
-              org.apache.pekko.pattern.after(durableStateConfig.refreshInterval, system.scheduler)(retrieveNextBatch())
+              pekko.pattern.after(durableStateConfig.refreshInterval, system.scheduler)(retrieveNextBatch())
           }
       }
       .mapConcat(identity)

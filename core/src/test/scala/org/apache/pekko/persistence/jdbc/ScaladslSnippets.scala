@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import org.apache.pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.actor.ActorSystem
+import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 
 import scala.concurrent.Future
 
@@ -46,8 +47,9 @@ object ScaladslSnippets {
     implicit val system: ActorSystem = ActorSystem()
 
     // #persistence-ids
-    import org.apache.pekko.stream.scaladsl.Source
-    import org.apache.pekko.persistence.query.PersistenceQuery
+    import org.apache
+    import pekko.stream.scaladsl.Source
+    import pekko.persistence.query.PersistenceQuery
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -62,8 +64,9 @@ object ScaladslSnippets {
     implicit val system: ActorSystem = ActorSystem()
 
     // #events-by-persistence-id
-    import org.apache.pekko.stream.scaladsl.Source
-    import org.apache.pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
+    import org.apache.pekko
+    import pekko.stream.scaladsl.Source
+    import pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)
@@ -79,8 +82,9 @@ object ScaladslSnippets {
   def eventsByTag(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
     // #events-by-tag
-    import org.apache.pekko.stream.scaladsl.Source
-    import org.apache.pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
+    import org.apache.pekko
+    import pekko.stream.scaladsl.Source
+    import pekko.persistence.query.{ EventEnvelope, PersistenceQuery }
 
     val readJournal: JdbcReadJournal =
       PersistenceQuery(system).readJournalFor[JdbcReadJournal](JdbcReadJournal.Identifier)

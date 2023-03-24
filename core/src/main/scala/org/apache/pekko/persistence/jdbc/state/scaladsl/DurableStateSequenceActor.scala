@@ -16,14 +16,15 @@ package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import scala.collection.immutable.NumericRange
 
-import org.apache.pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
-import org.apache.pekko.pattern.pipe
-import org.apache.pekko.persistence.jdbc.config.DurableStateSequenceRetrievalConfig
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko
+import pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
+import pekko.pattern.pipe
+import pekko.persistence.jdbc.config.DurableStateSequenceRetrievalConfig
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.Sink
 import scala.concurrent.duration.FiniteDuration
 
-import org.apache.pekko.annotation.InternalApi
+import pekko.annotation.InternalApi
 
 /**
  * INTERNAL API

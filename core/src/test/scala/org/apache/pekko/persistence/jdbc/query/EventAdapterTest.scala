@@ -14,11 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.persistence.query.{ EventEnvelope, NoOffset, Sequence }
+import org.apache.pekko
+import pekko.persistence.query.{ EventEnvelope, NoOffset, Sequence }
 
 import scala.concurrent.duration._
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.journal.{ EventSeq, ReadEventAdapter, Tagged, WriteEventAdapter }
+import pekko.pattern.ask
+import pekko.persistence.journal.{ EventSeq, ReadEventAdapter, Tagged, WriteEventAdapter }
 
 object EventAdapterTest {
   case class Event(value: String) {

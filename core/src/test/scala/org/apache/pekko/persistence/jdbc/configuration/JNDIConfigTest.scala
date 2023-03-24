@@ -15,9 +15,10 @@
 package org.apache.pekko.persistence.jdbc.configuration
 
 import com.typesafe.config.ConfigFactory
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.persistence.jdbc.SimpleSpec
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.persistence.jdbc.SimpleSpec
+import pekko.persistence.jdbc.db.SlickExtension
 
 class JNDIConfigTest extends SimpleSpec {
   "JNDI config" should "read the config and throw NoInitialContextException in case the JNDI resource is not available" in {

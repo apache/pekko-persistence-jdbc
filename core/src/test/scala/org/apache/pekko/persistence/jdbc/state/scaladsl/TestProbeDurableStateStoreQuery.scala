@@ -16,18 +16,19 @@ package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ExtendedActorSystem
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import org.apache.pekko.persistence.query.DurableStateChange
-import org.apache.pekko.persistence.query.Offset
-import org.apache.pekko.persistence.state.scaladsl.GetObjectResult
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.testkit.TestProbe
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ExtendedActorSystem
+import pekko.pattern.ask
+import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.query.DurableStateChange
+import pekko.persistence.query.Offset
+import pekko.persistence.state.scaladsl.GetObjectResult
+import pekko.stream.scaladsl.Source
+import pekko.testkit.TestProbe
+import pekko.util.Timeout
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
-import org.apache.pekko.serialization.Serialization
+import pekko.serialization.Serialization
 
 object TestProbeDurableStateStoreQuery {
   case class StateInfoSequence(offset: Long, limit: Long)

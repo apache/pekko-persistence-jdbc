@@ -18,10 +18,11 @@ import java.util.concurrent.CompletionStage
 
 import scala.compat.java8.FutureConverters._
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.ApiMayChange
+import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
 import org.slf4j.LoggerFactory
 
 object SchemaUtils {

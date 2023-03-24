@@ -18,11 +18,12 @@ import java.lang.management.ManagementFactory
 import java.lang.management.MemoryMXBean
 import java.util.UUID
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.{ ByteArrayJournalDao, JournalTables }
-import org.apache.pekko.serialization.SerializationExtension
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.persistence.{ AtomicWrite, PersistentRepr }
+import pekko.persistence.jdbc.journal.dao.legacy.{ ByteArrayJournalDao, JournalTables }
+import pekko.serialization.SerializationExtension
+import pekko.stream.scaladsl.{ Sink, Source }
 import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.slf4j.LoggerFactory
@@ -31,7 +32,7 @@ import scala.collection.immutable
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.testkit.scaladsl.TestSink
 import org.scalatest.matchers.should.Matchers
 
 object JournalDaoStreamMessagesMemoryTest {

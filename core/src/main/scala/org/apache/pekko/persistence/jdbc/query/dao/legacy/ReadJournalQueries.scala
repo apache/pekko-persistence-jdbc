@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao.legacy
 
-import org.apache.pekko.persistence.jdbc.config.{ LegacyJournalTableConfiguration, ReadJournalConfig }
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalTables
+import org.apache.pekko
+import pekko.persistence.jdbc.config.{ LegacyJournalTableConfiguration, ReadJournalConfig }
+import pekko.persistence.jdbc.journal.dao.legacy.JournalTables
 import slick.jdbc.JdbcProfile
 
 class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJournalConfig) extends JournalTables {

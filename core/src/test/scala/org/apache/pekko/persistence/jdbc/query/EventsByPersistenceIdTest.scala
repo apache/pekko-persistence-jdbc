@@ -14,14 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.Done
-import org.apache.pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent }
-import org.apache.pekko.persistence.query.{ EventEnvelope, Sequence }
+import org.apache.pekko
+import pekko.Done
+import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent }
+import pekko.persistence.query.{ EventEnvelope, Sequence }
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.persistence.query.Offset
+import pekko.pattern.ask
+import pekko.persistence.query.Offset
 
 abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps
@@ -313,7 +314,7 @@ abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(c
   }
 
   it should "find a large number of events quickly" in withActorSystem { implicit system =>
-    import org.apache.pekko.pattern.ask
+    import pekko.pattern.ask
     import system.dispatcher
     val journalOps = new JavaDslJdbcReadJournalOperations(system)
     withTestActors(replyToMessages = true) { (actor1, _, _) =>

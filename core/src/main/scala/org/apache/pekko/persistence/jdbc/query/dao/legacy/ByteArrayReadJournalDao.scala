@@ -14,17 +14,18 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao.legacy
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.config.ReadJournalConfig
-import org.apache.pekko.persistence.jdbc.journal.dao.{ BaseJournalDaoWithReadMessages, H2Compat }
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.{ ByteArrayJournalSerializer, JournalRow }
-import org.apache.pekko.persistence.jdbc.query.dao.ReadJournalDao
-import org.apache.pekko.persistence.jdbc.query.dao.legacy.TagFilterFlow.perfectlyMatchTag
-import org.apache.pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
-import org.apache.pekko.serialization.Serialization
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.persistence.PersistentRepr
+import pekko.persistence.jdbc.config.ReadJournalConfig
+import pekko.persistence.jdbc.journal.dao.{ BaseJournalDaoWithReadMessages, H2Compat }
+import pekko.persistence.jdbc.journal.dao.legacy.{ ByteArrayJournalSerializer, JournalRow }
+import pekko.persistence.jdbc.query.dao.ReadJournalDao
+import pekko.persistence.jdbc.query.dao.legacy.TagFilterFlow.perfectlyMatchTag
+import pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
+import pekko.serialization.Serialization
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.{ Flow, Source }
 import slick.jdbc.JdbcBackend._
 import slick.jdbc.{ GetResult, JdbcProfile }
 

@@ -14,14 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot
 
-import org.apache.pekko.actor.{ ActorSystem, ExtendedActorSystem }
-import org.apache.pekko.persistence.jdbc.config.SnapshotConfig
-import org.apache.pekko.persistence.jdbc.snapshot.dao.SnapshotDao
-import org.apache.pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
-import org.apache.pekko.persistence.snapshot.SnapshotStore
-import org.apache.pekko.persistence.{ SelectedSnapshot, SnapshotMetadata, SnapshotSelectionCriteria }
-import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ExtendedActorSystem }
+import pekko.persistence.jdbc.config.SnapshotConfig
+import pekko.persistence.jdbc.snapshot.dao.SnapshotDao
+import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
+import pekko.persistence.snapshot.SnapshotStore
+import pekko.persistence.{ SelectedSnapshot, SnapshotMetadata, SnapshotSelectionCriteria }
+import pekko.serialization.{ Serialization, SerializationExtension }
+import pekko.stream.{ Materializer, SystemMaterializer }
 import com.typesafe.config.Config
 import slick.jdbc.JdbcProfile
 import slick.jdbc.JdbcBackend._

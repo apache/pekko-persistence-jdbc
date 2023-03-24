@@ -14,14 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.serialization.SerializationExtension
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.serialization.SerializationExtension
+import pekko.util.Timeout
 import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
-import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
-import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import org.apache.pekko.persistence.jdbc.util.DropCreate
+import pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
+import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.jdbc.util.DropCreate
 import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.ExecutionContext

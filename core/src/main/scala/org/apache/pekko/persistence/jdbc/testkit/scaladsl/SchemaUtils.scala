@@ -16,10 +16,11 @@ package org.apache.pekko.persistence.jdbc.testkit.scaladsl
 
 import scala.concurrent.Future
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.ApiMayChange
+import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
 import org.slf4j.LoggerFactory
 
 object SchemaUtils {

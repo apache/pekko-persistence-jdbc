@@ -14,19 +14,20 @@
 
 package org.apache.pekko.persistence.jdbc.migrator
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.persistence.SnapshotMetadata
-import org.apache.pekko.persistence.jdbc.config.{ ReadJournalConfig, SnapshotConfig }
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
-import org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
-import org.apache.pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao
-import org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.{ ByteArraySnapshotSerializer, SnapshotQueries }
-import org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
-import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.Done
-import org.apache.pekko.persistence.jdbc.migrator.JournalMigrator.ReadJournalConfig
-import org.apache.pekko.persistence.jdbc.migrator.SnapshotMigrator.{ NoParallelism, SnapshotStoreConfig }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.persistence.SnapshotMetadata
+import pekko.persistence.jdbc.config.{ ReadJournalConfig, SnapshotConfig }
+import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
+import pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao
+import pekko.persistence.jdbc.snapshot.dao.legacy.{ ByteArraySnapshotSerializer, SnapshotQueries }
+import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
+import pekko.serialization.{ Serialization, SerializationExtension }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.Done
+import pekko.persistence.jdbc.migrator.JournalMigrator.ReadJournalConfig
+import pekko.persistence.jdbc.migrator.SnapshotMigrator.{ NoParallelism, SnapshotStoreConfig }
 import org.slf4j.{ Logger, LoggerFactory }
 import slick.jdbc
 import slick.jdbc.{ JdbcBackend, JdbcProfile }

@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalDaoWithReadMessages
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.persistence.PersistentRepr
+import pekko.persistence.jdbc.journal.dao.JournalDaoWithReadMessages
+import pekko.stream.scaladsl.Source
 
 import scala.collection.immutable.Set
 import scala.concurrent.Future

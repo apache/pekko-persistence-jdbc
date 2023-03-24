@@ -14,9 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.db
 
-import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko
+import pekko.actor.ActorSystem
 import javax.naming.InitialContext
-import org.apache.pekko.persistence.jdbc.config.SlickConfiguration
+import pekko.persistence.jdbc.config.SlickConfiguration
 import com.typesafe.config.Config
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile

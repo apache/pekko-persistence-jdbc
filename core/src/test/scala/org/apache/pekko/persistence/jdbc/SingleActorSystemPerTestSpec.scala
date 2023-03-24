@@ -14,13 +14,14 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.util.Timeout
 import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
-import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration }
-import org.apache.pekko.persistence.jdbc.db.SlickDatabase
-import org.apache.pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
-import org.apache.pekko.persistence.jdbc.util.DropCreate
+import pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration }
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.jdbc.util.DropCreate
 import org.scalatest.BeforeAndAfterEach
 import slick.jdbc.JdbcBackend.Database
 

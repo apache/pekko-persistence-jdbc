@@ -23,13 +23,14 @@ import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time._
 
-import org.apache.pekko.actor._
-import org.apache.pekko.persistence.jdbc.db.SlickDatabase
-import org.apache.pekko.persistence.jdbc.config._
-import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
-import org.apache.pekko.persistence.jdbc.util.DropCreate
-import org.apache.pekko.serialization.SerializationExtension
-import org.apache.pekko.util.Timeout
+import org.apache.pekko
+import pekko.actor._
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.config._
+import pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
+import pekko.persistence.jdbc.util.DropCreate
+import pekko.serialization.SerializationExtension
+import pekko.util.Timeout
 
 abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     extends AnyWordSpecLike

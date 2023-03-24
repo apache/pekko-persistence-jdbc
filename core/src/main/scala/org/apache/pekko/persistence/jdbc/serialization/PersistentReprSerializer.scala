@@ -14,11 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.serialization
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.persistence.jdbc.util.TrySeq
-import org.apache.pekko.persistence.journal.Tagged
-import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.persistence.jdbc.util.TrySeq
+import pekko.persistence.journal.Tagged
+import pekko.persistence.{ AtomicWrite, PersistentRepr }
+import pekko.stream.scaladsl.Flow
 import scala.collection.immutable._
 
 import scala.util.Try

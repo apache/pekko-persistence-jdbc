@@ -16,15 +16,16 @@ package org.apache.pekko.persistence.jdbc.serialization
 
 import scala.concurrent.duration._
 
-import org.apache.pekko.actor.ActorRef
-import org.apache.pekko.actor.Props
-import org.apache.pekko.event.LoggingReceive
-import org.apache.pekko.persistence.PersistentActor
-import org.apache.pekko.persistence.RecoveryCompleted
-import org.apache.pekko.persistence.jdbc.SharedActorSystemTestSpec
-import org.apache.pekko.persistence.jdbc.testkit.internal.H2
-import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaType
-import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko
+import pekko.actor.ActorRef
+import pekko.actor.Props
+import pekko.event.LoggingReceive
+import pekko.persistence.PersistentActor
+import pekko.persistence.RecoveryCompleted
+import pekko.persistence.jdbc.SharedActorSystemTestSpec
+import pekko.persistence.jdbc.testkit.internal.H2
+import pekko.persistence.jdbc.testkit.internal.SchemaType
+import pekko.testkit.TestProbe
 
 abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: SchemaType)
     extends SharedActorSystemTestSpec(config) {
@@ -43,7 +44,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
 
     override val receiveCommand: Receive = LoggingReceive { case msg =>
       persist(msg) { _ =>
-        sender ! org.apache.pekko.actor.Status.Success("")
+        sender ! pekko.actor.Status.Success("")
       }
     }
 
@@ -74,7 +75,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
       val tp = TestProbe()
       recover.expectMsg(RecoveryCompleted)
       tp.send(actor, "foo") // strings are serializable
-      tp.expectMsg(org.apache.pekko.actor.Status.Success(""))
+      tp.expectMsg(pekko.actor.Status.Success(""))
       failure.expectNoMessage(100.millis)
       rejected.expectNoMessage(100.millis)
     }
@@ -113,7 +114,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
       val tp = TestProbe()
       recover.expectMsg(RecoveryCompleted)
       tp.send(actor, "foo")
-      tp.expectMsg(org.apache.pekko.actor.Status.Success(""))
+      tp.expectMsg(pekko.actor.Status.Success(""))
       tp.send(actor, new NotSerializable) // the NotSerializable class cannot be serialized
       tp.expectNoMessage(300.millis) // the handler should not have been called, because persist has failed
       // the actor should call the OnPersistRejected

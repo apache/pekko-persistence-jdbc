@@ -15,9 +15,10 @@
 package org.apache.pekko.persistence.jdbc
 package journal.dao.legacy
 
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
-import org.apache.pekko.serialization.Serialization
+import org.apache.pekko
+import pekko.persistence.PersistentRepr
+import pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
+import pekko.serialization.Serialization
 
 import scala.collection.immutable._
 import scala.util.Try

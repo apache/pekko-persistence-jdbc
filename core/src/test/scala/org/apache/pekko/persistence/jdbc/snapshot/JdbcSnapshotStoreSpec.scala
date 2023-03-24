@@ -14,18 +14,19 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot
 
-import org.apache.pekko.persistence.CapabilityFlag
-import org.apache.pekko.persistence.jdbc.config._
-import org.apache.pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
-import org.apache.pekko.persistence.jdbc.db.SlickDatabase
-import org.apache.pekko.persistence.snapshot.SnapshotStoreSpec
+import org.apache.pekko
+import pekko.persistence.CapabilityFlag
+import pekko.persistence.jdbc.config._
+import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.snapshot.SnapshotStoreSpec
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.duration._
 
-import org.apache.pekko.persistence.jdbc.testkit.internal.H2
-import org.apache.pekko.persistence.jdbc.testkit.internal.SchemaType
+import pekko.persistence.jdbc.testkit.internal.H2
+import pekko.persistence.jdbc.testkit.internal.SchemaType
 
 abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
     extends SnapshotStoreSpec(config)

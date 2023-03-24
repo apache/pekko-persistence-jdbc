@@ -17,10 +17,11 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 import scala.concurrent.duration.FiniteDuration
 import scala.util.Try
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.Scheduler
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.Scheduler
+import pekko.persistence.PersistentRepr
+import pekko.stream.scaladsl.Source
 
 trait JournalDaoWithReadMessages {
 

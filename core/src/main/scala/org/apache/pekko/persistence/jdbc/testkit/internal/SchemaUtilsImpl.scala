@@ -17,12 +17,13 @@ package org.apache.pekko.persistence.jdbc.testkit.internal
 import java.sql.Statement
 
 import scala.concurrent.Future
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.Dispatchers
-import org.apache.pekko.persistence.jdbc.db.SlickDatabase
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.dispatch.Dispatchers
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.db.SlickExtension
 import com.typesafe.config.Config
 import org.slf4j.Logger
 import slick.jdbc.H2Profile

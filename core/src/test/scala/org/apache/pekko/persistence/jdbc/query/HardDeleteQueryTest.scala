@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.persistence.query.NoOffset
-import org.apache.pekko.pattern._
+import org.apache.pekko
+import pekko.persistence.query.NoOffset
+import pekko.pattern._
 
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers

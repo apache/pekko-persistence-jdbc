@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao
 
-import org.apache.pekko.persistence.jdbc.config.SnapshotTableConfiguration
-import org.apache.pekko.persistence.jdbc.snapshot.dao.SnapshotTables.SnapshotRow
-import org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.isOracleDriver
-import org.apache.pekko.persistence.jdbc.util.InputStreamOps.InputStreamImplicits
+import org.apache.pekko
+import pekko.persistence.jdbc.config.SnapshotTableConfiguration
+import pekko.persistence.jdbc.snapshot.dao.SnapshotTables.SnapshotRow
+import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.isOracleDriver
+import pekko.persistence.jdbc.util.InputStreamOps.InputStreamImplicits
 
 object SnapshotTables {
   case class SnapshotRow(

@@ -14,12 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.Scheduler
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.journal.dao.FlowControl.{ Continue, ContinueDelayed, Stop }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.Scheduler
+import pekko.persistence.PersistentRepr
+import pekko.persistence.jdbc.journal.dao.FlowControl.{ Continue, ContinueDelayed, Stop }
+import pekko.stream.Materializer
+import pekko.stream.scaladsl.{ Sink, Source }
 
 import scala.collection.immutable.Seq
 import scala.concurrent.{ ExecutionContext, Future }
@@ -73,7 +74,7 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
             case Continue => retrieveNextBatch()
             case ContinueDelayed =>
               val (delay, scheduler) = refreshInterval.get
-              org.apache.pekko.pattern.after(delay, scheduler)(retrieveNextBatch())
+              pekko.pattern.after(delay, scheduler)(retrieveNextBatch())
           }
       }
       .mapConcat(identity(_))

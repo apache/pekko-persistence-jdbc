@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.persistence.jdbc.query.TaggingEventAdapter.TagEvent
-import org.apache.pekko.persistence.journal.{ Tagged, WriteEventAdapter }
+import org.apache.pekko
+import pekko.persistence.jdbc.query.TaggingEventAdapter.TagEvent
+import pekko.persistence.journal.{ Tagged, WriteEventAdapter }
 
 object TaggingEventAdapter {
   case class TagEvent(payload: Any, tags: Set[String])

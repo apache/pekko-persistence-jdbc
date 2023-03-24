@@ -14,12 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko.Done
-import org.apache.pekko.persistence.Persistence
-import org.apache.pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal
-import org.apache.pekko.persistence.query.Offset
-import org.apache.pekko.persistence.query.{ EventEnvelope, Sequence }
-import org.apache.pekko.testkit.TestProbe
+import org.apache.pekko
+import pekko.Done
+import pekko.persistence.Persistence
+import pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal
+import pekko.persistence.query.Offset
+import pekko.persistence.query.{ EventEnvelope, Sequence }
+import pekko.testkit.TestProbe
 
 abstract class CurrentEventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps

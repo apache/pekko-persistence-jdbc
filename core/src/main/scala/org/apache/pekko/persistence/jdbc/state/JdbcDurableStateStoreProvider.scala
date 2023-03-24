@@ -17,14 +17,15 @@ package org.apache.pekko.persistence.jdbc.state
 import scala.concurrent.ExecutionContext
 import slick.jdbc.JdbcProfile
 import slick.jdbc.JdbcBackend._
-import org.apache.pekko.actor.ExtendedActorSystem
-import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import org.apache.pekko.persistence.state.scaladsl.DurableStateStore
-import org.apache.pekko.persistence.state.javadsl.{ DurableStateStore => JDurableStateStore }
-import org.apache.pekko.persistence.state.DurableStateStoreProvider
-import org.apache.pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
-import org.apache.pekko.serialization.SerializationExtension
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
+import org.apache.pekko
+import pekko.actor.ExtendedActorSystem
+import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.state.scaladsl.DurableStateStore
+import pekko.persistence.state.javadsl.{ DurableStateStore => JDurableStateStore }
+import pekko.persistence.state.DurableStateStoreProvider
+import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
+import pekko.serialization.SerializationExtension
+import pekko.stream.{ Materializer, SystemMaterializer }
 
 class JdbcDurableStateStoreProvider[A](system: ExtendedActorSystem) extends DurableStateStoreProvider {
 

@@ -14,14 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc.state
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
 import slick.jdbc.{ JdbcProfile, SetParameter }
 import slick.jdbc.H2Profile
 import slick.jdbc.MySQLProfile
 import slick.jdbc.OracleProfile
 import slick.jdbc.PostgresProfile
 import slick.jdbc.SQLServerProfile
-import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 
 /**
  * INTERNAL API

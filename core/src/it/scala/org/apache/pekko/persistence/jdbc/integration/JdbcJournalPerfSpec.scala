@@ -9,11 +9,12 @@
 
 package org.apache.pekko.persistence.jdbc.integration
 
-import org.apache.pekko.persistence.jdbc.journal.JdbcJournalPerfSpec
-import org.apache.pekko.persistence.jdbc.testkit.internal.MySQL
-import org.apache.pekko.persistence.jdbc.testkit.internal.Oracle
-import org.apache.pekko.persistence.jdbc.testkit.internal.Postgres
-import org.apache.pekko.persistence.jdbc.testkit.internal.SqlServer
+import org.apache.pekko
+import pekko.persistence.jdbc.journal.JdbcJournalPerfSpec
+import pekko.persistence.jdbc.testkit.internal.MySQL
+import pekko.persistence.jdbc.testkit.internal.Oracle
+import pekko.persistence.jdbc.testkit.internal.Postgres
+import pekko.persistence.jdbc.testkit.internal.SqlServer
 import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigValueFactory
 

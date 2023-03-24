@@ -14,15 +14,16 @@
 
 package org.apache.pekko.persistence.jdbc.journal
 
-import org.apache.pekko.actor.Props
-import org.apache.pekko.persistence.CapabilityFlag
-import org.apache.pekko.persistence.journal.JournalPerfSpec
-import org.apache.pekko.persistence.journal.JournalPerfSpec.{ BenchActor, Cmd, ResetCounter }
-import org.apache.pekko.testkit.TestProbe
-import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
-import org.apache.pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
-import org.apache.pekko.persistence.jdbc.config.JournalConfig
-import org.apache.pekko.persistence.jdbc.db.SlickExtension
+import org.apache.pekko
+import pekko.actor.Props
+import pekko.persistence.CapabilityFlag
+import pekko.persistence.journal.JournalPerfSpec
+import pekko.persistence.journal.JournalPerfSpec.{ BenchActor, Cmd, ResetCounter }
+import pekko.testkit.TestProbe
+import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
+import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
+import pekko.persistence.jdbc.config.JournalConfig
+import pekko.persistence.jdbc.db.SlickExtension
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures

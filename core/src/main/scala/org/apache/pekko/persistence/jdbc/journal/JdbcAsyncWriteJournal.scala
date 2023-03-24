@@ -16,16 +16,17 @@ package org.apache.pekko.persistence.jdbc.journal
 
 import java.util.{ HashMap => JHMap, Map => JMap }
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.{ ActorSystem, ExtendedActorSystem }
-import org.apache.pekko.persistence.jdbc.config.JournalConfig
-import org.apache.pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal.{ InPlaceUpdateEvent, WriteFinished }
-import org.apache.pekko.persistence.jdbc.journal.dao.{ JournalDao, JournalDaoWithUpdates }
-import org.apache.pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
-import org.apache.pekko.persistence.journal.AsyncWriteJournal
-import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.{ ActorSystem, ExtendedActorSystem }
+import pekko.persistence.jdbc.config.JournalConfig
+import pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal.{ InPlaceUpdateEvent, WriteFinished }
+import pekko.persistence.jdbc.journal.dao.{ JournalDao, JournalDaoWithUpdates }
+import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
+import pekko.persistence.journal.AsyncWriteJournal
+import pekko.persistence.{ AtomicWrite, PersistentRepr }
+import pekko.serialization.{ Serialization, SerializationExtension }
+import pekko.stream.{ Materializer, SystemMaterializer }
 import com.typesafe.config.Config
 import slick.jdbc.JdbcProfile
 import slick.jdbc.JdbcBackend._
@@ -33,8 +34,8 @@ import slick.jdbc.JdbcBackend._
 import scala.collection.immutable._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
-import org.apache.pekko.pattern.pipe
-import org.apache.pekko.persistence.jdbc.util.PluginVersionChecker
+import pekko.pattern.pipe
+import pekko.persistence.jdbc.util.PluginVersionChecker
 
 object JdbcAsyncWriteJournal {
   private case class WriteFinished(pid: String, f: Future[_])
@@ -43,7 +44,7 @@ object JdbcAsyncWriteJournal {
    * Extra Plugin API: May be used to issue in-place updates for events.
    * To be used only for data migrations such as "encrypt all events" and similar operations.
    *
-   * The write payload may be wrapped in a [[org.apache.pekko.persistence.journal.Tagged]],
+   * The write payload may be wrapped in a [[pekko.persistence.journal.Tagged]],
    * in which case the new tags will overwrite the existing tags of the event.
    */
   final case class InPlaceUpdateEvent(persistenceId: String, seqNr: Long, write: AnyRef)

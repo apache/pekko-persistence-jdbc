@@ -9,8 +9,9 @@
 
 package org.apache.pekko.persistence.jdbc.migrator.integration
 
-import org.apache.pekko.persistence.jdbc.migrator.MigratorSpec._
-import org.apache.pekko.persistence.jdbc.migrator.JournalMigratorTest
+import org.apache.pekko
+import pekko.persistence.jdbc.migrator.MigratorSpec._
+import pekko.persistence.jdbc.migrator.JournalMigratorTest
 
 class PostgresJournalMigratorTest extends JournalMigratorTest("postgres-application.conf") with PostgresCleaner
 

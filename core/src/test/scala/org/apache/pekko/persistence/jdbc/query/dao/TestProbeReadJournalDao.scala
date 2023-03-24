@@ -14,18 +14,19 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao.JournalSequence
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.testkit.TestProbe
-import org.apache.pekko.util.Timeout
-import org.apache.pekko.pattern.ask
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao.JournalSequence
+import pekko.persistence.PersistentRepr
+import pekko.stream.scaladsl.Source
+import pekko.testkit.TestProbe
+import pekko.util.Timeout
+import pekko.pattern.ask
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.Try
-import org.apache.pekko.actor.Scheduler
+import pekko.actor.Scheduler
 
 object TestProbeReadJournalDao {
   case class JournalSequence(offset: Long, limit: Long)

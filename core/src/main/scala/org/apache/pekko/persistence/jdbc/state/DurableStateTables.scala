@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.state
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 
 /**
  * INTERNAL API

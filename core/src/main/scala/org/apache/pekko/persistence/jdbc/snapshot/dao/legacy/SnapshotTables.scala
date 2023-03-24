@@ -14,9 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao.legacy
 
-import org.apache.pekko.persistence.jdbc.config.LegacySnapshotTableConfiguration
-import org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.{ isOracleDriver, SnapshotRow }
-import org.apache.pekko.persistence.jdbc.util.InputStreamOps._
+import org.apache.pekko
+import pekko.persistence.jdbc.config.LegacySnapshotTableConfiguration
+import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.{ isOracleDriver, SnapshotRow }
+import pekko.persistence.jdbc.util.InputStreamOps._
 import slick.jdbc.JdbcProfile
 
 object SnapshotTables {

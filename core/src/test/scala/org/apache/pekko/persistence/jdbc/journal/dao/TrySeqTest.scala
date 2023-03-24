@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.persistence.jdbc.util.TrySeq
-import org.apache.pekko.persistence.jdbc.SimpleSpec
+import org.apache.pekko
+import pekko.persistence.jdbc.util.TrySeq
+import pekko.persistence.jdbc.SimpleSpec
 
 import scala.collection.immutable._
 import scala.util.{ Failure, Success }

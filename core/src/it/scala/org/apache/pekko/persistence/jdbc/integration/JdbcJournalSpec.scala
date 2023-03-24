@@ -9,8 +9,9 @@
 
 package org.apache.pekko.persistence.jdbc.integration
 
-import org.apache.pekko.persistence.jdbc.journal.JdbcJournalSpec
-import org.apache.pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
+import org.apache.pekko
+import pekko.persistence.jdbc.journal.JdbcJournalSpec
+import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
 import com.typesafe.config.ConfigFactory
 
 class PostgresJournalSpec extends JdbcJournalSpec(ConfigFactory.load("postgres-application.conf"), Postgres)

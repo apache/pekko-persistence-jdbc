@@ -14,11 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.query.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.persistence.jdbc.query.scaladsl.{ JdbcReadJournal => ScalaJdbcReadJournal }
-import org.apache.pekko.persistence.query.{ EventEnvelope, Offset }
-import org.apache.pekko.persistence.query.javadsl._
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.persistence.jdbc.query.scaladsl.{ JdbcReadJournal => ScalaJdbcReadJournal }
+import pekko.persistence.query.{ EventEnvelope, Offset }
+import pekko.persistence.query.javadsl._
+import pekko.stream.javadsl.Source
 
 object JdbcReadJournal {
   final val Identifier = ScalaJdbcReadJournal.Identifier

@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao
 
-import org.apache.pekko.persistence.jdbc.config.SnapshotTableConfiguration
-import org.apache.pekko.persistence.jdbc.snapshot.dao.SnapshotTables.SnapshotRow
+import org.apache.pekko
+import pekko.persistence.jdbc.config.SnapshotTableConfiguration
+import pekko.persistence.jdbc.snapshot.dao.SnapshotTables.SnapshotRow
 import slick.jdbc.JdbcProfile
 
 class SnapshotQueries(val profile: JdbcProfile, override val snapshotTableCfg: SnapshotTableConfiguration)

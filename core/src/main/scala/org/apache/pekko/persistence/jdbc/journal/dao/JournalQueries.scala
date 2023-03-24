@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
+import org.apache.pekko
+import pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
+import pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext

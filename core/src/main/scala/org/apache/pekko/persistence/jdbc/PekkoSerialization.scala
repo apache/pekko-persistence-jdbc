@@ -14,11 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.persistence.PersistentRepr
-import org.apache.pekko.persistence.jdbc.state.DurableStateTables
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
-import org.apache.pekko.serialization.{ Serialization, Serializers }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.persistence.PersistentRepr
+import pekko.persistence.jdbc.state.DurableStateTables
+import pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
+import pekko.serialization.{ Serialization, Serializers }
 
 import scala.util.{ Success, Try }
 

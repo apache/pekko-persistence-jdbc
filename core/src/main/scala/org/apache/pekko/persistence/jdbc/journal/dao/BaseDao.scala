@@ -14,9 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.persistence.jdbc.config.BaseDaoConfig
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source, SourceQueueWithComplete }
-import org.apache.pekko.stream.{ Materializer, OverflowStrategy, QueueOfferResult }
+import org.apache.pekko
+import pekko.persistence.jdbc.config.BaseDaoConfig
+import pekko.stream.scaladsl.{ Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.stream.{ Materializer, OverflowStrategy, QueueOfferResult }
 
 import scala.collection.immutable.{ Seq, Vector }
 import scala.concurrent.{ ExecutionContext, Future, Promise }

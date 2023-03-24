@@ -11,11 +11,11 @@ import sbt._
 
 object Dependencies {
   // Keep in sync with .github CI build
-  val Scala212 = "2.12.16"
-  val Scala213 = "2.13.8"
+  val Scala212 = "2.12.17"
+  val Scala213 = "2.13.10"
   val ScalaVersions = Seq(Scala212, Scala213)
 
-  val PekkoVersion = "0.0.0+26546-767209a8-SNAPSHOT"
+  val PekkoVersion = "0.0.0+26623-85c2a469-SNAPSHOT"
 
   val SlickVersion = "3.3.3"
   val ScalaTestVersion = "3.2.10"

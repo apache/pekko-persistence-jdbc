@@ -5,6 +5,7 @@ import sbt.Keys._
 ThisBuild / resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
+sourceDistName := "incubating-pekko-persistence-jdbc"
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

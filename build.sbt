@@ -2,7 +2,7 @@ import com.lightbend.paradox.apidoc.ApidocPlugin.autoImport.apidocRootPackage
 import org.apache.pekko.PekkoParadoxPlugin.autoImport._
 import sbt.Keys._
 
-ThisBuild / resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "incubating-pekko-persistence-jdbc"
@@ -43,7 +43,7 @@ lazy val migrator = project
 
 lazy val themeSettings = Seq(
   // allow access to snapshots for pekko-sbt-paradox
-  resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/"),
+  resolvers += Resolver.ApacheMavenSnapshotsRepo,
   pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-persistence-jdbc"))
 
 lazy val docs = project

@@ -32,7 +32,12 @@ Maven
     </project>
     ```
 
-sbt
+sbt (1.9.0 or later)
+:   ```scala
+    resolvers += Resolver.ApacheMavenSnapshotsRepo
+    ```
+
+sbt (earlier than 1.9.0)
 :   ```scala
     resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
     ```

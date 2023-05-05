@@ -1,4 +1,4 @@
-resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
+resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 // compliance
 addSbtPlugin("de.heikoseeberger" % "sbt-header" % "5.7.0")

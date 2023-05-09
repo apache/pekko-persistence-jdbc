@@ -16,7 +16,6 @@ package org.apache.pekko.persistence.jdbc.state.javadsl
 
 import java.util.Optional
 import java.util.concurrent.CompletionStage
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext
 import org.apache.pekko
 import pekko.annotation.ApiMayChange
@@ -28,6 +27,7 @@ import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.query.javadsl.DurableStateStoreQuery
 import pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
 import pekko.stream.javadsl.Source
+import pekko.util.FutureConverters._
 import slick.jdbc.JdbcProfile
 
 object JdbcDurableStateStore {
@@ -48,19 +48,18 @@ class JdbcDurableStateStore[A](
   val queries = new DurableStateQueries(profile, durableStateConfig)
 
   def getObject(persistenceId: String): CompletionStage[GetObjectResult[A]] =
-    toJava(
-      scalaStore
-        .getObject(persistenceId)
-        .map(x => GetObjectResult(Optional.ofNullable(x.value.getOrElse(null.asInstanceOf[A])), x.revision)))
+    scalaStore
+      .getObject(persistenceId)
+      .map(x => GetObjectResult(Optional.ofNullable(x.value.getOrElse(null.asInstanceOf[A])), x.revision)).asJava
 
   def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): CompletionStage[Done] =
-    toJava(scalaStore.upsertObject(persistenceId, revision, value, tag))
+    scalaStore.upsertObject(persistenceId, revision, value, tag).asJava
 
   def deleteObject(persistenceId: String): CompletionStage[Done] =
-    toJava(scalaStore.deleteObject(persistenceId))
+    scalaStore.deleteObject(persistenceId).asJava
 
   def deleteObject(persistenceId: String, revision: Long): CompletionStage[Done] =
-    toJava(scalaStore.deleteObject(persistenceId, revision))
+    scalaStore.deleteObject(persistenceId, revision).asJava
 
   def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] =
     scalaStore.currentChanges(tag, offset).asJava

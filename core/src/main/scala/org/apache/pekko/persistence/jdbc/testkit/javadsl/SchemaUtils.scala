@@ -16,13 +16,12 @@ package org.apache.pekko.persistence.jdbc.testkit.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import scala.compat.java8.FutureConverters._
-
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.ApiMayChange
 import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
+import pekko.util.FutureConverters._
 import org.slf4j.LoggerFactory
 
 object SchemaUtils {
@@ -63,7 +62,7 @@ object SchemaUtils {
    */
   @ApiMayChange
   def dropIfExists(configKey: String, actorSystem: ClassicActorSystemProvider): CompletionStage[Done] =
-    SchemaUtilsImpl.dropIfExists(configKey, logger)(actorSystem).toJava
+    SchemaUtilsImpl.dropIfExists(configKey, logger)(actorSystem).asJava
 
   /**
    * Creates the schema for both the journal and the snapshot table using the default schema definition.
@@ -99,7 +98,7 @@ object SchemaUtils {
    */
   @ApiMayChange
   def createIfNotExists(configKey: String, actorSystem: ClassicActorSystemProvider): CompletionStage[Done] =
-    SchemaUtilsImpl.createIfNotExists(configKey, logger)(actorSystem).toJava
+    SchemaUtilsImpl.createIfNotExists(configKey, logger)(actorSystem).asJava
 
   /**
    * This method can be used to load alternative DDL scripts.
@@ -135,5 +134,5 @@ object SchemaUtils {
       separator: String,
       configKey: String,
       actorSystem: ClassicActorSystemProvider): CompletionStage[Done] =
-    SchemaUtilsImpl.applyScript(script, separator, configKey, logger)(actorSystem).toJava
+    SchemaUtilsImpl.applyScript(script, separator, configKey, logger)(actorSystem).asJava
 }

@@ -10,15 +10,15 @@
 import sbt.Keys._
 import sbt._
 import sbt.plugins.JvmPlugin
-import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
-import SonatypeApachePlugin.autoImport.apacheSonatypeDisclaimerFile
+import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
+import ApacheSonatypePlugin.autoImport.apacheSonatypeDisclaimerFile
 import sbtdynver.DynVerPlugin
 import sbtdynver.DynVerPlugin.autoImport.dynverSonatypeSnapshots
 
 object ProjectAutoPlugin extends AutoPlugin {
   object autoImport {}
 
-  override val requires = JvmPlugin && SonatypeApachePlugin && DynVerPlugin
+  override val requires = JvmPlugin && ApacheSonatypePlugin && DynVerPlugin
 
   override def globalSettings =
     Seq(

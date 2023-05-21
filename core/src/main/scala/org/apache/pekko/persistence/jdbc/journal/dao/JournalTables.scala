@@ -74,7 +74,7 @@ trait JournalTables {
         eventSerManifest,
         metaPayload,
         metaSerId,
-        metaSerManifest) <> (JournalPekkoSerializationRow.tupled, JournalPekkoSerializationRow.unapply)
+        metaSerManifest).<>(JournalPekkoSerializationRow.tupled, JournalPekkoSerializationRow.unapply)
 
     val ordering: Rep[Long] = column[Long](journalTableCfg.columnNames.ordering, O.AutoInc)
     val persistenceId: Rep[String] =
@@ -101,7 +101,7 @@ trait JournalTables {
   lazy val JournalTable = new TableQuery(tag => new JournalEvents(tag))
 
   class EventTags(_tableTag: Tag) extends Table[TagRow](_tableTag, tagTableCfg.schemaName, tagTableCfg.tableName) {
-    override def * = (eventId, tag) <> (TagRow.tupled, TagRow.unapply)
+    override def * = (eventId, tag).<>(TagRow.tupled, TagRow.unapply)
 
     val eventId: Rep[Long] = column[Long](tagTableCfg.columnNames.eventId)
     val tag: Rep[String] = column[String](tagTableCfg.columnNames.tag)

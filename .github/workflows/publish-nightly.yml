@@ -1,5 +1,8 @@
 name: Publish Nightly
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
   schedule:
@@ -25,6 +28,13 @@ jobs:
         with:
           distribution: temurin
           java-version: 8
+
+      - name: Publish Jars to Apache Maven Repository
+        run: |-
+          sbt +publish
+        env:
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_PW: ${{ secrets.NEXUS_PW }}
 
       - name: Build Documentation
         run: |-

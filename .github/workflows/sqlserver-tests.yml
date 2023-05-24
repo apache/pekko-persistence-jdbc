@@ -1,5 +1,7 @@
 name: SqlServer Integration Tests
 
+permissions: {}
+
 on:
   pull_request:
   push:

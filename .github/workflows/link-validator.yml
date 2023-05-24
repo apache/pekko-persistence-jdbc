@@ -1,5 +1,7 @@
 name: Link Validator
 
+permissions: {}
+
 on:
   pull_request:
   schedule:

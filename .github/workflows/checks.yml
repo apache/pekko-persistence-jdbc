@@ -1,5 +1,7 @@
 name: Basic checks
 
+permissions: {}
+
 on:
   pull_request:
   push:

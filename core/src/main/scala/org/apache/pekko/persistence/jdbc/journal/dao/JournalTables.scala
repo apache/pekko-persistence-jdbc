@@ -39,7 +39,15 @@ object JournalTables {
       metaSerId: Option[Int],
       metaSerManifest: Option[String])
 
+  object JournalPekkoSerializationRow {
+    def tupled = (apply _).tupled
+  }
+
   case class TagRow(eventId: Long, tag: String)
+
+  object TagRow {
+    def tupled = (apply _).tupled
+  }
 }
 
 /**

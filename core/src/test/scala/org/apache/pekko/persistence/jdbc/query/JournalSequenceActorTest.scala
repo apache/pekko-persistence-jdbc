@@ -86,10 +86,10 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
           val startTime = System.currentTimeMillis()
           withJournalSequenceActor(db, maxTries = 100) { actor =>
             val patienceConfig = PatienceConfig(10.seconds, Span(200, org.scalatest.time.Millis))
-            eventually {
+            eventually(patienceConfig) {
               val currentMax = actor.ask(GetMaxOrderingId).mapTo[MaxOrderingId].futureValue.maxOrdering
               currentMax shouldBe elements
-            }(patienceConfig, implicitly, implicitly)
+            }
           }
           val timeTaken = System.currentTimeMillis() - startTime
           log.info(s"Recovered all events in $timeTaken ms")
@@ -120,10 +120,10 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
           withJournalSequenceActor(db, maxTries = 2) { actor =>
             // Should normally recover after `maxTries` seconds
             val patienceConfig = PatienceConfig(10.seconds, Span(200, org.scalatest.time.Millis))
-            eventually {
+            eventually(patienceConfig) {
               val currentMax = actor.ask(GetMaxOrderingId).mapTo[MaxOrderingId].futureValue.maxOrdering
               currentMax shouldBe lastElement
-            }(patienceConfig, implicitly, implicitly)
+            }
           }
         }
       }
@@ -156,10 +156,10 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
           withJournalSequenceActor(db, maxTries = 2) { actor =>
             // The actor should assume the max after 2 seconds
             val patienceConfig = PatienceConfig(3.seconds)
-            eventually {
+            eventually(patienceConfig) {
               val currentMax = actor.ask(GetMaxOrderingId).mapTo[MaxOrderingId].futureValue.maxOrdering
               currentMax shouldBe highestValue
-            }(patienceConfig, implicitly, implicitly)
+            }
           }
         }
       }

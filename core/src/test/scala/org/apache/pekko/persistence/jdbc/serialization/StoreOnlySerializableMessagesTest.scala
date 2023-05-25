@@ -44,7 +44,7 @@ abstract class StoreOnlySerializableMessagesTest(config: String, schemaType: Sch
 
     override val receiveCommand: Receive = LoggingReceive { case msg =>
       persist(msg) { _ =>
-        sender ! pekko.actor.Status.Success("")
+        sender() ! pekko.actor.Status.Success("")
       }
     }
 

@@ -31,6 +31,10 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
       stateSerId: Int,
       stateSerManifest: Option[String],
       stateTimestamp: Long)
+
+  object DurableStateRow {
+    def tupled = (apply _).tupled
+  }
 }
 
 /**

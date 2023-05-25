@@ -28,6 +28,7 @@ import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
 abstract class JdbcJournalPerfSpec(config: Config, schemaType: SchemaType)
@@ -39,7 +40,7 @@ abstract class JdbcJournalPerfSpec(config: Config, schemaType: SchemaType)
     with DropCreate {
   override protected def supportsRejectingNonSerializableObjects: CapabilityFlag = true
 
-  implicit lazy val ec = system.dispatcher
+  implicit lazy val ec: ExecutionContext = system.dispatcher
 
   implicit def pc: PatienceConfig = PatienceConfig(timeout = 10.minutes)
 

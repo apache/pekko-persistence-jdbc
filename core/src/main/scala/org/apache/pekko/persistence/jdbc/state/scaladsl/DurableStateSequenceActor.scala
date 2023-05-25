@@ -19,6 +19,7 @@ import pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
 import pekko.pattern.pipe
 import pekko.persistence.jdbc.config.DurableStateSequenceRetrievalConfig
 import pekko.persistence.jdbc.MissingElements
+import pekko.persistence.jdbc.state.scaladsl
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Sink
 import scala.concurrent.duration.FiniteDuration
@@ -29,8 +30,8 @@ import pekko.annotation.InternalApi
  * INTERNAL API
  */
 @InternalApi private[pekko] object DurableStateSequenceActor {
-  def props[A](stateStore: JdbcDurableStateStore[A], config: DurableStateSequenceRetrievalConfig)(
-      implicit materializer: Materializer): Props = Props(new DurableStateSequenceActor(stateStore, config))
+  def props[A](stateStore: scaladsl.JdbcDurableStateStore[A], config: DurableStateSequenceRetrievalConfig)(
+      implicit materializer: Materializer): Props = Props(new scaladsl.DurableStateSequenceActor(stateStore, config))
 
   case class VisitedElement(pid: PersistenceId, offset: GlobalOffset, revision: Revision) {
     override def toString = s"($pid, $offset, $revision)"
@@ -86,9 +87,8 @@ import pekko.annotation.InternalApi
  *
  * INTERNAL API
  */
-@InternalApi
-private[pekko] class DurableStateSequenceActor[A](
-    stateStore: JdbcDurableStateStore[A],
+@InternalApi private[pekko] class DurableStateSequenceActor[A](
+    stateStore: scaladsl.JdbcDurableStateStore[A],
     config: DurableStateSequenceRetrievalConfig)(implicit materializer: Materializer)
     extends Actor
     with ActorLogging

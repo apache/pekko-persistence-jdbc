@@ -32,6 +32,8 @@ import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout
 
+import scala.concurrent.ExecutionContext
+
 abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     extends AnyWordSpecLike
     with BeforeAndAfterAll
@@ -42,7 +44,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     with DataGenerationHelper {
   implicit def system: ActorSystem
 
-  implicit lazy val e = system.dispatcher
+  implicit lazy val e: ExecutionContext = system.dispatcher
 
   private[jdbc] def schemaTypeToProfile(s: SchemaType) = s match {
     case H2       => slick.jdbc.H2Profile

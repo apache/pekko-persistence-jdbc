@@ -48,13 +48,13 @@ case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) 
 
   private val snapshotConfig: SnapshotConfig = new SnapshotConfig(system.settings.config.getConfig(SnapshotStoreConfig))
   private val readJournalConfig: ReadJournalConfig = new ReadJournalConfig(
-    system.settings.config.getConfig(ReadJournalConfig))
+    system.settings.config.getConfig(JournalMigrator.ReadJournalConfig))
 
   private val snapshotDB: jdbc.JdbcBackend.Database =
     SlickExtension(system).database(system.settings.config.getConfig(SnapshotStoreConfig)).database
 
   private val journalDB: JdbcBackend.Database =
-    SlickExtension(system).database(system.settings.config.getConfig(ReadJournalConfig)).database
+    SlickExtension(system).database(system.settings.config.getConfig(JournalMigrator.ReadJournalConfig)).database
 
   private val serialization: Serialization = SerializationExtension(system)
   private val queries: SnapshotQueries = new SnapshotQueries(profile, snapshotConfig.legacySnapshotTableConfiguration)

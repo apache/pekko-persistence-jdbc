@@ -25,6 +25,7 @@ import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
 abstract class JdbcJournalSpec(config: Config, schemaType: SchemaType)
@@ -38,7 +39,7 @@ abstract class JdbcJournalSpec(config: Config, schemaType: SchemaType)
 
   implicit val pc: PatienceConfig = PatienceConfig(timeout = 10.seconds)
 
-  implicit lazy val ec = system.dispatcher
+  implicit lazy val ec: ExecutionContext = system.dispatcher
 
   lazy val cfg = system.settings.config.getConfig("jdbc-journal")
 

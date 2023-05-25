@@ -23,19 +23,19 @@ import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ExtendedActorSystem
 import pekko.pattern.ask
-import pekko.persistence.state.scaladsl.{ DurableStateUpdateStore, GetObjectResult }
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.state.DurableStateQueries
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
 import pekko.persistence.query.{ DurableStateChange, Offset }
-import pekko.persistence.query.scaladsl.DurableStateStoreQuery
 import pekko.persistence.jdbc.journal.dao.FlowControl
+import pekko.persistence.jdbc.state.{ scaladsl => jdbcStateScalaDsl }
+import pekko.persistence.state.{ scaladsl => stateScalaDsl }
+import pekko.persistence.query.{ scaladsl => queryScalaDsl }
 import pekko.serialization.Serialization
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.Timeout
-import DurableStateSequenceActor._
 import OffsetSyntax._
 import pekko.annotation.ApiMayChange
 import pekko.persistence.query.UpdatedDurableState
@@ -53,31 +53,33 @@ class JdbcDurableStateStore[A](
     val profile: JdbcProfile,
     durableStateConfig: DurableStateTableConfiguration,
     serialization: Serialization)(implicit val system: ExtendedActorSystem)
-    extends DurableStateUpdateStore[A]
-    with DurableStateStoreQuery[A] {
+    extends stateScalaDsl.DurableStateUpdateStore[A]
+    with queryScalaDsl.DurableStateStoreQuery[A] {
+  import jdbcStateScalaDsl.DurableStateSequenceActor._
   import FlowControl._
   import profile.api._
 
   implicit val ec: ExecutionContext = system.dispatcher
   implicit val mat: Materializer = SystemMaterializer(system).materializer
 
-  lazy val queries = new DurableStateQueries(profile, durableStateConfig)
+  final lazy val queries = new DurableStateQueries(profile, durableStateConfig)
 
   // Started lazily to prevent the actor for querying the db if no changesByTag queries are used
   private[jdbc] lazy val stateSequenceActor = system.systemActorOf(
-    DurableStateSequenceActor.props(this, durableStateConfig.stateSequenceConfig),
+    jdbcStateScalaDsl.DurableStateSequenceActor.props(this,
+      durableStateConfig.stateSequenceConfig),
     s"pekko-persistence-jdbc-durable-state-sequence-actor")
 
-  def getObject(persistenceId: String): Future[GetObjectResult[A]] = {
+  def getObject(persistenceId: String): Future[stateScalaDsl.GetObjectResult[A]] = {
     db.run(queries.selectFromDbByPersistenceId(persistenceId).result).map { rows =>
       rows.headOption match {
         case Some(row) =>
-          GetObjectResult(
+          stateScalaDsl.GetObjectResult(
             PekkoSerialization.fromDurableStateRow(serialization)(row).toOption.asInstanceOf[Option[A]],
             row.revision)
 
         case None =>
-          GetObjectResult(None, 0)
+          stateScalaDsl.GetObjectResult(None, 0)
       }
     }
   }

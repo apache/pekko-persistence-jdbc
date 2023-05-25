@@ -122,7 +122,8 @@ trait OracleReadJournalDao extends ReadJournalDao {
     }
   }
 
-  implicit val getJournalRow = GetResult(r => JournalRow(r.<<, r.<<, r.<<, r.<<, r.nextBytes(), r.<<))
+  implicit val getJournalRow: GetResult[JournalRow] =
+    GetResult(r => JournalRow(r.<<, r.<<, r.<<, r.<<, r.nextBytes(), r.<<))
 
   abstract override def eventsByTag(
       tag: String,

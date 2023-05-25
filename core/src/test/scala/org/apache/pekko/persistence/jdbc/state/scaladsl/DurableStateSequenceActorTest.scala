@@ -21,18 +21,17 @@ import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.pekko
 import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem }
 import pekko.pattern.ask
-import pekko.persistence.jdbc.SharedActorSystemTestSpec
+import pekko.persistence.jdbc.{ CrossEventually, SharedActorSystemTestSpec }
 import pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.VisitedElement
 import pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.{ GetMaxGlobalOffset, MaxGlobalOffset }
 import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
 import pekko.testkit.TestProbe
 import pekko.util.Timeout
-import org.scalatest.concurrent.Eventually
 
 abstract class DurableStateSequenceActorTest(config: Config, schemaType: SchemaType)
     extends StateSpecBase(config, schemaType)
-    with DataGenerationHelper
-    with Eventually {
+    with CrossEventually
+    with DataGenerationHelper {
 
   val durableStateSequenceActorConfig = durableStateConfig.stateSequenceConfig
 

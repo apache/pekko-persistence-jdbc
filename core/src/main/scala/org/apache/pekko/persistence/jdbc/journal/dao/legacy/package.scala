@@ -25,6 +25,10 @@ package object legacy {
       message: Array[Byte],
       tags: Option[String] = None)
 
+  object JournalRow {
+    def tupled = (apply _).tupled
+  }
+
   def encodeTags(tags: Set[String], separator: String): Option[String] =
     if (tags.isEmpty) None else Option(tags.mkString(separator))
 

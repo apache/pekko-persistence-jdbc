@@ -19,7 +19,7 @@ import pekko.actor.{ ActorRef, ActorSystem }
 import pekko.persistence.jdbc.util.ClasspathResources
 import pekko.testkit.TestProbe
 import org.scalatest._
-import org.scalatest.concurrent.{ Eventually, ScalaFutures }
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -29,7 +29,7 @@ trait SimpleSpec
     with ScalaFutures
     with TryValues
     with OptionValues
-    with Eventually
+    with CrossEventually
     with ClasspathResources
     with BeforeAndAfterAll
     with BeforeAndAfterEach

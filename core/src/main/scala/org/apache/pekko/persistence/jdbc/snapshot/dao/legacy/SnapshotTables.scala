@@ -22,6 +22,11 @@ import slick.jdbc.JdbcProfile
 
 object SnapshotTables {
   case class SnapshotRow(persistenceId: String, sequenceNumber: Long, created: Long, snapshot: Array[Byte])
+
+  object SnapshotRow {
+    def tupled = (apply _).tupled
+  }
+
   def isOracleDriver(profile: JdbcProfile): Boolean =
     profile match {
       case _: slick.jdbc.OracleProfile => true

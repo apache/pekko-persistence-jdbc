@@ -29,7 +29,7 @@ import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.slf4j.LoggerFactory
 
 import scala.collection.immutable
-import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 import pekko.stream.testkit.scaladsl.TestSink
@@ -66,7 +66,7 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
       pending
     withActorSystem { implicit system: ActorSystem =>
       withDatabase { db =>
-        implicit val ec: ExecutionContextExecutor = system.dispatcher
+        implicit val ec: ExecutionContext = system.dispatcher
 
         val persistenceId = UUID.randomUUID().toString
         val dao = new ByteArrayJournalDao(db, profile, journalConfig, SerializationExtension(system))

@@ -13,11 +13,12 @@ object Dependencies {
   // Keep in sync with .github CI build
   val Scala212 = "2.12.18"
   val Scala213 = "2.13.12"
-  val ScalaVersions = Seq(Scala212, Scala213)
+  val Scala3 = "3.3.3"
+  val ScalaVersions = Seq(Scala212, Scala213, Scala3)
 
   val PekkoVersion = PekkoCoreDependency.version
 
-  val SlickVersion = "3.3.3"
+  val SlickVersion = "3.5.0"
   val ScalaTestVersion = "3.2.18"
 
   val JdbcDrivers = Seq(

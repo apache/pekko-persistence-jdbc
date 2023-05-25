@@ -1,0 +1,53 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.unapply")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.apply")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.tupled")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.curried")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.database")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.copy")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.copy$default$1")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.this")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.apply")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.unapply")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.db.LazySlickDatabase.database")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.db.SlickDatabase.forConfig")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.db.SlickDatabase.database")
+ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.persistence.jdbc.db.SlickDatabase.database")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.db.SlickDatabase.forConfig")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal.db")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.journal.dao.DefaultJournalDao.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.journal.dao.DefaultJournalDao.this")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.BaseByteArrayJournalDao.db")
+ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.BaseByteArrayJournalDao.db")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao.this")
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.package$JournalRow$")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.query.dao.DefaultReadJournalDao.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.query.dao.DefaultReadJournalDao.this")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.BaseByteArrayReadJournalDao.db")
+ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.BaseByteArrayReadJournalDao.db")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao.this")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.OracleReadJournalDao.db")
+ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.OracleReadJournalDao.db")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.snapshot.JdbcSnapshotStore.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao.this")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao.this")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.state.JdbcDurableStateStoreProvider.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore.this")

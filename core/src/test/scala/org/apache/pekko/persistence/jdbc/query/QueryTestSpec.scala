@@ -409,7 +409,7 @@ trait SqlServerCleaner extends QueryTestSpec {
     }
     withStatement { stmt =>
       tables.foreach { name => stmt.executeUpdate(s"DELETE FROM $name") }
-      stmt.executeUpdate(s"DBCC CHECKIDENT('${journalTableName}', RESEED, $reset)")
+      stmt.executeUpdate(s"DBCC CHECKIDENT('$journalTableName', RESEED, $reset)")
     }
   }
 

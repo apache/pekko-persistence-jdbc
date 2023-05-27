@@ -25,13 +25,13 @@ class MyPayloadSerializer extends Serializer {
   def includeManifest: Boolean = true
 
   def toBinary(o: AnyRef): Array[Byte] = o match {
-    case MyPayload(data) => s"${data}".getBytes("UTF-8")
+    case MyPayload(data) => s"$data".getBytes("UTF-8")
     case _               => throw new Exception("Unknown object for serialization")
   }
 
   def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef = manifest match {
     case Some(MyPayloadClass) => MyPayload(s"${new String(bytes, "UTF-8")}")
-    case Some(c)              => throw new Exception(s"unexpected manifest ${c}")
+    case Some(c)              => throw new Exception(s"unexpected manifest $c")
     case None                 => throw new Exception("no manifest")
   }
 }

@@ -50,6 +50,16 @@ Which licenses are compatible with Apache 2 are defined in [this doc](https://ww
 
 > Each license in this category requires some degree of [reciprocity](https://www.apache.org/legal/3party.html#define-reciprocal); therefore, additional action must be taken in order to minimize the chance that a user of an Apache product will create a derivative work of a reciprocally-licensed portion of an Apache product without being aware of the applicable requirements.
 
+### Ignoring formatting commits in git blame
+
+Throughout the history of the codebase various formatting commits have been applied as the scalafmt style has evolved over time, if desired
+one can setup git blame to ignore these commits. The hashes for these specific are stored in [this file](.git-blame-ignore-revs) so to configure
+git blame to ignore these commits you can execute the following.
+
+```shell
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
 ## Creating Commits And Writing Commit Messages
 
 Follow these guidelines when creating public commits and writing commit messages.

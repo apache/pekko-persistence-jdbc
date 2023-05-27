@@ -71,7 +71,7 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
             VALUES
             (
               ${row.persistenceId},
-              #${seqNextValue},
+              #$seqNextValue,
               ${row.revision},
               ${row.statePayload},
               ${row.stateSerId},
@@ -84,7 +84,7 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 
   private[jdbc] def updateDbWithDurableState(row: DurableStateTables.DurableStateRow, seqNextValue: String) = {
     sqlu"""UPDATE #${durableStateTableCfg.tableName}
-           SET #${durableStateTableCfg.columnNames.globalOffset} = #${seqNextValue},
+           SET #${durableStateTableCfg.columnNames.globalOffset} = #$seqNextValue,
                #${durableStateTableCfg.columnNames.revision} = ${row.revision},
                #${durableStateTableCfg.columnNames.statePayload} = ${row.statePayload},
                #${durableStateTableCfg.columnNames.stateSerId} = ${row.stateSerId},

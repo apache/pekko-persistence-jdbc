@@ -123,7 +123,7 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
             .map {
               case Success((repr, _)) =>
                 if (repr.sequenceNr % 100 == 0)
-                  log.info(s"fetched: ${repr.persistenceId} - ${repr.sequenceNr}/${totalMessages}")
+                  log.info(s"fetched: ${repr.persistenceId} - ${repr.sequenceNr}/$totalMessages")
               case Failure(exception) =>
                 log.error("Failure when reading messages.", exception)
             }

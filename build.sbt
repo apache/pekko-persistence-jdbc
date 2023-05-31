@@ -5,7 +5,7 @@ import sbt.Keys._
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
-ThisBuild / versionScheme := Some("semver-spec")
+ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "incubating-pekko-persistence-jdbc"
 
 lazy val `pekko-persistence-jdbc` = project

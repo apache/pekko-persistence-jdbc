@@ -2,7 +2,9 @@ import com.lightbend.paradox.apidoc.ApidocPlugin.autoImport.apidocRootPackage
 import org.apache.pekko.PekkoParadoxPlugin.autoImport._
 import sbt.Keys._
 
+// TODO: Remove when Pekko has a proper release
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
+ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)

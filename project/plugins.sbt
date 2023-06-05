@@ -1,4 +1,5 @@
 resolvers += Resolver.ApacheMavenSnapshotsRepo
+updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 // compliance
 addSbtPlugin("de.heikoseeberger" % "sbt-header" % "5.7.0")

@@ -2,7 +2,7 @@
 
 The Apache Pekko Persistence JDBC plugin allows for using JDBC-compliant databases as backend for @extref:[Apache Pekko Persistence](pekko:persistence.html) and @extref:[Apache Pekko Persistence Query](pekko:persistence-query.html).
 
-pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It implements the full pekko-persistence-query API and is therefore very useful for implementing DDD-style application models using Apache Pekko and Scala for creating reactive applications.
+pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It implements the full pekko-persistence-query API and is therefore very useful for implementing DDD-style application models using Apache Pekko and Scala for creating reactive applications. It also supports Durable State, although only when using a Postgres or H2 backend.
 
 Apache Pekko Persistence JDBC requires Apache Pekko $pekko.version$ or later. It uses @extref:[Slick](slick:) $slick.version$ internally to access the database via JDBC, this does not require user code to make use of Slick.
 

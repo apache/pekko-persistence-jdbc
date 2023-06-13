@@ -2,14 +2,14 @@ resolvers += Resolver.ApacheMavenSnapshotsRepo
 updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 // compliance
-addSbtPlugin("de.heikoseeberger" % "sbt-header" % "5.7.0")
+addSbtPlugin("de.heikoseeberger" % "sbt-header" % "5.9.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.0")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.0")
 addSbtPlugin("com.lightbend.sbt" % "sbt-java-formatter" % "0.7.0")
 
 // release
 addSbtPlugin("com.dwijnand" % "sbt-dynver" % "4.1.1")
-addSbtPlugin("org.mdedetrich" % "sbt-apache-sonatype" % "0.1.9")
+addSbtPlugin("org.mdedetrich" % "sbt-apache-sonatype" % "0.1.10")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.5")
 // docs
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")

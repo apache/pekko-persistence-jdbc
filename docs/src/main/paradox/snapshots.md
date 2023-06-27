@@ -53,7 +53,7 @@ Gradle
 
 ## Documentation
 
-The [snapshot documentation](https://pekko.apache.org/docs/pekko-persistence-jdbc/snapshot) is updated with every snapshot build.
+The [snapshot documentation](https://pekko.apache.org/docs/pekko-persistence-jdbc/snapshot/) is updated with every snapshot build.
 
 ## Versions
 

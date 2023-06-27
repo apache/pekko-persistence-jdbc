@@ -83,14 +83,14 @@ lazy val docs = project
       // Pekko
       "extref.pekko.base_url" -> "https://pekko.apache.org/docs/pekko/current/%s",
       "scaladoc.base_url" -> "https://pekko.apache.org/api/pekko-persistence-jdbc/current/",
-      "scaladoc.pekko.base_url" -> "https://pekko.apache.org/api/pekko/current/",
-      "javadoc.pekko.base_url" -> "https://pekko.apache.org/japi/pekko/current/",
-      "javadoc.pekko.link_style" -> "direct",
+      "scaladoc.org.apache.pekko.base_url" -> "https://pekko.apache.org/api/pekko/current/",
+      "javadoc.org.apache.pekko.base_url" -> "https://pekko.apache.org/japi/pekko/current/",
+      "javadoc.org.apache.pekko.link_style" -> "direct",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",
       // Scala
       "scaladoc.scala.base_url" -> s"https://www.scala-lang.org/api/${scalaBinaryVersion.value}.x/",
-      "scaladoc.pekko.persistence.jdbc.base_url" -> s"/${(Preprocess / siteSubdirName).value}/"),
+      "scaladoc.org.apache.pekko.persistence.jdbc.base_url" -> s"/${(Preprocess / siteSubdirName).value}/"),
     paradoxGroups := Map("Language" -> Seq("Java", "Scala")),
     resolvers += Resolver.jcenterRepo,
     apidocRootPackage := "org.apache.pekko")

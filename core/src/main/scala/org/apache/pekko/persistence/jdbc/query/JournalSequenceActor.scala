@@ -23,7 +23,6 @@ import pekko.persistence.jdbc.query.dao.ReadJournalDao
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Sink
 
-import scala.collection.immutable.NumericRange
 import scala.concurrent.duration.FiniteDuration
 
 object JournalSequenceActor {
@@ -43,22 +42,6 @@ object JournalSequenceActor {
   private case object AssumeMaxOrderingIdTimerKey
 
   private type OrderingId = Long
-
-  /**
-   * Efficient representation of missing elements using NumericRanges.
-   * It can be seen as a collection of OrderingIds
-   */
-  private case class MissingElements(elements: Seq[NumericRange[OrderingId]]) {
-    def addRange(from: OrderingId, until: OrderingId): MissingElements = {
-      val newRange = from.until(until)
-      MissingElements(elements :+ newRange)
-    }
-    def contains(id: OrderingId): Boolean = elements.exists(_.containsTyped(id))
-    def isEmpty: Boolean = elements.forall(_.isEmpty)
-  }
-  private object MissingElements {
-    def empty: MissingElements = MissingElements(Vector.empty)
-  }
 }
 
 /**
@@ -96,7 +79,7 @@ class JournalSequenceActor(readJournalDao: ReadJournalDao, config: JournalSequen
    */
   def receive(
       currentMaxOrdering: OrderingId,
-      missingByCounter: Map[Int, MissingElements],
+      missingByCounter: Map[Int, MissingElements[OrderingId]],
       moduloCounter: Int,
       previousDelay: FiniteDuration = queryDelay): Receive = {
     case ScheduleAssumeMaxOrderingId(max) =>
@@ -142,16 +125,16 @@ class JournalSequenceActor(readJournalDao: ReadJournalDao, config: JournalSequen
   def findGaps(
       elements: Seq[OrderingId],
       currentMaxOrdering: OrderingId,
-      missingByCounter: Map[Int, MissingElements],
+      missingByCounter: Map[Int, MissingElements[OrderingId]],
       moduloCounter: Int): Unit = {
     // list of elements that will be considered as genuine gaps.
     // `givenUp` is either empty or is was filled on a previous iteration
-    val givenUp = missingByCounter.getOrElse(moduloCounter, MissingElements.empty)
+    val givenUp = missingByCounter.getOrElse(moduloCounter, MissingElements.empty[OrderingId])
 
     val (nextMax, _, missingElems) =
       // using the ordering elements that were fetched, we verify if there are any gaps
-      elements.foldLeft[(OrderingId, OrderingId, MissingElements)](
-        (currentMaxOrdering, currentMaxOrdering, MissingElements.empty)) {
+      elements.foldLeft[(OrderingId, OrderingId, MissingElements[OrderingId])](
+        (currentMaxOrdering, currentMaxOrdering, MissingElements.empty[OrderingId])) {
         case ((currentMax, previousElement, missing), currentElement) =>
           // we must decide if we move the cursor forward
           val newMax =

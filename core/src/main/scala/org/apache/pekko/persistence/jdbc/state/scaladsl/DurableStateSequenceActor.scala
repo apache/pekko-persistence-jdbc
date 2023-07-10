@@ -14,12 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import scala.collection.immutable.NumericRange
-
 import org.apache.pekko
 import pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
 import pekko.pattern.pipe
 import pekko.persistence.jdbc.config.DurableStateSequenceRetrievalConfig
+import pekko.persistence.jdbc.MissingElements
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Sink
 import scala.concurrent.duration.FiniteDuration
@@ -51,32 +50,6 @@ import pekko.annotation.InternalApi
   private type GlobalOffset = Long
   private type PersistenceId = String
   private type Revision = Long
-
-  /**
-   * Efficient representation of missing elements using NumericRanges.
-   * It can be seen as a collection of GlobalOffset
-   */
-  private case class MissingElements(elements: Seq[NumericRange[GlobalOffset]]) {
-    def addRange(from: GlobalOffset, until: GlobalOffset): MissingElements = {
-      val newRange = from.until(until)
-      MissingElements(elements :+ newRange)
-    }
-    def contains(id: GlobalOffset): Boolean = elements.exists(_.containsTyped(id))
-    def isEmpty: Boolean = elements.forall(_.isEmpty)
-    def size: Int = elements.map(_.size).sum
-    override def toString: String = {
-      elements
-        .collect {
-          case range if range.nonEmpty =>
-            if (range.size == 1) range.start.toString
-            else s"${range.start}-${range.end}"
-        }
-        .mkString(", ")
-    }
-  }
-  private object MissingElements {
-    def empty: MissingElements = MissingElements(Vector.empty)
-  }
 }
 
 /**
@@ -149,7 +122,7 @@ private[pekko] class DurableStateSequenceActor[A](
    */
   final def receive(
       currentMaxGlobalOffset: GlobalOffset,
-      missingByCounter: Map[Int, MissingElements],
+      missingByCounter: Map[Int, MissingElements[GlobalOffset]],
       moduloCounter: Int,
       previousDelay: FiniteDuration = queryDelay): Receive = {
     case ScheduleAssumeMaxGlobalOffset(max) =>
@@ -200,16 +173,16 @@ private[pekko] class DurableStateSequenceActor[A](
   final def findGaps(
       elements: List[VisitedElement],
       currentMaxOffset: GlobalOffset,
-      missingByCounter: Map[Int, MissingElements],
+      missingByCounter: Map[Int, MissingElements[GlobalOffset]],
       moduloCounter: Int): Unit = {
     // list of elements that will be considered as genuine gaps.
     // `givenUp` is either empty or is was filled on a previous iteration
-    val givenUp = missingByCounter.getOrElse(moduloCounter, MissingElements.empty)
+    val givenUp = missingByCounter.getOrElse(moduloCounter, MissingElements.empty[GlobalOffset])
 
     val (nextMax, _, missingElems) =
       // using the global offset of the elements that were fetched, we verify if there are any gaps
-      elements.foldLeft[(GlobalOffset, GlobalOffset, MissingElements)](
-        (currentMaxOffset, currentMaxOffset, MissingElements.empty)) {
+      elements.foldLeft[(GlobalOffset, GlobalOffset, MissingElements[GlobalOffset])](
+        (currentMaxOffset, currentMaxOffset, MissingElements.empty[GlobalOffset])) {
         case ((currentMax, previousOffset, missing), currentElement) =>
           // we must decide if we move the cursor forward
           val newMax =

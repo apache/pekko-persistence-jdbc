@@ -13,6 +13,7 @@ import sbt.Keys._
 
 // TODO: Remove when Pekko has a proper release
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
+ThisBuild / resolvers += "Apache Pekko Staging".at("https://repository.apache.org/content/groups/staging")
 ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"

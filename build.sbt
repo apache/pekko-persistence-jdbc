@@ -13,7 +13,8 @@ import sbt.Keys._
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
-sourceDistName := "incubating-pekko-persistence-jdbc"
+sourceDistName := "apache-pekko-persistence-jdbc"
+sourceDistIncubating := true
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

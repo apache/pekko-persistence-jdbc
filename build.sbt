@@ -11,14 +11,10 @@ import com.lightbend.paradox.apidoc.ApidocPlugin.autoImport.apidocRootPackage
 import org.apache.pekko.PekkoParadoxPlugin.autoImport._
 import sbt.Keys._
 
-// TODO: Remove when Pekko has a proper release
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
-ThisBuild / resolvers += "Apache Pekko Staging".at("https://repository.apache.org/content/groups/staging")
-ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
-
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
-sourceDistName := "incubating-pekko-persistence-jdbc"
+sourceDistName := "apache-pekko-persistence-jdbc"
+sourceDistIncubating := true
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

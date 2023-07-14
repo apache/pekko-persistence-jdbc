@@ -16,6 +16,8 @@ ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "apache-pekko-persistence-jdbc"
 sourceDistIncubating := true
 
+enablePlugins(ReproducibleBuildsPlugin)
+
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)

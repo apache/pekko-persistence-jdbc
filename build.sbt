@@ -16,8 +16,6 @@ ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "apache-pekko-persistence-jdbc"
 sourceDistIncubating := true
 
-enablePlugins(ReproducibleBuildsPlugin)
-
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
@@ -29,7 +27,7 @@ lazy val `pekko-persistence-jdbc` = project
 
 lazy val core = project
   .in(file("core"))
-  .enablePlugins(MimaPlugin)
+  .enablePlugins(MimaPlugin, ReproducibleBuildsPlugin)
   .disablePlugins(SitePlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
@@ -42,7 +40,7 @@ lazy val core = project
 
 lazy val migrator = project
   .in(file("migrator"))
-  .disablePlugins(SitePlugin, MimaPlugin)
+  .disablePlugins(SitePlugin, MimaPlugin, ReproducibleBuildsPlugin)
   .configs(IntegrationTest.extend(Test))
   .settings(Defaults.itSettings)
   .settings(

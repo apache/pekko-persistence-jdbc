@@ -15,7 +15,7 @@ object Dependencies {
   val Scala213 = "2.13.11"
   val ScalaVersions = Seq(Scala212, Scala213)
 
-  val PekkoVersion = "1.0.0"
+  val PekkoVersion = "1.0.1"
 
   val SlickVersion = "3.3.3"
   val ScalaTestVersion = "3.2.14"

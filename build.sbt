@@ -9,6 +9,7 @@
 
 import com.lightbend.paradox.apidoc.ApidocPlugin.autoImport.apidocRootPackage
 import org.apache.pekko.PekkoParadoxPlugin.autoImport._
+import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
 import sbt.Keys._
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
@@ -21,6 +22,9 @@ commands := commands.value.filterNot { command =>
     name.contains("sonatypeRelease") || name.contains("sonatypeBundleRelease")
   }
 }
+
+ThisBuild / reproducibleBuildsCheckResolver :=
+  "Apache Pekko Staging".at("https://repository.apache.org/content/groups/staging/")
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

@@ -9,9 +9,8 @@
 
 package org.apache.pekko.persistence.jdbc.state
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import org.apache.pekko
-import pekko.actor.ActorSystem
 import pekko.actor.ActorSystem
 import pekko.Done
 import org.scalatest.concurrent.ScalaFutures
@@ -61,7 +60,7 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
 
   def upsertAndGetObject(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
-    implicit val e = system.dispatcher
+    implicit val e: ExecutionContext = system.dispatcher
 
     // #upsert-get-object
     import org.apache.pekko

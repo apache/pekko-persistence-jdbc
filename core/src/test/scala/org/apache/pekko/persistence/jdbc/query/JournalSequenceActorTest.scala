@@ -43,7 +43,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
 
   import profile.api._
 
-  implicit val askTimeout = 50.millis
+  implicit val askTimeout: FiniteDuration = 50.millis
 
   def generateId: Int = 0
 

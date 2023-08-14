@@ -69,9 +69,9 @@ Follow these guidelines when creating public commits and writing commit messages
    It is **not ok** to only list the ticket number, type "minor fix" or similar.
    If the commit is a small fix, then you are done. If not, go to 2.
 
-2Following the single line description should be a blank line followed by an enumerated list with the details of the commit.
+2. Following the single line description should be a blank line followed by an enumerated list with the details of the commit.
 
-3Add keywords for your commit (depending on the degree of automation we reach, the list may change over time):
+3. Add keywords for your commit (depending on the degree of automation we reach, the list may change over time):
     * ``Review by @gituser`` - if you want to notify someone on the team. The others can, and are encouraged to participate.
 
 Example:

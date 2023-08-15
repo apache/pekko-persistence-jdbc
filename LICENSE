@@ -200,3 +200,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+---------------
+
+Apache Pekko Persistence JDBC is derived from Akka Persistence JDBC 5.1.x, the last version that was distributed under the
+Apache License, Version 2.0 License.
+
+Akka Persistence JDBC is based on code originally developed by Dennis Vriend and donated to the Lightbend Akka project.
+
+Copyright (C) 2014 - 2019 Dennis Vriend <https://github.com/dnvriend>
+Copyright (C) 2019 - 2022 Lightbend Inc. <https://www.lightbend.com>
+

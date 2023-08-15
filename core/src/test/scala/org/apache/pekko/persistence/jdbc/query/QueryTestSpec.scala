@@ -31,9 +31,9 @@ import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
 import com.typesafe.config.ConfigValue
-import scala.concurrent.Future
-import scala.concurrent.duration.{ FiniteDuration, _ }
 
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.duration.{ FiniteDuration, _ }
 import pekko.persistence.jdbc.testkit.internal.H2
 import pekko.persistence.jdbc.testkit.internal.MySQL
 import pekko.persistence.jdbc.testkit.internal.Oracle
@@ -331,7 +331,7 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
   def expectAllStarted(refs: Seq[ActorRef])(implicit system: ActorSystem): Unit = {
     // make sure we notice early if the actors failed to start (because of issues with journal) makes debugging
     // failing tests easier as we know it is not the actual interaction from the test that is the problem
-    implicit val ec = system.dispatcher
+    implicit val ec: ExecutionContext = system.dispatcher
     Future.sequence(refs.map(_ ? "state")).futureValue
   }
 

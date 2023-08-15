@@ -49,7 +49,7 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
     case _          => ???
   }
 
-  implicit val uuidSetter = SetParameter[Array[Byte]] { case (bytes, params) =>
+  implicit val uuidSetter: SetParameter[Array[Byte]] = SetParameter[Array[Byte]] { case (bytes, params) =>
     params.setBytes(bytes)
   }
 

@@ -61,8 +61,6 @@ lazy val migrator = project
   .dependsOn(core % "compile->compile;test->test")
 
 lazy val themeSettings = Seq(
-  // allow access to snapshots for pekko-sbt-paradox
-  resolvers += Resolver.ApacheMavenSnapshotsRepo,
   pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-persistence-jdbc"))
 
 lazy val docs = project

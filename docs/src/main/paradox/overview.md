@@ -6,10 +6,6 @@ pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC 
 
 Apache Pekko Persistence JDBC requires Apache Pekko $pekko.version$ or later. It uses @extref:[Slick](slick:) $slick.version$ internally to access the database via JDBC, this does not require user code to make use of Slick.
 
-## Version history
-
-There have been no Apache Pekko Persistence JDBC releases yet.
-
 ## Module info
 
 @@dependency [sbt,Maven,Gradle] {

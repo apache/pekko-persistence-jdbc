@@ -12,10 +12,6 @@ Please note that the H2 database is not recommended to be used as a production d
 
 * [current Apache Pekko Persistence JDBC documentation](https://pekko.apache.org/docs/pekko-persistence-jdbc/current/)
 
-## Release notes
-
-The release notes can be found [here](https://github.com/apache/incubator-pekko-persistence-jdbc/releases).
-
 ## Community
 
 There are several ways to interact with the Pekko community:

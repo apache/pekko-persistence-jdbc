@@ -23,8 +23,7 @@ commands := commands.value.filterNot { command =>
   }
 }
 
-ThisBuild / reproducibleBuildsCheckResolver :=
-  "Apache Pekko Staging".at("https://repository.apache.org/content/groups/staging/")
+ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

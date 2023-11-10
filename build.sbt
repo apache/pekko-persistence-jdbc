@@ -44,8 +44,9 @@ lazy val core = project
     name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
-    // temporarily disable mima checks
-    mimaPreviousArtifacts := Set.empty)
+    mimaPreviousArtifacts := Set(
+      organization.value %% name.value % previousStableVersion.value.getOrElse(
+        throw new Error("Unable to determine previous version for MiMa"))))
 
 lazy val migrator = project
   .in(file("migrator"))

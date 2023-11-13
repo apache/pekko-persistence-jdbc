@@ -17,6 +17,8 @@ ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "apache-pekko-persistence-jdbc"
 sourceDistIncubating := true
 
+val mimaCompareVersion = "1.0.0"
+
 commands := commands.value.filterNot { command =>
   command.nameOption.exists { name =>
     name.contains("sonatypeRelease") || name.contains("sonatypeBundleRelease")
@@ -44,8 +46,8 @@ lazy val core = project
     name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
-    // temporarily disable mima checks
-    mimaPreviousArtifacts := Set.empty)
+    mimaPreviousArtifacts := Set(
+      organization.value %% name.value % mimaCompareVersion))
 
 lazy val migrator = project
   .in(file("migrator"))

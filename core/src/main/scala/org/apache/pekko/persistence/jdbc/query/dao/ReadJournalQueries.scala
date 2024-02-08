@@ -36,11 +36,6 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
 
   private def baseTableQuery() =
     JournalTable.filter(_.deleted === false)
-
-  private def baseTableWithTagsQuery() = {
-    baseTableQuery().join(TagTable).on(_.ordering === _.eventId)
-  }
-
   val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
 
   private def _messagesQuery(
@@ -63,10 +58,12 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       offset: ConstColumn[Long],
       maxOffset: ConstColumn[Long],
       max: ConstColumn[Long]) = {
-    baseTableWithTagsQuery()
+    baseTableQuery()
+      .filter(row => row.ordering > offset && row.ordering <= maxOffset)
+      .sortBy(_.ordering.asc)
+      .join(TagTable)
+      .on(_.ordering === _.eventId)
       .filter(_._2.tag === tag)
-      .sortBy(_._1.ordering.asc)
-      .filter(row => row._1.ordering > offset && row._1.ordering <= maxOffset)
       .take(max)
       .map(_._1)
   }

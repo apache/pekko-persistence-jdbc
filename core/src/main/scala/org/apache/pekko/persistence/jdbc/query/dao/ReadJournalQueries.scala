@@ -60,10 +60,10 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       max: ConstColumn[Long]) = {
     baseTableQuery()
       .filter(row => row.ordering > offset && row.ordering <= maxOffset)
-      .sortBy(_.ordering.asc)
       .join(TagTable)
       .on(_.ordering === _.eventId)
       .filter(_._2.tag === tag)
+      .sortBy(_._1.ordering.asc)
       .take(max)
       .map(_._1)
   }

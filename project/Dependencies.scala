@@ -24,8 +24,8 @@ object Dependencies {
     "org.postgresql" % "postgresql" % "42.7.1",
     "com.h2database" % "h2" % "2.2.224",
     "com.mysql" % "mysql-connector-j" % "8.3.0",
-    "com.microsoft.sqlserver" % "mssql-jdbc" % "12.6.0.jre8",
-    "com.oracle.database.jdbc" % "ojdbc8" % "23.3.0.23.09")
+    "com.microsoft.sqlserver" % "mssql-jdbc" % "8.4.1.jre8",
+    "com.oracle.database.jdbc" % "ojdbc8" % "18.15.0.0")
 
   val Libraries: Seq[ModuleID] = Seq(
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,

@@ -27,7 +27,7 @@ services:
     image: oracleinanutshell/oracle-xe-11g
     container_name: oracle-test
     environment:
-      - "TZ=Europe/Amsterdam"
+      - "TZ=UTC"
       - "DBCA_TOTAL_MEMORY=1024"
     ports:
       - "1521:1521" # DB_CONN: credentials (system:oracle)

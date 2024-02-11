@@ -25,7 +25,7 @@ object Dependencies {
     "com.h2database" % "h2" % "2.2.220",
     "mysql" % "mysql-connector-java" % "8.0.28",
     "com.microsoft.sqlserver" % "mssql-jdbc" % "7.4.1.jre8",
-    "com.oracle.database.jdbc" % "ojdbc6" % "11.2.0.4")
+    "com.oracle.database.jdbc" % "ojdbc8" % "23.3.0.23.09")
 
   val Libraries: Seq[ModuleID] = Seq(
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,

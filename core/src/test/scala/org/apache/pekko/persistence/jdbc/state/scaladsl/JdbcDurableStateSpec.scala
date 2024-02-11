@@ -20,18 +20,15 @@ import pekko.actor._
 import pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
 import OffsetSyntax._
 import pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
-import pekko.persistence.query.UpdatedDurableState
-import pekko.persistence.query.{ NoOffset, Offset, Sequence }
+import pekko.persistence.query.{ NoOffset, Offset, Sequence, UpdatedDurableState }
 import pekko.stream.scaladsl.Sink
-import org.scalatest.time.Millis
-import org.scalatest.time.Seconds
-import org.scalatest.time.Span
+import org.scalatest.time.{ Millis, Seconds, Span }
 
 import scala.concurrent.Future
 
 abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) extends StateSpecBase(config, schemaType) {
 
-  override implicit val defaultPatience =
+  override implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = Span(60, Seconds), interval = Span(100, Millis))
 
   "A durable state store" must withActorSystem { implicit system =>

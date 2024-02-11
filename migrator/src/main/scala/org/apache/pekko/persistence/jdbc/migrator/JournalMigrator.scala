@@ -24,7 +24,6 @@ import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.journal.dao.JournalQueries
 import pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer
 import pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
-import pekko.persistence.jdbc.migrator.JournalMigrator.{ JournalConfig, ReadJournalConfig }
 import pekko.persistence.jdbc.query.dao.legacy.ReadJournalQueries
 import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.scaladsl.Source

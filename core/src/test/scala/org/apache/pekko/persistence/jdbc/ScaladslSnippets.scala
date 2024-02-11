@@ -47,7 +47,6 @@ object ScaladslSnippets {
     implicit val system: ActorSystem = ActorSystem()
 
     // #persistence-ids
-    import org.apache
     import pekko.stream.scaladsl.Source
     import pekko.persistence.query.PersistenceQuery
 

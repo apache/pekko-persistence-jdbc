@@ -12,26 +12,26 @@ import sbt._
 object Dependencies {
   // Keep in sync with .github CI build
   val Scala212 = "2.12.18"
-  val Scala213 = "2.13.11"
+  val Scala213 = "2.13.12"
   val ScalaVersions = Seq(Scala212, Scala213)
 
   val PekkoVersion = PekkoCoreDependency.version
 
   val SlickVersion = "3.3.3"
-  val ScalaTestVersion = "3.2.14"
+  val ScalaTestVersion = "3.2.18"
 
   val JdbcDrivers = Seq(
-    "org.postgresql" % "postgresql" % "42.3.8",
-    "com.h2database" % "h2" % "2.2.220",
-    "mysql" % "mysql-connector-java" % "8.0.28",
-    "com.microsoft.sqlserver" % "mssql-jdbc" % "7.4.1.jre8",
-    "com.oracle.database.jdbc" % "ojdbc6" % "11.2.0.4")
+    "org.postgresql" % "postgresql" % "42.7.1",
+    "com.h2database" % "h2" % "2.2.224",
+    "com.mysql" % "mysql-connector-j" % "8.3.0",
+    "com.microsoft.sqlserver" % "mssql-jdbc" % "12.6.0.jre8",
+    "com.oracle.database.jdbc" % "ojdbc8" % "23.3.0.23.09")
 
   val Libraries: Seq[ModuleID] = Seq(
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,
     "com.typesafe.slick" %% "slick" % SlickVersion,
     "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
-    "ch.qos.logback" % "logback-classic" % "1.2.10" % Test,
+    "ch.qos.logback" % "logback-classic" % "1.2.13" % Test,
     "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion % Test,
     "org.apache.pekko" %% "pekko-persistence-tck" % PekkoVersion % Test,
     "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
@@ -39,7 +39,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Test)
 
   val Migration: Seq[ModuleID] = Seq(
-    "com.typesafe" % "config" % "1.4.2",
+    "com.typesafe" % "config" % "1.4.3",
     "ch.qos.logback" % "logback-classic" % "1.2.13",
     "org.testcontainers" % "postgresql" % "1.16.3" % Test,
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Provided)

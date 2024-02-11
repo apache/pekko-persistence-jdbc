@@ -17,7 +17,7 @@ object Dependencies {
 
   val PekkoVersion = PekkoCoreDependency.version
 
-  val SlickVersion = "3.3.3"
+  val SlickVersion = "3.4.1"
   val ScalaTestVersion = "3.2.14"
 
   val JdbcDrivers = Seq(

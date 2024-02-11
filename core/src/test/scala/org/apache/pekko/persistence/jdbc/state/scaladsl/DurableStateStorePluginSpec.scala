@@ -16,7 +16,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
-import pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore
 import pekko.persistence.state.DurableStateStoreRegistry
 import slick.jdbc.{ H2Profile, JdbcProfile }
 

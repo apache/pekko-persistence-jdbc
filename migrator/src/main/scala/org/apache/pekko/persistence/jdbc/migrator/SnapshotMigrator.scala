@@ -15,19 +15,18 @@
 package org.apache.pekko.persistence.jdbc.migrator
 
 import org.apache.pekko
+import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.persistence.SnapshotMetadata
 import pekko.persistence.jdbc.config.{ ReadJournalConfig, SnapshotConfig }
 import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.migrator.SnapshotMigrator.{ NoParallelism, SnapshotStoreConfig }
 import pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
 import pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao
 import pekko.persistence.jdbc.snapshot.dao.legacy.{ ByteArraySnapshotSerializer, SnapshotQueries }
 import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
 import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.Done
-import pekko.persistence.jdbc.migrator.JournalMigrator.ReadJournalConfig
-import pekko.persistence.jdbc.migrator.SnapshotMigrator.{ NoParallelism, SnapshotStoreConfig }
 import org.slf4j.{ Logger, LoggerFactory }
 import slick.jdbc
 import slick.jdbc.{ JdbcBackend, JdbcProfile }

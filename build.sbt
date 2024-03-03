@@ -20,6 +20,7 @@ val mimaCompareVersion = "1.0.0"
 
 ThisBuild / pekkoInlineEnabled := false
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

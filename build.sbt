@@ -26,6 +26,7 @@ commands := commands.value.filterNot { command =>
 }
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))

@@ -83,7 +83,7 @@ lazy val docs = project
       "canonical.base_url" -> "https://pekko.apache.org/docs/pekko-persistence-jdbc/current",
       "pekko.version" -> "current",
       "slick.version" -> Dependencies.SlickVersion,
-      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-persistence-jdbc/blob/${if (isSnapshot.value) "master"
+      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-persistence-jdbc/blob/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       // Slick
       "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",

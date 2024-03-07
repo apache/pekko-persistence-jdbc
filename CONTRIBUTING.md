@@ -2,7 +2,7 @@
 
 ## General Workflow
 
-This is the process for committing code into master.
+This is the process for committing code into main.
 
 1. For non-trivial changes, you will be asked to sign the [CLA](https://www.apache.org/licenses/contributor-agreements.html) if you have not done so before.
 2. Before starting to work on a feature or a fix, make sure that there is a ticket for your work in the [issue tracker](https://github.com/apache/incubator-pekko-persistence-jdbc/issues). If not, create it first.
@@ -25,7 +25,7 @@ For a Pull Request to be considered at all it has to meet these requirements:
 5. The commit messages must properly describe the changes, see [further below](#creating-commits-and-writing-commit-messages).
 6. Do not use ``@author`` tags since it does not encourage [Collective Code Ownership](http://www.extremeprogramming.org/rules/collective.html). Contributors get the credit they deserve in the release notes.
 
-If these requirements are not met then the code should **not** be merged into master, or even reviewed - regardless of how good or important it is. No exceptions.
+If these requirements are not met then the code should **not** be merged into main, or even reviewed - regardless of how good or important it is. No exceptions.
 
 ## Documentation
 

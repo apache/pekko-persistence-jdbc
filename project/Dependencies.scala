@@ -18,6 +18,8 @@ object Dependencies {
 
   val PekkoVersion = PekkoCoreDependency.version
 
+  val LogbackVersion = "1.3.14"
+
   val SlickVersion = "3.5.0"
   val ScalaTestVersion = "3.2.18"
 
@@ -32,7 +34,7 @@ object Dependencies {
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,
     "com.typesafe.slick" %% "slick" % SlickVersion,
     "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
-    "ch.qos.logback" % "logback-classic" % "1.2.13" % Test,
+    "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
     "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion % Test,
     "org.apache.pekko" %% "pekko-persistence-tck" % PekkoVersion % Test,
     "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
@@ -41,7 +43,7 @@ object Dependencies {
 
   val Migration: Seq[ModuleID] = Seq(
     "com.typesafe" % "config" % "1.4.3",
-    "ch.qos.logback" % "logback-classic" % "1.2.13",
+    "ch.qos.logback" % "logback-classic" % LogbackVersion,
     "org.testcontainers" % "postgresql" % "1.16.3" % Test,
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Provided)
 }

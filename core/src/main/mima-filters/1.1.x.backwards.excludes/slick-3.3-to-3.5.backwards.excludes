@@ -15,6 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalTables$JournalPekkoSerializationRow$")
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalTables$TagRow$")
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.package$JournalRow$")
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.SnapshotTables$SnapshotRow$")
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$SnapshotRow$")
+ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.state.DurableStateTables$DurableStateRow$")
+ProblemFilters.exclude[FinalMethodProblem]("org.apache.pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateStore.queries")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.unapply")
 ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.apply")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.db.EagerSlickDatabase.tupled")

@@ -11,7 +11,7 @@ import sbt._
 
 object Dependencies {
   // Keep in sync with .github CI build
-  val Scala212 = "2.12.18"
+  val Scala212 = "2.12.19"
   val Scala213 = "2.13.13"
   val Scala3 = "3.3.3"
   val ScalaVersions = Seq(Scala212, Scala213, Scala3)
@@ -44,6 +44,6 @@ object Dependencies {
   val Migration: Seq[ModuleID] = Seq(
     "com.typesafe" % "config" % "1.4.3",
     "ch.qos.logback" % "logback-classic" % LogbackVersion,
-    "org.testcontainers" % "postgresql" % "1.16.3" % Test,
+    "org.testcontainers" % "postgresql" % "1.19.7" % Test,
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Provided)
 }

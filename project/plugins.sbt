@@ -19,7 +19,8 @@ addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.31")
 addSbtPlugin("org.mdedetrich" % "sbt-apache-sonatype" % "0.1.10")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.11")
 // docs
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
+addSbtPlugin(("com.github.sbt" % "sbt-site-paradox" % "1.5.0").excludeAll(
+  "com.lightbend.paradox", "sbt-paradox"))
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 
 resolvers += Resolver.ApacheMavenSnapshotsRepo

@@ -13,7 +13,6 @@
 
 import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
 import de.heikoseeberger.sbtheader.{ CommentCreator, HeaderPlugin, NewLine }
-import org.apache.commons.lang3.StringUtils
 import sbt.Keys._
 import sbt._
 
@@ -111,13 +110,15 @@ trait CopyrightHeader extends AutoPlugin {
     }
   })
 
-  private def isApacheCopyrighted(text: String): Boolean =
-    StringUtils.containsIgnoreCase(text, "licensed to the apache software foundation (asf)") ||
-    StringUtils.containsIgnoreCase(text, "www.apache.org/licenses/license-2.0") ||
-    StringUtils.contains(text, "Apache-2.0")
+  private def isApacheCopyrighted(text: String): Boolean = {
+    val lower = text.toLowerCase
+    lower.contains("licensed to the apache software foundation (asf)") ||
+    lower.contains("www.apache.org/licenses/license-2.0") ||
+    text.contains("Apache-2.0")
+  }
 
   private def isLightbendCopyrighted(text: String): Boolean =
-    StringUtils.containsIgnoreCase(text, "lightbend inc.")
+    text.toLowerCase.contains("lightbend inc.")
 
   private def isValidCopyrightAnnotated(text: String): Boolean = {
     isApacheCopyrighted(text)

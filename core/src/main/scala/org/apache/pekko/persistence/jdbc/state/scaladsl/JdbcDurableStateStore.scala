@@ -70,7 +70,7 @@ class JdbcDurableStateStore[A](
       durableStateConfig.stateSequenceConfig),
     s"pekko-persistence-jdbc-durable-state-sequence-actor")
 
-  def getObject(persistenceId: String): Future[stateScalaDsl.GetObjectResult[A]] = {
+  override def getObject(persistenceId: String): Future[stateScalaDsl.GetObjectResult[A]] = {
     db.run(queries.selectFromDbByPersistenceId(persistenceId).result).map { rows =>
       rows.headOption match {
         case Some(row) =>
@@ -84,7 +84,7 @@ class JdbcDurableStateStore[A](
     }
   }
 
-  def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): Future[Done] = {
+  override def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): Future[Done] = {
     require(revision > 0)
     val row =
       PekkoSerialization.serialize(serialization, value).map { serialized =>
@@ -113,13 +113,13 @@ class JdbcDurableStateStore[A](
       }
   }
 
-  def deleteObject(persistenceId: String): Future[Done] =
+  override def deleteObject(persistenceId: String): Future[Done] =
     db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
 
-  def deleteObject(persistenceId: String, revision: Long): Future[Done] =
-    db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
+  override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
+    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision).map(_ => Done))
 
-  def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
+  override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
     Source
       .futureSource(maxStateStoreOffset().map { maxOrderingInDb =>
         changesByTag(tag, offset.value, terminateAfterOffset = Some(maxOrderingInDb))
@@ -127,7 +127,7 @@ class JdbcDurableStateStore[A](
       .mapMaterializedValue(_ => NotUsed)
   }
 
-  def changes(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] =
+  override def changes(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] =
     changesByTag(tag, offset.value, terminateAfterOffset = None)
 
   private def currentChangesByTag(

@@ -120,6 +120,45 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
       }
     }
+    "delete old object revision but not latest" in {
+      whenReady {
+        for {
+
+          n <- stateStoreString.upsertObject("p987", 1, "a valid string", "t123")
+          _ = n shouldBe pekko.Done
+          g <- stateStoreString.getObject("p987")
+          _ = g.value shouldBe Some("a valid string")
+          u <- stateStoreString.upsertObject("p987", 2, "updated valid string", "t123")
+          _ = u shouldBe pekko.Done
+          d <- stateStoreString.deleteObject("p987", 1)
+          _ = d shouldBe pekko.Done
+          h <- stateStoreString.getObject("p987")
+
+        } yield h
+      } { v =>
+        v.value shouldBe Some("updated valid string")
+      }
+    }
+    "delete latest object revision but not older one" in {
+      whenReady {
+        for {
+
+          n <- stateStoreString.upsertObject("p9876", 1, "a valid string", "t123")
+          _ = n shouldBe pekko.Done
+          g <- stateStoreString.getObject("p9876")
+          _ = g.value shouldBe Some("a valid string")
+          u <- stateStoreString.upsertObject("p9876", 2, "updated valid string", "t123")
+          _ = u shouldBe pekko.Done
+          d <- stateStoreString.deleteObject("p9876", 2)
+          _ = d shouldBe pekko.Done
+          h <- stateStoreString.getObject("p9876")
+
+        } yield h
+      } { v =>
+        // current behavior is that deleting the latest revision means getObject returns None (we don't preserve older revisions)
+        v.value shouldBe None
+      }
+    }
   }
 
   "A durable state store with payload that needs custom serializer" must withActorSystem { implicit system =>

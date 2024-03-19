@@ -19,7 +19,7 @@ jobs:
       matrix:
         include:
           - { name: "Oracle", extraOpts: '-Doracle.jdbc.timezoneAsRegion=false' }
-          - { name: "Oracle (old dao)", extraOpts: '-Djdbc-journal.dao=org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao -Djdbc-snapshot-store.dao=org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao -Djdbc-read-journal.dao=org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao' }
+          - { name: "Oracle (old dao)", extraOpts: '-Djdbc-journal.dao=org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao -Djdbc-snapshot-store.dao=org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao -Djdbc-read-journal.dao=org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao -Doracle.jdbc.timezoneAsRegion=false' }
           
     steps:
       - name: Checkout

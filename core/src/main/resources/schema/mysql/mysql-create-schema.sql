@@ -36,3 +36,17 @@ CREATE TABLE IF NOT EXISTS snapshot (
     meta_ser_manifest TEXT,
     meta_payload BLOB,
   PRIMARY KEY (persistence_id, sequence_number));
+
+CREATE TABLE IF NOT EXISTS durable_state (
+    global_offset BIGINT AUTO_INCREMENT,
+    persistence_id VARCHAR(255) NOT NULL,
+    revision BIGINT NOT NULL,
+    state_payload LONGBLOB NOT NULL,
+    state_serial_id INT NOT NULL,
+    state_serial_manifest VARCHAR(255),
+    tag VARCHAR(255),
+    state_timestamp BIGINT NOT NULL,
+    PRIMARY KEY (persistence_id),
+    INDEX state_tag_idx (tag),
+    INDEX state_global_offset_idx (global_offset)
+    );

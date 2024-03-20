@@ -46,6 +46,7 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
   lazy val sequenceNextValUpdater = slickProfileToSchemaType(profile) match {
     case "H2"       => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
     case "Postgres" => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
+    case "MySQL"    => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
     case _          => ???
   }
 

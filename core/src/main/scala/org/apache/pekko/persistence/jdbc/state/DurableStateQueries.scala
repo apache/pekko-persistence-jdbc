@@ -44,10 +44,12 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
     }
 
   lazy val sequenceNextValUpdater = slickProfileToSchemaType(profile) match {
-    case "H2"       => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
-    case "Postgres" => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
-    case "MySQL"    => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
-    case _          => ???
+    case "H2"        => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
+    case "Postgres"  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
+    case "MySQL"     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
+    case "SqlServer" => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
+    case "Oracle"    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
+    case _           => throw new IllegalArgumentException(s"Unknown JdbcProfile $profile encountered")
   }
 
   implicit val uuidSetter: SetParameter[Array[Byte]] = SetParameter[Array[Byte]] { case (bytes, params) =>

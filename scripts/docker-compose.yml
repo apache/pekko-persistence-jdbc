@@ -24,7 +24,7 @@ services:
       - "3306:3306" # credentials (root:root)
 
   oracle:
-    image: gvenzl/oracle-xe:18.4.0-slim-faststart
+    image: gvenzl/oracle-xe:21.3.0-slim-faststart
     container_name: oracle-test
     environment:
       - "TZ=Europe/Amsterdam"

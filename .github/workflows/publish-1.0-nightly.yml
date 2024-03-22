@@ -10,7 +10,7 @@ on:
 
 jobs:
   publish10:
-    if: github.repository == 'apache/incubator-pekko-persistence-jdbc'
+    if: github.repository == 'apache/pekko-persistence-jdbc'
     name: Publish
     runs-on: ubuntu-20.04
     env:

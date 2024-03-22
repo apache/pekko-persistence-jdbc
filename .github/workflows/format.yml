@@ -10,7 +10,7 @@ jobs:
   build:
     name: Code is formatted
     runs-on: ubuntu-latest
-    if: github.repository == 'apache/incubator-pekko-persistence-jdbc'
+    if: github.repository == 'apache/pekko-persistence-jdbc'
     steps:
       - name: Checkout current branch (full)
         uses: actions/checkout@v4

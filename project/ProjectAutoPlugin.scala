@@ -11,7 +11,6 @@ import sbt.Keys._
 import sbt._
 import sbt.plugins.JvmPlugin
 import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
-import ApacheSonatypePlugin.autoImport.apacheSonatypeDisclaimerFile
 import sbtdynver.DynVerPlugin
 import sbtdynver.DynVerPlugin.autoImport.dynverSonatypeSnapshots
 
@@ -24,13 +23,13 @@ object ProjectAutoPlugin extends AutoPlugin {
     Seq(
       homepage := Some(url("https://pekko.apache.org/docs/pekko-persistence-jdbc/current/")),
       scmInfo := Some(
-        ScmInfo(url("https://github.com/apache/incubator-pekko-persistence-jdbc"),
-          "git@github.com:apache/incubator-pekko-persistence-jdbc.git")),
+        ScmInfo(url("https://github.com/apache/pekko-persistence-jdbc"),
+          "git@github.com:apache/pekko-persistence-jdbc.git")),
       developers += Developer(
         "contributors",
         "Contributors",
         "dev@pekko.apache.org",
-        url("https://github.com/apache/incubator-pekko-persistence-jdbc/graphs/contributors")),
+        url("https://github.com/apache/pekko-persistence-jdbc/graphs/contributors")),
       description := "A plugin for storing events in an event journal pekko-persistence-jdbc",
       startYear := Some(2022))
 
@@ -79,14 +78,12 @@ object ProjectAutoPlugin extends AutoPlugin {
         List("-skip-packages", "pekko.pattern")
     } ++ List("-doc-source-url", {
         val branch = if (isSnapshot.value) "main" else s"v${version.value}"
-        s"https://github.com/apache/incubator-pekko-persistence-jdbc/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
+        s"https://github.com/apache/pekko-persistence-jdbc/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
       },
       "-doc-canonical-base-url",
       "https://pekko.apache.org/api/pekko-persistence-jdbc/current/"),
     // show full stack traces and test case durations
-    Test / testOptions += Tests.Argument("-oDF"),
-    resolvers += Resolver.jcenterRepo,
-    apacheSonatypeDisclaimerFile := Some((LocalRootProject / baseDirectory).value / "DISCLAIMER"))
+    Test / testOptions += Tests.Argument("-oDF"))
 
   override lazy val buildSettings = Seq(
     dynverSonatypeSnapshots := true)

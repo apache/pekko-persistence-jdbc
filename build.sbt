@@ -14,7 +14,7 @@ import sbt.Keys._
 
 ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "apache-pekko-persistence-jdbc"
-sourceDistIncubating := true
+sourceDistIncubating := false
 
 val mimaCompareVersion = "1.0.0"
 
@@ -55,7 +55,7 @@ lazy val migrator = project
   .dependsOn(core % "compile->compile;test->test")
 
 lazy val themeSettings = Seq(
-  pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-persistence-jdbc"))
+  pekkoParadoxGithub := Some("https://github.com/apache/pekko-persistence-jdbc"))
 
 lazy val docs = project
   .enablePlugins(ProjectAutoPlugin, PekkoParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin)
@@ -71,11 +71,11 @@ lazy val docs = project
     Paradox / siteSubdirName := s"docs/pekko-persistence-jdbc/${if (isSnapshot.value) "snapshot" else version.value}",
     Compile / paradoxProperties ++= Map(
       "project.url" -> "https://pekko.apache.org/docs/pekko-persistence-jdbc/current/",
-      "github.base_url" -> "https://github.com/apache/incubator-pekko-persistence-jdbc/",
+      "github.base_url" -> "https://github.com/apache/pekko-persistence-jdbc/",
       "canonical.base_url" -> "https://pekko.apache.org/docs/pekko-persistence-jdbc/current",
       "pekko.version" -> "current",
       "slick.version" -> Dependencies.SlickVersion,
-      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-persistence-jdbc/blob/${if (isSnapshot.value) "main"
+      "extref.github.base_url" -> s"https://github.com/apache/pekko-persistence-jdbc/blob/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       // Slick
       "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",

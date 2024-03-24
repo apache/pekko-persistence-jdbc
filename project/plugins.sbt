@@ -19,7 +19,7 @@ addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.32")
 addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.3.3")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.12")
 // docs
-addSbtPlugin(("com.github.sbt" % "sbt-site-paradox" % "1.5.0").excludeAll(
+addSbtPlugin(("com.github.sbt" % "sbt-site-paradox" % "1.6.0").excludeAll(
   "com.lightbend.paradox", "sbt-paradox"))
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 

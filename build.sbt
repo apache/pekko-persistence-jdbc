@@ -76,6 +76,7 @@ lazy val docs = project
       else version.value}",
     Preprocess / sourceDirectory := (LocalRootProject / ScalaUnidoc / unidoc / target).value,
     Paradox / siteSubdirName := s"docs/pekko-persistence-jdbc/${if (isSnapshot.value) "snapshot" else version.value}",
+    Global / pekkoParadoxIncubatorNotice := None,
     Compile / paradoxProperties ++= Map(
       "project.url" -> "https://pekko.apache.org/docs/pekko-persistence-jdbc/current/",
       "github.base_url" -> "https://github.com/apache/pekko-persistence-jdbc/",

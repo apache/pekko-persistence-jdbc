@@ -16,13 +16,8 @@ package org.apache.pekko.persistence.jdbc.state
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import slick.jdbc.{ JdbcProfile, SetParameter }
-import slick.jdbc.H2Profile
-import slick.jdbc.MySQLProfile
-import slick.jdbc.OracleProfile
-import slick.jdbc.PostgresProfile
-import slick.jdbc.SQLServerProfile
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import slick.jdbc.{ JdbcProfile, SetParameter }
 
 /**
  * INTERNAL API
@@ -31,19 +26,10 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
     val profile: JdbcProfile,
     override val durableStateTableCfg: DurableStateTableConfiguration)
     extends DurableStateTables {
+
   import profile.api._
 
-  private def slickProfileToSchemaType(profile: JdbcProfile): String =
-    profile match {
-      case PostgresProfile  => "Postgres"
-      case MySQLProfile     => "MySQL"
-      case OracleProfile    => "Oracle"
-      case SQLServerProfile => "SqlServer"
-      case H2Profile        => "H2"
-      case _                => throw new IllegalArgumentException(s"Unknown JdbcProfile $profile encountered")
-    }
-
-  lazy val sequenceNextValUpdater = slickProfileToSchemaType(profile) match {
+  lazy val sequenceNextValUpdater = profile match {
     case "H2"        => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
     case "Postgres"  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
     case "MySQL"     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)

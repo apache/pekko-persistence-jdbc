@@ -17,7 +17,15 @@ package org.apache.pekko.persistence.jdbc.state
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import slick.jdbc.{ JdbcProfile, SetParameter }
+import slick.jdbc.{
+  H2Profile,
+  JdbcProfile,
+  MySQLProfile,
+  OracleProfile,
+  PostgresProfile,
+  SQLServerProfile,
+  SetParameter
+}
 
 /**
  * INTERNAL API
@@ -30,12 +38,12 @@ import slick.jdbc.{ JdbcProfile, SetParameter }
   import profile.api._
 
   lazy val sequenceNextValUpdater = profile match {
-    case "H2"        => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
-    case "Postgres"  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
-    case "MySQL"     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
-    case "SqlServer" => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
-    case "Oracle"    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
-    case _           => throw new IllegalArgumentException(s"Unknown JdbcProfile $profile encountered")
+    case H2Profile        => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
+    case PostgresProfile  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
+    case MySQLProfile     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
+    case SQLServerProfile => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
+    case OracleProfile    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
+    case _                => throw new UnsupportedOperationException(s"Currently JdbcProfile: <$profile> wasn't support.")
   }
 
   implicit val uuidSetter: SetParameter[Array[Byte]] = SetParameter[Array[Byte]] { case (bytes, params) =>

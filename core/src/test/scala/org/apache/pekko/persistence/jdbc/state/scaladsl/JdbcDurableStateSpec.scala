@@ -19,7 +19,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
 import OffsetSyntax._
-import pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.query.{ NoOffset, Offset, Sequence, UpdatedDurableState }
 import pekko.stream.scaladsl.Sink
 import org.scalatest.time.{ Millis, Seconds, Span }
@@ -83,6 +83,12 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
             e shouldBe an[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
           case Postgres =>
             e shouldBe an[org.postgresql.util.PSQLException]
+          case MySQL =>
+            e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
+          case Oracle =>
+            e shouldBe an[oracle.jdbc.OracleDatabaseException]
+          case SqlServer =>
+            e shouldBe an[com.microsoft.sqlserver.jdbc.SQLServerException]
           case _ => ???
         }
       }

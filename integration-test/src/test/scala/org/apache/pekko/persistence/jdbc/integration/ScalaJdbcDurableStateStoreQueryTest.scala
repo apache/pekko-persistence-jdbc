@@ -38,13 +38,13 @@ class MySQLScalaJdbcDurableStateStoreQueryTest
 }
 
 class OracleScalaJdbcDurableStateStoreQueryTest
-    extends JdbcDurableStateSpec(ConfigFactory.load("mysql-shared-db-application.conf"), Oracle) {
+    extends JdbcDurableStateSpec(ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
   implicit lazy val system: ActorSystem =
     ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
 }
 
 class SqlServerScalaJdbcDurableStateStoreQueryTest
-    extends JdbcDurableStateSpec(ConfigFactory.load("mysql-shared-db-application.conf"), SqlServer) {
+    extends JdbcDurableStateSpec(ConfigFactory.load("sqlserver-shared-db-application.conf"), SqlServer) {
   implicit lazy val system: ActorSystem =
     ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
 }

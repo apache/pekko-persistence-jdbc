@@ -15,6 +15,7 @@
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import com.typesafe.config.{ Config, ConfigFactory }
+
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 import org.scalatest.matchers.should.Matchers
@@ -22,12 +23,11 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time._
-
 import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.config._
-import pekko.persistence.jdbc.testkit.internal.{ H2, Postgres, SchemaType }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout
@@ -47,9 +47,12 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   implicit lazy val e: ExecutionContext = system.dispatcher
 
   private[jdbc] def schemaTypeToProfile(s: SchemaType) = s match {
-    case H2       => slick.jdbc.H2Profile
-    case Postgres => slick.jdbc.PostgresProfile
-    case _        => ???
+    case H2        => slick.jdbc.H2Profile
+    case Postgres  => slick.jdbc.PostgresProfile
+    case MySQL     => slick.jdbc.MySQLProfile
+    case SqlServer => slick.jdbc.SQLServerProfile
+    case Oracle    => slick.jdbc.OracleProfile
+    case _         => ???
   }
 
   val customSerializers = ConfigFactory.parseString("""

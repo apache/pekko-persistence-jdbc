@@ -34,7 +34,7 @@ lazy val core = project
   .enablePlugins(MimaPlugin, ReproducibleBuildsPlugin)
   .disablePlugins(SitePlugin)
   .settings(
-    name := "pekko-persistence-jdbc-core",
+    name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
     mimaPreviousArtifacts := Set(

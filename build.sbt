@@ -33,8 +33,6 @@ lazy val core = project
   .in(file("core"))
   .enablePlugins(MimaPlugin, ReproducibleBuildsPlugin)
   .disablePlugins(SitePlugin)
-  .configs(IntegrationTest.extend(Test))
-  .settings(Defaults.itSettings)
   .settings(
     name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
@@ -42,16 +40,28 @@ lazy val core = project
     mimaPreviousArtifacts := Set(
       organization.value %% name.value % mimaCompareVersion))
 
+lazy val integration = project
+  .in(file("integration-test"))
+  .settings(name := "pekko-persistence-jdbc-integration", libraryDependencies ++= Dependencies.Libraries)
+  .settings(publish / skip := true, doc / sources := Seq.empty, Test / fork := true)
+  .disablePlugins(MimaPlugin, SitePlugin)
+  .dependsOn(core % "compile->compile;test->test")
+
 lazy val migrator = project
   .in(file("migrator"))
   .disablePlugins(SitePlugin, MimaPlugin, ReproducibleBuildsPlugin)
-  .configs(IntegrationTest.extend(Test))
-  .settings(Defaults.itSettings)
   .settings(
     name := "pekko-persistence-jdbc-migrator",
     libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries,
     // TODO remove this when ready to publish it
     publish / skip := true)
+  .dependsOn(core % "compile->compile;test->test")
+
+lazy val migratorIntegration = project
+  .in(file("migrator-integration-test"))
+  .settings(name := "pekko-persistence-jdbc-migrator-integration", libraryDependencies ++= Dependencies.Libraries)
+  .settings(publish / skip := true, doc / sources := Seq.empty, Test / fork := true)
+  .disablePlugins(MimaPlugin, SitePlugin)
   .dependsOn(core % "compile->compile;test->test")
 
 lazy val themeSettings = Seq(

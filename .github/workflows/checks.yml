@@ -67,8 +67,8 @@ jobs:
         uses: coursier/cache-action@v6
 
       - name: Compile all code with fatal warnings for Java 11, Scala 2.12, Scala 2.13 and Scala 3
-        # Run locally with: sbt 'clean ; +Test/compile ; +It/compile'
-        run: sbt "; +Test/compile; +It/compile"
+        # Run locally with: sbt 'clean ; +Test/compile'
+        run: sbt "; +Test/compile"
 
   check-docs:
     name: Check Docs

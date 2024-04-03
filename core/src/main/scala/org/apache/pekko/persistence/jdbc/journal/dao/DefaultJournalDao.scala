@@ -59,7 +59,7 @@ class DefaultJournalDao(
     new JournalQueries(profile, journalConfig.eventJournalTableConfiguration, journalConfig.eventTagTableConfiguration)
 
   override def delete(persistenceId: String, maxSequenceNr: Long): Future[Unit] = {
-    db.run(queries.delete(persistenceId, maxSequenceNr - 1)).map(_ => ())
+    db.run(queries.delete(persistenceId, maxSequenceNr)).map(_ => ())
   }
 
   override def highestSequenceNr(persistenceId: String, fromSequenceNr: Long): Future[Long] = {

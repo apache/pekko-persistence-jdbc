@@ -51,7 +51,7 @@ class JournalQueries(
   }
 
   def delete(persistenceId: String, toSequenceNr: Long) = {
-    selectByPersistenceIdAndSequenceNr(persistenceId, toSequenceNr).delete
+    selectByPersistenceIdAndMaxSequenceNr(persistenceId, toSequenceNr).delete
   }
 
   private def _selectAllJournalForPersistenceId(persistenceId: Rep[String]) =
@@ -62,7 +62,7 @@ class JournalQueries(
 
   private def _selectByPersistenceIdAndMaxSequenceNr(persistenceId: Rep[String], maxSeqNr: Rep[Long]) =
     _selectByPersistenceId(persistenceId).filter(_.sequenceNumber <= maxSeqNr)
-  val selectByPersistenceIdAndSequenceNr = Compiled(_selectByPersistenceIdAndMaxSequenceNr _)
+  val selectByPersistenceIdAndMaxSequenceNr = Compiled(_selectByPersistenceIdAndMaxSequenceNr _)
 
   private def _highestSequenceNrForPersistenceId(persistenceId: Rep[String]): Rep[Option[Long]] =
     _selectAllJournalForPersistenceId(persistenceId).take(1).map(_.sequenceNumber).max

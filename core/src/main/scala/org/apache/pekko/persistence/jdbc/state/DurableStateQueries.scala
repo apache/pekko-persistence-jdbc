@@ -40,10 +40,11 @@ import slick.jdbc.{
   lazy val sequenceNextValUpdater = profile match {
     case H2Profile        => new H2SequenceNextValUpdater(profile, durableStateTableCfg)
     case PostgresProfile  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
-    case MySQLProfile     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
     case SQLServerProfile => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
     case OracleProfile    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
-    case _                => throw new UnsupportedOperationException(s"Currently JdbcProfile: <$profile> wasn't support.")
+    // TODO https://github.com/apache/pekko-persistence-jdbc/pull/158
+    // case MySQLProfile     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
+    case _ => throw new UnsupportedOperationException(s"Currently JdbcProfile: <$profile> wasn't support.")
   }
 
   implicit val uuidSetter: SetParameter[Array[Byte]] = SetParameter[Array[Byte]] { case (bytes, params) =>

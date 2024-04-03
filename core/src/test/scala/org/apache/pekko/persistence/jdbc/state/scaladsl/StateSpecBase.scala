@@ -47,12 +47,13 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   implicit lazy val e: ExecutionContext = system.dispatcher
 
   private[jdbc] def schemaTypeToProfile(s: SchemaType) = s match {
-    case H2        => slick.jdbc.H2Profile
-    case Postgres  => slick.jdbc.PostgresProfile
-    case MySQL     => slick.jdbc.MySQLProfile
+    case H2       => slick.jdbc.H2Profile
+    case Postgres => slick.jdbc.PostgresProfile
+    // TODO https://github.com/apache/pekko-persistence-jdbc/pull/158
+    // case MySQL     => slick.jdbc.MySQLProfile
     case SqlServer => slick.jdbc.SQLServerProfile
     case Oracle    => slick.jdbc.OracleProfile
-    case _         => ???
+    case _         => throw new UnsupportedOperationException(s"Currently database: <$schemaType> wasn't support.")
   }
 
   val customSerializers = ConfigFactory.parseString("""

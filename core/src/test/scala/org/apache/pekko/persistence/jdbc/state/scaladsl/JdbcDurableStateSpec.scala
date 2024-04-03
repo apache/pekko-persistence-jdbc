@@ -83,13 +83,14 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
             e shouldBe an[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
           case Postgres =>
             e shouldBe an[org.postgresql.util.PSQLException]
-          case MySQL =>
-            e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
+          // TODO https://github.com/apache/pekko-persistence-jdbc/pull/158
+          // case MySQL =>
+          //  e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case Oracle =>
             e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case SqlServer =>
             e shouldBe an[com.microsoft.sqlserver.jdbc.SQLServerException]
-          case _ => ???
+          case _ => throw new UnsupportedOperationException(s"Currently database: <$schemaType> wasn't support.")
         }
       }
     }

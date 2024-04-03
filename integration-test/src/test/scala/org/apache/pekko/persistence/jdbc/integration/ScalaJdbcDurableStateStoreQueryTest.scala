@@ -31,12 +31,6 @@ class PostgresScalaJdbcDurableStateStoreQueryTest
     ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
 }
 
-class MySQLScalaJdbcDurableStateStoreQueryTest
-    extends JdbcDurableStateSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQL) {
-  implicit lazy val system: ActorSystem =
-    ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
-}
-
 class OracleScalaJdbcDurableStateStoreQueryTest
     extends JdbcDurableStateSpec(ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
   implicit lazy val system: ActorSystem =

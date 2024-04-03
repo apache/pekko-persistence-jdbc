@@ -16,9 +16,6 @@ import slick.jdbc.{ MySQLProfile, OracleProfile, PostgresProfile, SQLServerProfi
 class PostgresDurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("postgres-shared-db-application.conf"), PostgresProfile) {}
 
-class MySQLDurableStateStorePluginSpec
-    extends DurableStateStorePluginSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQLProfile) {}
-
 class OracleDurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("oracle-shared-db-application.conf"), OracleProfile) {}
 

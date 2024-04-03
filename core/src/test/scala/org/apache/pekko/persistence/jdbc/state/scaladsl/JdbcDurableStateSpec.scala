@@ -86,7 +86,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
           case MySQL =>
             e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case Oracle =>
-            e shouldBe an[oracle.jdbc.OracleDatabaseException]
+            e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case SqlServer =>
             e shouldBe an[com.microsoft.sqlserver.jdbc.SQLServerException]
           case _ => ???

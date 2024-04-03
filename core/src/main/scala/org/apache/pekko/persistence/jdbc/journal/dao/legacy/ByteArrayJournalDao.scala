@@ -87,13 +87,7 @@ trait BaseByteArrayJournalDao
   override def delete(persistenceId: String, maxSequenceNr: Long): Future[Unit] = {
     // We should keep journal record with highest sequence number in order to be compliant
     // with @see [[pekko.persistence.journal.JournalSpec]]
-    val actions: DBIOAction[Unit, NoStream, Effect.Write with Effect.Read] = for {
-      _ <- queries.markJournalMessagesAsDeleted(persistenceId, maxSequenceNr)
-      highestMarkedSequenceNr <- highestMarkedSequenceNr(persistenceId)
-      _ <- queries.delete(persistenceId, highestMarkedSequenceNr.getOrElse(0L) - 1)
-    } yield ()
-
-    db.run(actions.transactionally)
+    db.run(queries.delete(persistenceId, maxSequenceNr - 1)).map(_ => ())
   }
 
   def update(persistenceId: String, sequenceNr: Long, payload: AnyRef): Future[Done] = {
@@ -107,9 +101,6 @@ trait BaseByteArrayJournalDao
     }
     db.run(queries.update(persistenceId, sequenceNr, serializedRow.message).map(_ => Done))
   }
-
-  private def highestMarkedSequenceNr(persistenceId: String) =
-    queries.highestMarkedSequenceNrForPersistenceId(persistenceId).result
 
   override def highestSequenceNr(persistenceId: String, fromSequenceNr: Long): Future[Long] =
     for {

@@ -25,20 +25,11 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
 
   import profile.api._
 
-  def journalRowByPersistenceIds(persistenceIds: Iterable[String]) =
-    for {
-      query <- JournalTable.map(_.persistenceId)
-      if query.inSetBind(persistenceIds)
-    } yield query
-
   private def _allPersistenceIdsDistinct(max: ConstColumn[Long]): Query[Rep[String], String, Seq] =
-    baseTableQuery().map(_.persistenceId).distinct.take(max)
-
-  private def baseTableQuery() =
-    JournalTable.filter(_.deleted === false)
+    JournalTable.map(_.persistenceId).distinct.take(max)
 
   private def baseTableWithTagsQuery() = {
-    baseTableQuery().join(TagTable).on(_.ordering === _.eventId)
+    JournalTable.join(TagTable).on(_.ordering === _.eventId)
   }
 
   val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
@@ -48,11 +39,10 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       fromSequenceNr: Rep[Long],
       toSequenceNr: Rep[Long],
       max: ConstColumn[Long]) =
-    baseTableQuery()
+    JournalTable
       .filter(_.persistenceId === persistenceId)
       .filter(_.sequenceNumber >= fromSequenceNr)
       .filter(_.sequenceNumber <= toSequenceNr)
-      .filter(!_.deleted)
       .sortBy(_.sequenceNumber.asc)
       .take(max)
 

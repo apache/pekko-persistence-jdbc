@@ -24,17 +24,8 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
 
   import profile.api._
 
-  def journalRowByPersistenceIds(persistenceIds: Iterable[String]) =
-    for {
-      query <- JournalTable.map(_.persistenceId)
-      if query.inSetBind(persistenceIds)
-    } yield query
-
   private def _allPersistenceIdsDistinct(max: ConstColumn[Long]): Query[Rep[String], String, Seq] =
-    baseTableQuery().map(_.persistenceId).distinct.take(max)
-
-  private def baseTableQuery() =
-    JournalTable.filter(_.deleted === false)
+    JournalTable.map(_.persistenceId).distinct.take(max)
 
   val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
 
@@ -43,10 +34,10 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       fromSequenceNr: Rep[Long],
       toSequenceNr: Rep[Long],
       max: ConstColumn[Long]) =
-    baseTableQuery()
+    JournalTable
       .filter(_.persistenceId === persistenceId)
       .filter(_.sequenceNumber >= fromSequenceNr)
-      .filter(_.sequenceNumber <= toSequenceNr)
+      .filter(_.sequenceNumber <= toSequenceNr) // TODO optimized this avoid large offset query.
       .sortBy(_.sequenceNumber.asc)
       .take(max)
 
@@ -57,7 +48,7 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       offset: ConstColumn[Long],
       maxOffset: ConstColumn[Long],
       max: ConstColumn[Long]) = {
-    baseTableQuery()
+    JournalTable
       .filter(_.tags.like(tag))
       .sortBy(_.ordering.asc)
       .filter(row => row.ordering > offset && row.ordering <= maxOffset)

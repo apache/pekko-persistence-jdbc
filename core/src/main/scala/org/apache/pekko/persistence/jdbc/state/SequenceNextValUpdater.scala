@@ -96,7 +96,7 @@ import slick.sql.SqlStreamingAction
 
   import profile.api._
 
-  final val nextValFetcher = ""
+  final val nextValFetcher = s"""SELECT NEXT VALUE FOR ${durableStateTableCfg.columnNames.globalOffset}""".stripMargin
 
   def getSequenceNextValueExpr() = sql"""#$nextValFetcher""".as[String]
 }

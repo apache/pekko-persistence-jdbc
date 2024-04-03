@@ -17,15 +17,7 @@ package org.apache.pekko.persistence.jdbc.state
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import slick.jdbc.{
-  H2Profile,
-  JdbcProfile,
-  MySQLProfile,
-  OracleProfile,
-  PostgresProfile,
-  SQLServerProfile,
-  SetParameter
-}
+import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLServerProfile, SetParameter }
 
 /**
  * INTERNAL API

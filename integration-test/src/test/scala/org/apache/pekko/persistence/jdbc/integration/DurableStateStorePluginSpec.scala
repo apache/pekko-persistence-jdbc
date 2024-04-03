@@ -11,7 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import com.typesafe.config.ConfigFactory
 import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateStorePluginSpec
-import slick.jdbc.{ MySQLProfile, OracleProfile, PostgresProfile, SQLServerProfile }
+import slick.jdbc.{ OracleProfile, PostgresProfile, SQLServerProfile }
 
 class PostgresDurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("postgres-shared-db-application.conf"), PostgresProfile) {}

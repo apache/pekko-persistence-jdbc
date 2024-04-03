@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigFactory
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateSpec
-import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ Oracle, Postgres, SchemaType, SqlServer }
 
 class PostgresScalaJdbcDurableStateStoreQueryTest
     extends JdbcDurableStateSpec(ConfigFactory.load("postgres-shared-db-application.conf"), Postgres) {

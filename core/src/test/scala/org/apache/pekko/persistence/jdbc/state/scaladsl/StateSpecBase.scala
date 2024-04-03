@@ -27,7 +27,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.config._
-import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ H2, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout

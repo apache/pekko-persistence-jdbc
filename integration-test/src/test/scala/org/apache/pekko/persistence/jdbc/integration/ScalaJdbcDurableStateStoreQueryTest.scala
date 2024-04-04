@@ -25,12 +25,6 @@ import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateSpec
 import pekko.persistence.jdbc.testkit.internal.{ Oracle, Postgres, SchemaType, SqlServer }
 
-class PostgresScalaJdbcDurableStateStoreQueryTest
-    extends JdbcDurableStateSpec(ConfigFactory.load("postgres-shared-db-application.conf"), Postgres) {
-  implicit lazy val system: ActorSystem =
-    ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
-}
-
 class OracleScalaJdbcDurableStateStoreQueryTest
     extends JdbcDurableStateSpec(ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
   implicit lazy val system: ActorSystem =

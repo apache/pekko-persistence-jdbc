@@ -53,7 +53,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     // case MySQL     => slick.jdbc.MySQLProfile
     case SqlServer => slick.jdbc.SQLServerProfile
     case Oracle    => slick.jdbc.OracleProfile
-    case _         => throw new UnsupportedOperationException(s"Currently database: <$schemaType> wasn't support.")
+    case _         => throw new UnsupportedOperationException(s"Unsupported <$s> for durableState.")
   }
 
   val customSerializers = ConfigFactory.parseString("""

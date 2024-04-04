@@ -90,7 +90,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
             e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case SqlServer =>
             e shouldBe an[com.microsoft.sqlserver.jdbc.SQLServerException]
-          case _ => throw new UnsupportedOperationException(s"Currently database: <$schemaType> wasn't support.")
+          case _ => throw new UnsupportedOperationException(s"Unsupported <$schemaType> for durableState.")
         }
       }
     }

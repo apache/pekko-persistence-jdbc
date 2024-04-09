@@ -22,22 +22,22 @@ package org.apache.pekko.persistence.jdbc.integration
 import com.typesafe.config.ConfigFactory
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActorTest
-import org.apache.pekko.persistence.jdbc.testkit.internal.{ H2, Oracle, SchemaType }
+import org.apache.pekko.persistence.jdbc.testkit.internal.{Oracle, Postgres, SqlServer}
 
 class OracleDurableStateSequenceActorTest
-    extends DurableStateSequenceActorTest(ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
+    extends DurableStateSequenceActorTest(ConfigFactory.load("oracle-application.conf"), Oracle) {
   implicit lazy val system: ActorSystem =
     ActorSystem("test", config.withFallback(customSerializers))
 }
 
 class SqlServerDurableStateSequenceActorTest
-    extends DurableStateSequenceActorTest(ConfigFactory.load("sqlserver-shared-db-application.conf"), Oracle) {
+    extends DurableStateSequenceActorTest(ConfigFactory.load("sqlserver-application.conf"), SqlServer) {
   implicit lazy val system: ActorSystem =
     ActorSystem("test", config.withFallback(customSerializers))
 }
 
 class PostgresDurableStateSequenceActorTest
-    extends DurableStateSequenceActorTest(ConfigFactory.load("postgres-shared-db-application.conf"), Oracle) {
+    extends DurableStateSequenceActorTest(ConfigFactory.load("postgres-application.conf"), Postgres) {
   implicit lazy val system: ActorSystem =
     ActorSystem("test", config.withFallback(customSerializers))
 }

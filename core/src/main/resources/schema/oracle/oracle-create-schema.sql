@@ -84,7 +84,7 @@ select DURABLE_STATE__GLOBAL_OFFSET_SEQ.nextval into :new.GLOBAL_OFFSET from sys
 end;
 /
 
-CREATE OR REPLACE PROCEDURE "reset__global_offset"
+CREATE OR REPLACE PROCEDURE "RESET__GLOBAL_OFFSET"
     IS
     l_value NUMBER;
 BEGIN

@@ -33,7 +33,7 @@ class OracleScalaJdbcDurableStateStoreQueryTest
   override private[jdbc] def dropAndCreate(schemaType: SchemaType): Unit = {
     super.dropAndCreate(schemaType)
     withStatement(stmt =>
-      stmt.executeUpdate(s"""BEGIN "reset__${durableStateConfig.columnNames.globalOffset}"; END; """))
+      stmt.executeUpdate(s"""BEGIN "RESET__${durableStateConfig.columnNames.globalOffset}"; END; """))
   }
 }
 

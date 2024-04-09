@@ -31,7 +31,7 @@ import slick.sql.SqlStreamingAction
 /**
  * INTERNAL API
  */
-@InternalApi private[jdbc] class H2SequenceNextValUpdater(
+@InternalApi private[jdbc] final class H2SequenceNextValUpdater(
     profile: JdbcProfile, durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 
@@ -50,7 +50,7 @@ import slick.sql.SqlStreamingAction
 /**
  * INTERNAL API
  */
-@InternalApi private[jdbc] class PostgresSequenceNextValUpdater(
+@InternalApi private[jdbc] final class PostgresSequenceNextValUpdater(
     profile: JdbcProfile, durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 
@@ -64,7 +64,7 @@ import slick.sql.SqlStreamingAction
 /**
  * INTERNAL API
  */
-@InternalApi private[jdbc] class SqlServerSequenceNextValUpdater(profile: JdbcProfile,
+@InternalApi private[jdbc] final class SqlServerSequenceNextValUpdater(profile: JdbcProfile,
     durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 
@@ -77,7 +77,7 @@ import slick.sql.SqlStreamingAction
 /**
  * INTERNAL API
  */
-@InternalApi private[jdbc] class OracleSequenceNextValUpdater(profile: JdbcProfile,
+@InternalApi private[jdbc] final class OracleSequenceNextValUpdater(profile: JdbcProfile,
     durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 

@@ -49,7 +49,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   private[jdbc] def schemaTypeToProfile(s: SchemaType) = s match {
     case H2       => slick.jdbc.H2Profile
     case Postgres => slick.jdbc.PostgresProfile
-    // TODO https://github.com/apache/pekko-persistence-jdbc/pull/158
+    // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
     // case MySQL     => slick.jdbc.MySQLProfile
     case SqlServer => slick.jdbc.SQLServerProfile
     case Oracle    => slick.jdbc.OracleProfile

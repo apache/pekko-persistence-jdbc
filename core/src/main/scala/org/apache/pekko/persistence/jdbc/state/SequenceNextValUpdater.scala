@@ -32,9 +32,9 @@ import slick.sql.SqlStreamingAction
  * INTERNAL API
  */
 @InternalApi private[jdbc] class H2SequenceNextValUpdater(
-    profile: JdbcProfile,
-    val durableStateTableCfg: DurableStateTableConfiguration)
+    profile: JdbcProfile, durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
+
   import profile.api._
 
   // H2 dependent (https://stackoverflow.com/questions/36244641/h2-equivalent-of-postgres-serial-or-bigserial-column)
@@ -51,40 +51,39 @@ import slick.sql.SqlStreamingAction
  * INTERNAL API
  */
 @InternalApi private[jdbc] class PostgresSequenceNextValUpdater(
-    profile: JdbcProfile,
-    val durableStateTableCfg: DurableStateTableConfiguration)
+    profile: JdbcProfile, durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
-  import profile.api._
-  final val nextValFetcher =
-    s"""(SELECT nextval(pg_get_serial_sequence('${durableStateTableCfg.tableName}', '${durableStateTableCfg.columnNames.globalOffset}')))"""
 
-  def getSequenceNextValueExpr() = sql"""#$nextValFetcher""".as[String]
+  import profile.api._
+
+  def getSequenceNextValueExpr() =
+    sql"""SELECT nextval(pg_get_serial_sequence('#${durableStateTableCfg.tableName}', '#${durableStateTableCfg.columnNames.globalOffset}'))""".as[
+      String]
 }
 
 /**
  * INTERNAL API
  */
 @InternalApi private[jdbc] class SqlServerSequenceNextValUpdater(profile: JdbcProfile,
-    val durableStateTableCfg: DurableStateTableConfiguration)
+    durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 
   import profile.api._
 
-  final val nextValFetcher = s"""SELECT NEXT VALUE FOR ${durableStateTableCfg.columnNames.globalOffset}""".stripMargin
-
-  def getSequenceNextValueExpr() = sql"""#$nextValFetcher""".as[String]
+  def getSequenceNextValueExpr() =
+    sql"""SELECT NEXT VALUE FOR #${durableStateTableCfg.columnNames.globalOffset}""".as[String]
 }
 
 /**
  * INTERNAL API
  */
 @InternalApi private[jdbc] class OracleSequenceNextValUpdater(profile: JdbcProfile,
-    val durableStateTableCfg: DurableStateTableConfiguration)
+    durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 
   import profile.api._
 
-  final val nextValFetcher = s"""(SELECT DURABLE_STATE__GLOBAL_OFFSET_SEQ.nextval FROM DUAL)"""
-
-  def getSequenceNextValueExpr() = sql"""#$nextValFetcher""".as[String]
+  def getSequenceNextValueExpr() =
+    sql"""SELECT #${durableStateTableCfg.tableName}__#${durableStateTableCfg.columnNames.globalOffset}_SEQ.nextval FROM DUAL""".as[
+      String]
 }

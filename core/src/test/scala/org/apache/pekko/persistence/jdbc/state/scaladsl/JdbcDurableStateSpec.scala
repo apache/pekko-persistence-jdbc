@@ -83,7 +83,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
             e shouldBe an[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
           case Postgres =>
             e shouldBe an[org.postgresql.util.PSQLException]
-          // TODO https://github.com/apache/pekko-persistence-jdbc/pull/158
+          // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
           // case MySQL =>
           //  e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case Oracle =>

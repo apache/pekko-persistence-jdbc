@@ -34,7 +34,7 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
     case PostgresProfile  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
     case SQLServerProfile => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
     case OracleProfile    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
-    // TODO https://github.com/apache/pekko-persistence-jdbc/pull/158
+    // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
     // case MySQLProfile     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
     case _ => throw new UnsupportedOperationException(s"Unsupported JdbcProfile <$profile> for durableState.")
   }

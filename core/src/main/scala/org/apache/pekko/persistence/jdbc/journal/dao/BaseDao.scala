@@ -16,8 +16,8 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko
 import pekko.persistence.jdbc.config.BaseDaoConfig
-import pekko.stream.scaladsl.{ Keep, Sink, Source, SourceQueueWithComplete }
-import pekko.stream.{ Materializer, OverflowStrategy, QueueOfferResult }
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.stream.{ BoundedSourceQueue, Materializer, QueueOfferResult }
 
 import scala.collection.immutable.{ Seq, Vector }
 import scala.concurrent.{ ExecutionContext, Future, Promise }
@@ -29,8 +29,8 @@ abstract class BaseDao[T] {
 
   def baseDaoConfig: BaseDaoConfig
 
-  val writeQueue: SourceQueueWithComplete[(Promise[Unit], Seq[T])] = Source
-    .queue[(Promise[Unit], Seq[T])](baseDaoConfig.bufferSize, OverflowStrategy.dropNew)
+  val writeQueue: BoundedSourceQueue[(Promise[Unit], Seq[T])] = Source
+    .queue[(Promise[Unit], Seq[T])](baseDaoConfig.bufferSize)
     .batchWeighted[(Seq[Promise[Unit]], Seq[T])](baseDaoConfig.batchSize, _._2.size, tup => Vector(tup._1) -> tup._2) {
       case ((promises, rows), (newPromise, newRows)) => (promises :+ newPromise) -> (rows ++ newRows)
     }
@@ -46,7 +46,7 @@ abstract class BaseDao[T] {
 
   def queueWriteJournalRows(xs: Seq[T]): Future[Unit] = {
     val promise = Promise[Unit]()
-    writeQueue.offer(promise -> xs).flatMap {
+    writeQueue.offer(promise -> xs) match {
       case QueueOfferResult.Enqueued =>
         promise.future
       case QueueOfferResult.Failure(t) =>

@@ -1,1 +1,2 @@
 ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.persistence.jdbc.journal.dao.BaseDao.writeQueue")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.BaseDao.writeQueue")

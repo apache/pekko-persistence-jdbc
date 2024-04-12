@@ -29,7 +29,7 @@ abstract class BaseDao[T] {
 
   def baseDaoConfig: BaseDaoConfig
 
-  val writeQueue: BoundedSourceQueue[(Promise[Unit], Seq[T])] = Source
+  private val writeQueue: BoundedSourceQueue[(Promise[Unit], Seq[T])] = Source
     .queue[(Promise[Unit], Seq[T])](baseDaoConfig.bufferSize)
     .batchWeighted[(Seq[Promise[Unit]], Seq[T])](baseDaoConfig.batchSize, _._2.size, tup => Vector(tup._1) -> tup._2) {
       case ((promises, rows), (newPromise, newRows)) => (promises :+ newPromise) -> (rows ++ newRows)

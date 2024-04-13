@@ -145,4 +145,4 @@ pekko-persistence-jdbc {
 ## Explicitly shutting down the database connections
 
 The plugin automatically shuts down the HikariCP connection pool when the ActorSystem is terminated.
-This is done using @apidoc[ActorSystem.registerOnTermination](ActorSystem).
+This is done using @apidoc[org.apache.pekko.actor.ActorSystem.registerOnTermination](ActorSystem).

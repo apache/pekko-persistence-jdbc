@@ -22,23 +22,23 @@ import slick.jdbc.{ JdbcBackend, JdbcProfile }
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ExtendedActorSystem
+import pekko.annotation.ApiMayChange
 import pekko.pattern.ask
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.state.DurableStateQueries
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
-import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.jdbc.journal.dao.FlowControl
 import pekko.persistence.jdbc.state.{ scaladsl => jdbcStateScalaDsl }
-import pekko.persistence.state.{ scaladsl => stateScalaDsl }
+import pekko.persistence.query.{ DurableStateChange, Offset, UpdatedDurableState }
 import pekko.persistence.query.{ scaladsl => queryScalaDsl }
+import pekko.persistence.state.{ scaladsl => stateScalaDsl }
+import pekko.persistence.typed.state.internal.DurableStateStoreException
 import pekko.serialization.Serialization
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.Timeout
 import OffsetSyntax._
-import pekko.annotation.ApiMayChange
-import pekko.persistence.query.UpdatedDurableState
 
 object JdbcDurableStateStore {
   val Identifier = "jdbc-durable-state-store"
@@ -117,7 +117,14 @@ class JdbcDurableStateStore[A](
     db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
 
   override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
-    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision).map(_ => Done))
+    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision).map {
+      count => {
+        if (count == 0)
+          throw new DurableStateStoreException(
+            s"Object with persistenceId [$persistenceId] and revision [$revision] does not exist", null)
+        else Done
+      }
+    })
 
   override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
     Source

@@ -118,12 +118,13 @@ class JdbcDurableStateStore[A](
 
   override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
     db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision).map {
-      count => {
-        if (count == 0)
-          throw new DurableStateStoreException(
-            s"Object with persistenceId [$persistenceId] and revision [$revision] does not exist", null)
-        else Done
-      }
+      count =>
+        {
+          if (count == 0)
+            throw new DurableStateStoreException(
+              s"Object with persistenceId [$persistenceId] and revision [$revision] does not exist", null)
+          else Done
+        }
     })
 
   override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {

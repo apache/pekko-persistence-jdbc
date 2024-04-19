@@ -42,9 +42,13 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
     Source
       .unfoldAsync[(Long, FlowControl), Seq[Try[(PersistentRepr, Long)]]]((Math.max(1, fromSequenceNr), Continue)) {
         case (from, control) =>
+          def limitWindow(from: Long): Long = {
+            math.min(from + batchSize, toSequenceNr)
+          }
+
           def retrieveNextBatch(): Future[Option[((Long, FlowControl), Seq[Try[(PersistentRepr, Long)]])]] = {
             for {
-              xs <- messages(persistenceId, from, toSequenceNr, batchSize).runWith(Sink.seq)
+              xs <- messages(persistenceId, from, limitWindow(from), batchSize).runWith(Sink.seq)
             } yield {
               val hasMoreEvents = xs.size == batchSize
               // Events are ordered by sequence number, therefore the last one is the largest)
@@ -77,7 +81,7 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
               pekko.pattern.after(delay, scheduler)(retrieveNextBatch())
           }
       }
-      .mapConcat(identity(_))
+      .mapConcat(identity)
   }
 
 }

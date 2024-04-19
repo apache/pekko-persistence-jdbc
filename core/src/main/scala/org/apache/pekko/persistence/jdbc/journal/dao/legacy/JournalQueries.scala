@@ -28,7 +28,10 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
     JournalTableC ++= xs.sortBy(_.sequenceNumber)
 
   def delete(persistenceId: String, toSequenceNr: Long) = {
-    JournalTable.filter(_.persistenceId === persistenceId).filter(_.sequenceNumber <= toSequenceNr).delete
+    JournalTable
+      .filter(_.persistenceId === persistenceId)
+      .filter(_.sequenceNumber <= toSequenceNr)
+      .delete
   }
 
   /**
@@ -42,7 +45,12 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
   }
 
   private def _highestSequenceNrForPersistenceId(persistenceId: Rep[String]): Rep[Option[Long]] =
-    JournalTable.filter(_.persistenceId === persistenceId).take(1).map(_.sequenceNumber).max
+    JournalTable
+      .filter(_.persistenceId === persistenceId)
+      .sortBy(_.sequenceNumber.desc)
+      .take(1)
+      .map(_.sequenceNumber)
+      .max
 
   val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
 

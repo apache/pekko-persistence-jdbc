@@ -25,17 +25,17 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
   private val JournalTableC = Compiled(JournalTable)
 
   val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
-  val beforeHighestSequenceNrForPersistenceId = Compiled(_beforeHighestSequenceNrForPersistenceId _)
+  val highestSequenceNrForPersistenceIdBefore = Compiled(_highestSequenceNrForPersistenceIdBefore _)
   val messagesQuery = Compiled(_messagesQuery _)
 
   def writeJournalRows(xs: Seq[JournalRow]) =
     JournalTableC ++= xs.sortBy(_.sequenceNumber)
 
+  private def selectAllJournalForPersistenceId(persistenceId: Rep[String]) =
+    JournalTable.filter(_.persistenceId === persistenceId).sortBy(_.sequenceNumber.desc)
+
   def delete(persistenceId: String, toSequenceNr: Long) = {
-    JournalTable
-      .filter(_.persistenceId === persistenceId)
-      .filter(_.sequenceNumber <= toSequenceNr)
-      .delete
+    JournalTable.filter(_.persistenceId === persistenceId).filter(_.sequenceNumber <= toSequenceNr).delete
   }
 
   /**
@@ -48,7 +48,7 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
     baseQuery.map(_.message).update(replacement)
   }
 
-  def markMaxSequenceNrJournalMessagesAsDeleted(persistenceId: String, maxSequenceNr: Long) =
+  def markJournalMessagesAsDeleted(persistenceId: String, maxSequenceNr: Long) =
     JournalTable
       .filter(_.persistenceId === persistenceId)
       .filter(_.sequenceNumber === maxSequenceNr)
@@ -57,18 +57,12 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
       .update(true)
 
   private def _highestSequenceNrForPersistenceId(persistenceId: Rep[String]): Rep[Option[Long]] =
-    JournalTable
-      .filter(_.persistenceId === persistenceId)
-      .sortBy(_.sequenceNumber.desc)
-      .take(1)
-      .map(_.sequenceNumber)
-      .max
+    selectAllJournalForPersistenceId(persistenceId).take(1).map(_.sequenceNumber).max
 
-  private def _beforeHighestSequenceNrForPersistenceId(persistenceId: Rep[String], maxSeqNr: Rep[Long]): Rep[Long] =
-    JournalTable
-      .filter(_.persistenceId === persistenceId)
-      .filter(_.sequenceNumber <= maxSeqNr)
-      .sortBy(_.sequenceNumber.desc)
+  private def _highestSequenceNrForPersistenceIdBefore(
+      persistenceId: Rep[String], maxSequenceNr: Rep[Long]): Rep[Long] =
+    selectAllJournalForPersistenceId(persistenceId)
+      .filter(_.sequenceNumber <= maxSequenceNr)
       .take(1)
       .map(_.sequenceNumber)
       .max

@@ -88,9 +88,9 @@ trait BaseByteArrayJournalDao
     // We should keep journal record with highest sequence number in order to be compliant
     // with @see [[pekko.persistence.journal.JournalSpec]]
     val actions: DBIOAction[Unit, NoStream, Effect.Write with Effect.Read] = for {
-      highestSequenceNr <- queries.beforeHighestSequenceNrForPersistenceId((persistenceId, maxSequenceNr)).result
+      highestSequenceNr <- queries.highestSequenceNrForPersistenceIdBefore((persistenceId, maxSequenceNr)).result
       _ <- queries.delete(persistenceId, highestSequenceNr - 1)
-      _ <- queries.markMaxSequenceNrJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
+      _ <- queries.markJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
     } yield ()
 
     db.run(actions.transactionally)

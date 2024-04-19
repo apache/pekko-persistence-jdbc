@@ -62,6 +62,7 @@ class JournalQueries(
 
   private def _selectByPersistenceIdAndMaxSequenceNr(persistenceId: Rep[String], maxSeqNr: Rep[Long]) =
     _selectByPersistenceId(persistenceId).filter(_.sequenceNumber <= maxSeqNr)
+
   val selectByPersistenceIdAndMaxSequenceNr = Compiled(_selectByPersistenceIdAndMaxSequenceNr _)
 
   private def _highestSequenceNrForPersistenceId(persistenceId: Rep[String]): Rep[Option[Long]] =

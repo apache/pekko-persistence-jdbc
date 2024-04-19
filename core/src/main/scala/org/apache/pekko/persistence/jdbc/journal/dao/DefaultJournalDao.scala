@@ -59,7 +59,9 @@ class DefaultJournalDao(
     new JournalQueries(profile, journalConfig.eventJournalTableConfiguration, journalConfig.eventTagTableConfiguration)
 
   override def delete(persistenceId: String, maxSequenceNr: Long): Future[Unit] = {
-    db.run(queries.delete(persistenceId, maxSequenceNr)).map(_ => ())
+    // We should keep journal record with highest sequence number in order to be compliant
+    // with @see [[pekko.persistence.journal.JournalSpec]]
+    db.run(queries.delete(persistenceId, maxSequenceNr - 1)).map(_ => ())
   }
 
   override def highestSequenceNr(persistenceId: String, fromSequenceNr: Long): Future[Long] = {

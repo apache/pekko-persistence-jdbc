@@ -20,7 +20,7 @@ object Dependencies {
 
   val LogbackVersion = "1.3.14"
 
-  val SlickVersion = "3.5.0"
+  val SlickVersion = "3.5.1"
   val ScalaTestVersion = "3.2.18"
 
   val JdbcDrivers = Seq(

@@ -24,6 +24,10 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
 
   private val JournalTableC = Compiled(JournalTable)
 
+  val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
+  val beforeHighestSequenceNrForPersistenceId = Compiled(_beforeHighestSequenceNrForPersistenceId _)
+  val messagesQuery = Compiled(_messagesQuery _)
+
   def writeJournalRows(xs: Seq[JournalRow]) =
     JournalTableC ++= xs.sortBy(_.sequenceNumber)
 
@@ -60,7 +64,15 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
       .map(_.sequenceNumber)
       .max
 
-  val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
+  private def _beforeHighestSequenceNrForPersistenceId(persistenceId: Rep[String], maxSeqNr: Rep[Long]): Rep[Long] =
+    JournalTable
+      .filter(_.persistenceId === persistenceId)
+      .filter(_.sequenceNumber <= maxSeqNr)
+      .sortBy(_.sequenceNumber.desc)
+      .take(1)
+      .map(_.sequenceNumber)
+      .max
+      .getOrElse(0L)
 
   private def _messagesQuery(
       persistenceId: Rep[String],
@@ -74,7 +86,4 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
       .filter(_.sequenceNumber <= toSequenceNr)
       .sortBy(_.sequenceNumber.asc)
       .take(max)
-
-  val messagesQuery = Compiled(_messagesQuery _)
-
 }

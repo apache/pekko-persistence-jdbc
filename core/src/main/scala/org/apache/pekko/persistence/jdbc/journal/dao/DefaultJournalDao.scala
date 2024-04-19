@@ -59,9 +59,12 @@ class DefaultJournalDao(
     new JournalQueries(profile, journalConfig.eventJournalTableConfiguration, journalConfig.eventTagTableConfiguration)
 
   override def delete(persistenceId: String, maxSequenceNr: Long): Future[Unit] = {
+    // We should keep journal record with highest sequence number in order to be compliant
+    // with @see [[pekko.persistence.journal.JournalSpec]]
     val actions: DBIOAction[Unit, NoStream, Effect.Write with Effect.Read] = for {
-      _ <- queries.delete(persistenceId, maxSequenceNr - 1)
-      _ <- queries.markMaxSequenceNrJournalMessagesAsDeleted(persistenceId, maxSequenceNr)
+      highestSequenceNr <- queries.beforeHighestSequenceNrForPersistenceId(persistenceId, maxSequenceNr).result
+      _ <- queries.delete(persistenceId, highestSequenceNr - 1)
+      _ <- queries.markMaxSequenceNrJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
     } yield ()
 
     db.run(actions.transactionally)

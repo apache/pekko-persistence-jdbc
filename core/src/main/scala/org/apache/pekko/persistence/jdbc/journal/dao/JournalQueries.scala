@@ -33,6 +33,10 @@ class JournalQueries(
   private val insertAndReturn = JournalTable.returning(JournalTable.map(_.ordering))
   private val TagTableC = Compiled(TagTable)
 
+  val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
+  val beforeHighestSequenceNrForPersistenceId = Compiled(_beforeHighestSequenceNrForPersistenceId _)
+  val messagesQuery = Compiled(_messagesQuery _)
+
   def writeJournalRows(xs: Seq[(JournalPekkoSerializationRow, Set[String])])(implicit ec: ExecutionContext) = {
     val sorted = xs.sortBy(event => event._1.sequenceNumber)
     if (sorted.exists(_._2.nonEmpty)) {
@@ -73,7 +77,16 @@ class JournalQueries(
       .map(_.sequenceNumber)
       .max
 
-  val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
+  private def _beforeHighestSequenceNrForPersistenceId(
+      persistenceId: Rep[String], maxSequenceNr: Rep[Long]): Rep[Long] =
+    JournalTable
+      .filter(_.persistenceId === persistenceId)
+      .filter(_.sequenceNumber <= maxSequenceNr)
+      .sortBy(_.sequenceNumber.desc)
+      .take(1)
+      .map(_.sequenceNumber)
+      .max
+      .getOrElse(0L)
 
   private def _messagesQuery(
       persistenceId: Rep[String],
@@ -87,7 +100,5 @@ class JournalQueries(
       .filter(_.sequenceNumber <= toSequenceNr) // TODO optimized this avoid large offset query.
       .sortBy(_.sequenceNumber.asc)
       .take(max)
-
-  val messagesQuery = Compiled(_messagesQuery _)
 
 }

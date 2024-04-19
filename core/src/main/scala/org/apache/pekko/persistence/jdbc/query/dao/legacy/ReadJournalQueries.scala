@@ -24,13 +24,19 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
 
   import profile.api._
 
+  val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
+  val messagesQuery = Compiled(_messagesQuery _)
+  val eventsByTag = Compiled(_eventsByTag _)
+  val journalSequenceQuery = Compiled(_journalSequenceQuery _)
+  val maxJournalSequenceQuery = Compiled {
+    JournalTable.map(_.ordering).max.getOrElse(0L)
+  }
+
   private def baseTableQuery() =
     JournalTable.filter(_.deleted === false)
 
   private def _allPersistenceIdsDistinct(max: ConstColumn[Long]): Query[Rep[String], String, Seq] =
     baseTableQuery().map(_.persistenceId).distinct.take(max)
-
-  val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
 
   private def _messagesQuery(
       persistenceId: Rep[String],
@@ -44,8 +50,6 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       .sortBy(_.sequenceNumber.asc)
       .take(max)
 
-  val messagesQuery = Compiled(_messagesQuery _)
-
   private def _eventsByTag(
       tag: Rep[String],
       offset: ConstColumn[Long],
@@ -58,14 +62,6 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       .take(max)
   }
 
-  val eventsByTag = Compiled(_eventsByTag _)
-
   private def _journalSequenceQuery(from: ConstColumn[Long], limit: ConstColumn[Long]) =
     JournalTable.filter(_.ordering > from).map(_.ordering).sorted.take(limit)
-
-  val journalSequenceQuery = Compiled(_journalSequenceQuery _)
-
-  val maxJournalSequenceQuery = Compiled {
-    JournalTable.map(_.ordering).max.getOrElse(0L)
-  }
 }

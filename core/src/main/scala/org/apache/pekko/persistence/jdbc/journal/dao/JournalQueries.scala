@@ -57,6 +57,14 @@ class JournalQueries(
       .delete
   }
 
+  def markMaxSequenceNrJournalMessagesAsDeleted(persistenceId: String, maxSequenceNr: Long) =
+    JournalTable
+      .filter(_.persistenceId === persistenceId)
+      .filter(_.sequenceNumber == maxSequenceNr)
+      .filter(_.deleted === false)
+      .map(_.deleted)
+      .update(true)
+
   private def _highestSequenceNrForPersistenceId(persistenceId: Rep[String]): Rep[Option[Long]] =
     JournalTable
       .filter(_.persistenceId === persistenceId)
@@ -74,6 +82,7 @@ class JournalQueries(
       max: ConstColumn[Long]) =
     JournalTable
       .filter(_.persistenceId === persistenceId)
+      .filter(_.deleted === false)
       .filter(_.sequenceNumber >= fromSequenceNr)
       .filter(_.sequenceNumber <= toSequenceNr) // TODO optimized this avoid large offset query.
       .sortBy(_.sequenceNumber.asc)

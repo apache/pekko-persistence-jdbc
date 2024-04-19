@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalQueries.markJournalMessagesAsDeleted")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalQueries.markJournalMessagesAsDeleted")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalQueries.highestMarkedSequenceNrForPersistenceId")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalQueries.highestMarkedSequenceNrForPersistenceId")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalQueries.selectByPersistenceIdAndMaxSequenceNumber")

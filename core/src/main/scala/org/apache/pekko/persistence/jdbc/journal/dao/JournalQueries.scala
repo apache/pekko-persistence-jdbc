@@ -61,10 +61,10 @@ class JournalQueries(
     JournalTable.filter(_.persistenceId === persistenceId).filter(_.sequenceNumber <= toSequenceNr).delete
   }
 
-  def markJournalMessagesAsDeleted(persistenceId: String, maxSequenceNr: Long) =
+  def markSeqNrJournalMessagesAsDeleted(persistenceId: String, sequenceNr: Long) =
     JournalTable
       .filter(_.persistenceId === persistenceId)
-      .filter(_.sequenceNumber === maxSequenceNr)
+      .filter(_.sequenceNumber === sequenceNr)
       .filter(_.deleted === false)
       .map(_.deleted)
       .update(true)

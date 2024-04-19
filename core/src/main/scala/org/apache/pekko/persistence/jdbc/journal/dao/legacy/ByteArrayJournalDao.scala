@@ -90,7 +90,7 @@ trait BaseByteArrayJournalDao
     val actions: DBIOAction[Unit, NoStream, Effect.Write with Effect.Read] = for {
       highestSequenceNr <- queries.highestSequenceNrForPersistenceIdBefore((persistenceId, maxSequenceNr)).result
       _ <- queries.delete(persistenceId, highestSequenceNr - 1)
-      _ <- queries.markJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
+      _ <- queries.markSeqNrJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
     } yield ()
 
     db.run(actions.transactionally)

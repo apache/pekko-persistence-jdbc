@@ -394,7 +394,7 @@ class MockDurableStateSequenceActorTest extends SharedActorSystemTestSpec {
     lazy val cfg = customConfig
       .getConfig("jdbc-durable-state-store")
       .withFallback(system.settings.config.getConfig("jdbc-durable-state-store"))
-      .withFallback(ConfigFactory.load("h2-application.conf").getConfig("jdbc-durable-state-store"))
+      .withFallback(config.getConfig("jdbc-durable-state-store"))
 
     val stateTableConfig = new DurableStateTableConfiguration(cfg)
 

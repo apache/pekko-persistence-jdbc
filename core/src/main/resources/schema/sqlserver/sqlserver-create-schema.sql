@@ -40,3 +40,24 @@ CREATE TABLE "snapshot" (
     PRIMARY KEY ("persistence_id", "sequence_number")
   )
 
+-- Create Sequence Object
+CREATE SEQUENCE global_offset
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE TABLE durable_state
+(
+    "global_offset"         BIGINT
+        CONSTRAINT [df_global_offset] DEFAULT
+        (NEXT VALUE FOR global_offset),
+    "persistence_id"        VARCHAR(255)   NOT NULL,
+    "revision"              NUMERIC(10, 0) NOT NULL,
+    "state_payload"         VARBINARY(MAX) NOT NULL,
+    "state_serial_id"       INTEGER        NOT NULL,
+    "state_serial_manifest" VARCHAR(MAX),
+    "tag"                   VARCHAR(255),
+    "state_timestamp"       BIGINT         NOT NULL
+        PRIMARY KEY ("persistence_id")
+);
+CREATE INDEX durable_state_tag_idx on durable_state (tag);
+CREATE UNIQUE INDEX durable_state_global_offset_idx ON durable_state (global_offset);

@@ -51,29 +51,13 @@ class JournalQueries(
   }
 
   def delete(persistenceId: String, toSequenceNr: Long) = {
-    selectByPersistenceIdAndMaxSequenceNr(persistenceId, toSequenceNr).delete
+    JournalTable.filter(_.persistenceId === persistenceId).filter(_.sequenceNumber <= toSequenceNr).delete
   }
 
-  private def _selectAllJournalForPersistenceId(persistenceId: Rep[String]) =
-    _selectByPersistenceId(persistenceId).sortBy(_.sequenceNumber.desc)
-
-  private def _selectByPersistenceId(persistenceId: Rep[String]) =
-    JournalTable.filter(_.persistenceId === persistenceId)
-
-  private def _selectByPersistenceIdAndMaxSequenceNr(persistenceId: Rep[String], maxSeqNr: Rep[Long]) =
-    _selectByPersistenceId(persistenceId).filter(_.sequenceNumber <= maxSeqNr)
-
-  val selectByPersistenceIdAndMaxSequenceNr = Compiled(_selectByPersistenceIdAndMaxSequenceNr _)
-
   private def _highestSequenceNrForPersistenceId(persistenceId: Rep[String]): Rep[Option[Long]] =
-    _selectAllJournalForPersistenceId(persistenceId).take(1).map(_.sequenceNumber).max
+    JournalTable.filter(_.persistenceId === persistenceId).take(1).map(_.sequenceNumber).max
 
   val highestSequenceNrForPersistenceId = Compiled(_highestSequenceNrForPersistenceId _)
-
-  private def _allPersistenceIdsDistinct: Query[Rep[String], String, Seq] =
-    JournalTable.map(_.persistenceId).distinct
-
-  val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct)
 
   private def _messagesQuery(
       persistenceId: Rep[String],

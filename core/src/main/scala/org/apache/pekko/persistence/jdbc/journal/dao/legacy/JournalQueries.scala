@@ -60,13 +60,11 @@ class JournalQueries(val profile: JdbcProfile, override val journalTableCfg: Leg
     selectAllJournalForPersistenceId(persistenceId).take(1).map(_.sequenceNumber).max
 
   private def _highestSequenceNrForPersistenceIdBefore(
-      persistenceId: Rep[String], maxSequenceNr: Rep[Long]): Rep[Long] =
+      persistenceId: Rep[String], maxSequenceNr: Rep[Long]): Query[Rep[Long], Long, Seq] =
     selectAllJournalForPersistenceId(persistenceId)
       .filter(_.sequenceNumber <= maxSequenceNr)
-      .take(1)
       .map(_.sequenceNumber)
-      .max
-      .getOrElse(0L)
+      .take(1)
 
   private def _messagesQuery(
       persistenceId: Rep[String],

@@ -74,13 +74,11 @@ class JournalQueries(
 
   private def _highestSequenceNrForPersistenceIdBefore(
       persistenceId: Rep[String],
-      maxSequenceNr: Rep[Long]): Rep[Long] =
+      maxSequenceNr: Rep[Long]): Query[Rep[Long], Long, Seq] =
     selectAllJournalForPersistenceId(persistenceId)
       .filter(_.sequenceNumber <= maxSequenceNr)
-      .take(1)
       .map(_.sequenceNumber)
-      .max
-      .getOrElse(0L)
+      .take(1)
 
   private def _messagesQuery(
       persistenceId: Rep[String],

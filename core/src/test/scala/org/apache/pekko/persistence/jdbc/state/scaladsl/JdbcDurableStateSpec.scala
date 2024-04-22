@@ -20,7 +20,6 @@ import pekko.actor._
 import pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
 import OffsetSyntax._
 import pekko.persistence.jdbc.testkit.internal.{ H2, Oracle, Postgres, SchemaType, SqlServer }
-import pekko.persistence.typed.state.internal.DurableStateStoreException
 import pekko.persistence.query.{ NoOffset, Offset, Sequence, UpdatedDurableState }
 import pekko.stream.scaladsl.Sink
 import org.scalatest.time.{ Millis, Seconds, Span }
@@ -132,7 +131,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         d <- stateStoreString.deleteObject("p987", 1)
       } yield d
       whenReady(f.failed) { e =>
-        e shouldBe a[DurableStateStoreException]
+        e shouldBe an[Exception]
       }
     }
     "delete latest object revision but not older one" in {

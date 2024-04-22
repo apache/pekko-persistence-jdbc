@@ -33,7 +33,6 @@ import pekko.persistence.jdbc.state.{ scaladsl => jdbcStateScalaDsl }
 import pekko.persistence.query.{ DurableStateChange, Offset, UpdatedDurableState }
 import pekko.persistence.query.{ scaladsl => queryScalaDsl }
 import pekko.persistence.state.{ scaladsl => stateScalaDsl }
-import pekko.persistence.typed.state.internal.DurableStateStoreException
 import pekko.serialization.Serialization
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
@@ -117,23 +116,17 @@ class JdbcDurableStateStore[A](
     db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
 
   override def deleteObject(persistenceId: String, revision: Long): Future[Done] = {
-    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).flatMap { count =>
+    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
       {
         if (count == 0) {
-          db.run(queries.selectFromDbByPersistenceId(persistenceId).result).map { state =>
-            state.headOption match {
-              case Some(row) if row.revision < revision =>
-                throw new DurableStateStoreException(
-                  s"Out of date revision [$revision] for object with persistenceId [$persistenceId]", null)
-              case Some(_) =>
-                throw new DurableStateStoreException(
-                  s"Unknown revision [$revision] for object with persistenceId [$persistenceId]", null)
-              case _ =>
-                throw new DurableStateStoreException(
-                  s"Object with persistenceId [$persistenceId] does not exist", null)
-            }
-          }
-        } else Future.successful(Done)
+          // if you run this code with Pekko 1.0.x, no exception will be thrown here
+          // this matches the behavior of pekko-connectors-jdbc 1.0.x
+          // if you run this code with Pekko 1.1.x, a DeleteRevisionException will be thrown here
+          DurableStateExceptionSupport.createDeleteRevisionExceptionIfSupported(
+            s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]")
+            .foreach(throw _)
+        }
+        Done
       }
     }
   }

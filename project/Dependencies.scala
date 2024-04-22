@@ -32,7 +32,6 @@ object Dependencies {
 
   val Libraries: Seq[ModuleID] = Seq(
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,
-    "org.apache.pekko" %% "pekko-persistence-typed" % PekkoVersion,
     "com.typesafe.slick" %% "slick" % SlickVersion,
     "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
     "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,

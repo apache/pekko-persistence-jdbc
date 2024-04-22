@@ -26,7 +26,7 @@ private[scaladsl] object DurableStateExceptionSupport {
 
   private def exceptionClassOpt: Option[Class[_]] =
     Try(Class.forName(
-        "org.apache.pekko.persistence.state.exception.DeleteRevisionException")).toOption
+      "org.apache.pekko.persistence.state.exception.DeleteRevisionException")).toOption
 
   private lazy val constructorOpt = exceptionClassOpt.map { clz =>
     val mt = MethodType.methodType(classOf[Unit], classOf[String])
@@ -38,4 +38,4 @@ private[scaladsl] object DurableStateExceptionSupport {
       constructor.invoke(message).asInstanceOf[Exception]
     }
 
-} 
+}

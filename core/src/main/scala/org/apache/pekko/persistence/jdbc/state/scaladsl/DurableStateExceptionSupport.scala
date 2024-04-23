@@ -31,14 +31,13 @@ import scala.util.Try
 private[scaladsl] object DurableStateExceptionSupport {
   val DeleteRevisionExceptionClass =
     "org.apache.pekko.persistence.state.exception.DeleteRevisionException"
-  private val methodHandleLookup = MethodHandles.publicLookup()
 
   private def exceptionClassOpt: Option[Class[_]] =
     Try(Class.forName(DeleteRevisionExceptionClass)).toOption
 
-  private lazy val constructorOpt = exceptionClassOpt.map { clz =>
+  private val constructorOpt = exceptionClassOpt.map { clz =>
     val mt = MethodType.methodType(classOf[Unit], classOf[String])
-    methodHandleLookup.findConstructor(clz, mt)
+    MethodHandles.publicLookup().findConstructor(clz, mt)
   }
 
   def createDeleteRevisionExceptionIfSupported(message: String): Option[Exception] =

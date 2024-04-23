@@ -115,21 +115,18 @@ class JdbcDurableStateStore[A](
   override def deleteObject(persistenceId: String): Future[Done] =
     db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
 
-  override def deleteObject(persistenceId: String, revision: Long): Future[Done] = {
+  override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
     db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
-      {
-        if (count == 0) {
-          // if you run this code with Pekko 1.0.x, no exception will be thrown here
-          // this matches the behavior of pekko-connectors-jdbc 1.0.x
-          // if you run this code with Pekko 1.1.x, a DeleteRevisionException will be thrown here
-          DurableStateExceptionSupport.createDeleteRevisionExceptionIfSupported(
-            s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]")
-            .foreach(throw _)
-        }
-        Done
+      if (count == 0) {
+        // if you run this code with Pekko 1.0.x, no exception will be thrown here
+        // this matches the behavior of pekko-connectors-jdbc 1.0.x
+        // if you run this code with Pekko 1.1.x, a DeleteRevisionException will be thrown here
+        DurableStateExceptionSupport.createDeleteRevisionExceptionIfSupported(
+          s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]")
+          .foreach(throw _)
       }
-    }
-  }
+      Done
+    }(ExecutionContext.parasitic)
 
   override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
     Source

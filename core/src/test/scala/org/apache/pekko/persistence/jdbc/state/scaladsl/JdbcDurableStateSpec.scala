@@ -130,8 +130,15 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         _ = u shouldBe pekko.Done
         d <- stateStoreString.deleteObject("p987", 1)
       } yield d
-      whenReady(f.failed) { e =>
-        e shouldBe an[Exception]
+      if (pekko.Version.current.startsWith("1.0")) {
+        whenReady(f) { v =>
+          v shouldBe pekko.Done
+        }
+      } else {
+        whenReady(f.failed) { e =>
+          e.getClass.getName shouldEqual DurableStateExceptionSupport.DeleteRevisionExceptionClass
+          e.getMessage should include("Failed to delete object with persistenceId [p987] and revision [1]")
+        }
       }
     }
     "delete latest object revision but not older one" in {

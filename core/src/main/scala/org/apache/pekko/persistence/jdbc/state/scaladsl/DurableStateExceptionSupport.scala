@@ -21,6 +21,13 @@ import java.lang.invoke.{ MethodHandles, MethodType }
 
 import scala.util.Try
 
+/**
+  * INTERNAL API
+  *
+  * Support for creating a `DeleteRevisionException`if the class is
+  * available on the classpath. Pekko 1.0 does not have this class, but
+  * it is added in Pekko 1.1.
+  */
 private[scaladsl] object DurableStateExceptionSupport {
   val DeleteRevisionExceptionClass =
     "org.apache.pekko.persistence.state.exception.DeleteRevisionException"

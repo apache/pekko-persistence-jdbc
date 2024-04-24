@@ -47,9 +47,6 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
   private[jdbc] def selectFromDbByPersistenceId(persistenceId: Rep[String]) =
     durableStateTable.filter(_.persistenceId === persistenceId)
 
-  private[jdbc] def selectFromDbByPersistenceId(persistenceId: String) =
-    durableStateTable.filter(_.persistenceId === persistenceId)
-
   private[jdbc] def insertDbWithDurableState(row: DurableStateTables.DurableStateRow, seqNextValue: String) = {
     sqlu"""INSERT INTO #${durableStateTableCfg.tableName}
             (
@@ -103,7 +100,7 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
    * @since 1.1.0
    */
   private[jdbc] def deleteBasedOnPersistenceIdAndRevision(persistenceId: String, revision: Long) = {
-    durableStateTable.filter(r => r.persistenceId === persistenceId && r.revision === revision).delete
+    selectFromDbByPersistenceId(persistenceId).filter(_.revision === revision).delete
   }
 
   def deleteAllFromDb() = {

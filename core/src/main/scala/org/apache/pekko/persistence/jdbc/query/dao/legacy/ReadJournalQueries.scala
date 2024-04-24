@@ -24,19 +24,19 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
 
   import profile.api._
 
-  def journalRowByPersistenceIds(persistenceIds: Iterable[String]) =
-    for {
-      query <- JournalTable.map(_.persistenceId)
-      if query.inSetBind(persistenceIds)
-    } yield query
-
-  private def _allPersistenceIdsDistinct(max: ConstColumn[Long]): Query[Rep[String], String, Seq] =
-    baseTableQuery().map(_.persistenceId).distinct.take(max)
+  val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
+  val messagesQuery = Compiled(_messagesQuery _)
+  val eventsByTag = Compiled(_eventsByTag _)
+  val journalSequenceQuery = Compiled(_journalSequenceQuery _)
+  val maxJournalSequenceQuery = Compiled {
+    JournalTable.map(_.ordering).max.getOrElse(0L)
+  }
 
   private def baseTableQuery() =
     JournalTable.filter(_.deleted === false)
 
-  val allPersistenceIdsDistinct = Compiled(_allPersistenceIdsDistinct _)
+  private def _allPersistenceIdsDistinct(max: ConstColumn[Long]): Query[Rep[String], String, Seq] =
+    baseTableQuery().map(_.persistenceId).distinct.take(max)
 
   private def _messagesQuery(
       persistenceId: Rep[String],
@@ -46,11 +46,9 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
     baseTableQuery()
       .filter(_.persistenceId === persistenceId)
       .filter(_.sequenceNumber >= fromSequenceNr)
-      .filter(_.sequenceNumber <= toSequenceNr)
+      .filter(_.sequenceNumber <= toSequenceNr) // TODO perf: optimized this avoid large offset query.
       .sortBy(_.sequenceNumber.asc)
       .take(max)
-
-  val messagesQuery = Compiled(_messagesQuery _)
 
   private def _eventsByTag(
       tag: Rep[String],
@@ -64,14 +62,6 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
       .take(max)
   }
 
-  val eventsByTag = Compiled(_eventsByTag _)
-
   private def _journalSequenceQuery(from: ConstColumn[Long], limit: ConstColumn[Long]) =
     JournalTable.filter(_.ordering > from).map(_.ordering).sorted.take(limit)
-
-  val journalSequenceQuery = Compiled(_journalSequenceQuery _)
-
-  val maxJournalSequenceQuery = Compiled {
-    JournalTable.map(_.ordering).max.getOrElse(0L)
-  }
 }

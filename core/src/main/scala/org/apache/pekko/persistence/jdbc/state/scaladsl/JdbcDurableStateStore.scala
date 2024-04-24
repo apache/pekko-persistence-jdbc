@@ -117,7 +117,7 @@ class JdbcDurableStateStore[A](
 
   override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
     db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
-      if (count == 0) {
+      if (count != 1) {
         // if you run this code with Pekko 1.0.x, no exception will be thrown here
         // this matches the behavior of pekko-connectors-jdbc 1.0.x
         // if you run this code with Pekko 1.1.x, a DeleteRevisionException will be thrown here

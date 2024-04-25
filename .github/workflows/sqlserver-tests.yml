@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-      - migration-tool # remove before merging to main
     tags-ignore: [ v.* ]
 
 jobs:

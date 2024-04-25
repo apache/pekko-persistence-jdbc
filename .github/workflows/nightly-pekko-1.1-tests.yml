@@ -1,13 +1,11 @@
-name: H2 Unit Tests
+name: Nightly Testing with Pekko 1.1
 
 permissions: {}
 
 on:
-  pull_request:
-  push:
-    branches:
-      - main
-    tags-ignore: [ v.* ]
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
 
 jobs:
   test:
@@ -20,9 +18,6 @@ jobs:
           - { java-version: 8,  scala-version: 2.12, sbt-opts: '' }
           - { java-version: 8,  scala-version: 2.13, sbt-opts: '' }
           - { java-version: 8,  scala-version: 3.3,  sbt-opts: '' }
-          - { java-version: 11, scala-version: 2.12, sbt-opts: '-J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler' }
-          - { java-version: 11, scala-version: 2.13, sbt-opts: '-J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler' }
-          - { java-version: 11, scala-version: 3.3,  sbt-opts: '-J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler' }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,7 +41,7 @@ jobs:
         uses: coursier/cache-action@v6
 
       - name: Run tests with Scala ${{ matrix.scala-version }} and Java ${{ matrix.java-version }}
-        run: sbt "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
+        run: sbt -Dpekko.build.pekko.version=main "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
 
       - name: Print logs on failure
         if: ${{ failure() }}

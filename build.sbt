@@ -18,6 +18,7 @@ sourceDistIncubating := false
 
 val mimaCompareVersion = "1.0.0"
 
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val `pekko-persistence-jdbc` = project

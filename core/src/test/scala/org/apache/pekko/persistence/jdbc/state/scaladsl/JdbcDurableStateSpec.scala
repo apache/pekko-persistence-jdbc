@@ -120,6 +120,47 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
       }
     }
+    "fail to delete old object revision" in {
+      val f = for {
+        n <- stateStoreString.upsertObject("p987", 1, "a valid string", "t123")
+        _ = n shouldBe pekko.Done
+        g <- stateStoreString.getObject("p987")
+        _ = g.value shouldBe Some("a valid string")
+        u <- stateStoreString.upsertObject("p987", 2, "updated valid string", "t123")
+        _ = u shouldBe pekko.Done
+        d <- stateStoreString.deleteObject("p987", 1)
+      } yield d
+      if (pekko.Version.current.startsWith("1.0")) {
+        whenReady(f) { v =>
+          v shouldBe pekko.Done
+        }
+      } else {
+        whenReady(f.failed) { e =>
+          e.getClass.getName shouldEqual DurableStateExceptionSupport.DeleteRevisionExceptionClass
+          e.getMessage should include("Failed to delete object with persistenceId [p987] and revision [1]")
+        }
+      }
+    }
+    "delete latest object revision but not older one" in {
+      whenReady {
+        for {
+
+          n <- stateStoreString.upsertObject("p9876", 1, "a valid string", "t123")
+          _ = n shouldBe pekko.Done
+          g <- stateStoreString.getObject("p9876")
+          _ = g.value shouldBe Some("a valid string")
+          u <- stateStoreString.upsertObject("p9876", 2, "updated valid string", "t123")
+          _ = u shouldBe pekko.Done
+          d <- stateStoreString.deleteObject("p9876", 2)
+          _ = d shouldBe pekko.Done
+          h <- stateStoreString.getObject("p9876")
+
+        } yield h
+      } { v =>
+        // current behavior is that deleting the latest revision means getObject returns None (we don't preserve older revisions)
+        v.value shouldBe None
+      }
+    }
   }
 
   "A durable state store with payload that needs custom serializer" must withActorSystem { implicit system =>

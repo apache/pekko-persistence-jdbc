@@ -22,23 +22,23 @@ import slick.jdbc.{ JdbcBackend, JdbcProfile }
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ExtendedActorSystem
+import pekko.annotation.ApiMayChange
+import pekko.dispatch.ExecutionContexts
 import pekko.pattern.ask
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.state.DurableStateQueries
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
-import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.jdbc.journal.dao.FlowControl
 import pekko.persistence.jdbc.state.{ scaladsl => jdbcStateScalaDsl }
-import pekko.persistence.state.{ scaladsl => stateScalaDsl }
+import pekko.persistence.query.{ DurableStateChange, Offset, UpdatedDurableState }
 import pekko.persistence.query.{ scaladsl => queryScalaDsl }
+import pekko.persistence.state.{ scaladsl => stateScalaDsl }
 import pekko.serialization.Serialization
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.Timeout
 import OffsetSyntax._
-import pekko.annotation.ApiMayChange
-import pekko.persistence.query.UpdatedDurableState
 
 object JdbcDurableStateStore {
   val Identifier = "jdbc-durable-state-store"
@@ -70,7 +70,7 @@ class JdbcDurableStateStore[A](
       durableStateConfig.stateSequenceConfig),
     s"pekko-persistence-jdbc-durable-state-sequence-actor")
 
-  def getObject(persistenceId: String): Future[stateScalaDsl.GetObjectResult[A]] = {
+  override def getObject(persistenceId: String): Future[stateScalaDsl.GetObjectResult[A]] = {
     db.run(queries.selectFromDbByPersistenceId(persistenceId).result).map { rows =>
       rows.headOption match {
         case Some(row) =>
@@ -84,7 +84,7 @@ class JdbcDurableStateStore[A](
     }
   }
 
-  def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): Future[Done] = {
+  override def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): Future[Done] = {
     require(revision > 0)
     val row =
       PekkoSerialization.serialize(serialization, value).map { serialized =>
@@ -113,13 +113,27 @@ class JdbcDurableStateStore[A](
       }
   }
 
-  def deleteObject(persistenceId: String): Future[Done] =
+  override def deleteObject(persistenceId: String): Future[Done] =
     db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
 
-  def deleteObject(persistenceId: String, revision: Long): Future[Done] =
-    db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
+  override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
+    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
+      if (count != 1) {
+        // if you run this code with Pekko 1.0.x, no exception will be thrown here
+        // this matches the behavior of pekko-connectors-jdbc 1.0.x
+        // if you run this code with Pekko 1.1.x, a DeleteRevisionException will be thrown here
+        val msg = if (count == 0) {
+          s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]"
+        } else {
+          s"Delete object succeeded for persistenceId [$persistenceId] and revision [$revision] but more than one row was affected ($count rows)"
+        }
+        DurableStateExceptionSupport.createDeleteRevisionExceptionIfSupported(msg)
+          .foreach(throw _)
+      }
+      Done
+    }(ExecutionContexts.parasitic)
 
-  def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
+  override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
     Source
       .futureSource(maxStateStoreOffset().map { maxOrderingInDb =>
         changesByTag(tag, offset.value, terminateAfterOffset = Some(maxOrderingInDb))
@@ -127,7 +141,7 @@ class JdbcDurableStateStore[A](
       .mapMaterializedValue(_ => NotUsed)
   }
 
-  def changes(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] =
+  override def changes(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] =
     changesByTag(tag, offset.value, terminateAfterOffset = None)
 
   private def currentChangesByTag(

@@ -23,7 +23,6 @@ import pekko.persistence.jdbc.journal.dao.FlowControl.{ Continue, ContinueDelaye
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Sink, Source }
 
-import scala.collection.immutable.Seq
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
 import scala.util.{ Failure, Success, Try }

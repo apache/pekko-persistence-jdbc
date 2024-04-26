@@ -15,9 +15,10 @@
 package org.apache.pekko.persistence.jdbc.query
 
 import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
-import org.apache.pekko.actor.ExtendedActorSystem
+import org.apache.pekko.actor.{ ActorRef, ExtendedActorSystem }
+import org.apache.pekko.pattern.ask
 import org.apache.pekko.persistence.jdbc.config.JournalConfig
-import org.apache.pekko.persistence.jdbc.journal.dao.JournalDao
+import org.apache.pekko.persistence.jdbc.journal.dao.{ DefaultJournalDao, JournalDao }
 import org.apache.pekko.persistence.jdbc.query.JournalDaoStreamMessagesMemoryTest.fetchSize
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
 import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
@@ -55,24 +56,10 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
   val memoryMBean: MemoryMXBean = ManagementFactory.getMemoryMXBean
 
   it should "stream events" in withActorSystem { implicit system =>
-    withDatabase { db =>
-      implicit val ec: ExecutionContext = system.dispatcher
-      implicit val mat: Materializer = SystemMaterializer(system).materializer
+    implicit val ec: ExecutionContext = system.dispatcher
+    implicit val mat: Materializer = SystemMaterializer(system).materializer
 
-      val fqcn = journalConfig.pluginConfig.dao
-      val args = Seq(
-        (classOf[Database], db),
-        (classOf[JdbcProfile], profile),
-        (classOf[JournalConfig], journalConfig),
-        (classOf[Serialization], SerializationExtension(system)),
-        (classOf[ExecutionContext], ec),
-        (classOf[Materializer], mat))
-      val dao: JournalDao =
-        system.asInstanceOf[ExtendedActorSystem].dynamicAccess.createInstanceFor[JournalDao](fqcn, args) match {
-          case Success(dao)   => dao
-          case Failure(cause) => throw cause
-        }
-
+    withDao { dao =>
       val persistenceId = UUID.randomUUID().toString
 
       val payloadSize = 5000 // 5000 bytes
@@ -102,7 +89,7 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
             val atomicWrites =
               (start to end).map { j =>
                 AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId)))
-              }.toSeq
+              }
 
             dao.asyncWriteMessages(atomicWrites).map(_ => i)
           }

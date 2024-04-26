@@ -23,8 +23,8 @@ import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 import org.apache.pekko.persistence.jdbc.journal.dao.LimitWindowingStreamTest.fetchSize
 import org.apache.pekko.persistence.jdbc.query.{ H2Cleaner, QueryTestSpec }
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.serialization.SerializationExtension
 import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.slf4j.LoggerFactory
 
@@ -32,6 +32,7 @@ import java.util.UUID
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
+
 object LimitWindowingStreamTest {
   val fetchSize = 100
   val configOverrides: Map[String, ConfigValue] =
@@ -44,17 +45,16 @@ abstract class LimitWindowingStreamTest(configFile: String)
   private val log = LoggerFactory.getLogger(this.getClass)
 
   it should "stream events with limit windowing" in withActorSystem { implicit system =>
+    implicit val ec: ExecutionContext = system.dispatcher
+    implicit val mat: Materializer = SystemMaterializer(system).materializer
+
     val persistenceId = UUID.randomUUID().toString
     val payload = 'a'.toByte
     val eventsPerBatch = 1000
     val numberOfInsertBatches = 16
     val totalMessages = numberOfInsertBatches * eventsPerBatch
 
-    withDatabase { db =>
-      implicit val ec: ExecutionContext = system.dispatcher
-
-      val dao = new DefaultJournalDao(db, profile, journalConfig, SerializationExtension(system))
-
+    withDao { dao =>
       val lastInsert =
         Source
           .fromIterator(() => (1 to numberOfInsertBatches).toIterator)
@@ -71,8 +71,9 @@ abstract class LimitWindowingStreamTest(configFile: String)
           .runWith(Sink.last)
 
       lastInsert.futureValue(Timeout(totalMessages.seconds))
-
-      val messagesSrc = dao.internalBatchStream(persistenceId, 0, totalMessages, batchSize = fetchSize, None)
+      val readMessagesDao = dao.asInstanceOf[BaseJournalDaoWithReadMessages]
+      val messagesSrc =
+        readMessagesDao.internalBatchStream(persistenceId, 0, totalMessages, batchSize = fetchSize, None)
 
       val eventualSum: Future[(Int, Int)] = messagesSrc.toMat(Sink.fold((0, 0)) { case ((accBatch, accTotal), seq) =>
         (accBatch + 1, accTotal + seq.size)

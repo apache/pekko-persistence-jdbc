@@ -21,7 +21,7 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 
 import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 import org.apache.pekko.persistence.jdbc.journal.dao.LimitWindowingStreamTest.fetchSize
-import org.apache.pekko.persistence.jdbc.query.{ H2Cleaner, LegacyJournalDaoStreamMessagesMemoryTest, QueryTestSpec }
+import org.apache.pekko.persistence.jdbc.query.{ H2Cleaner, QueryTestSpec }
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
 import org.apache.pekko.serialization.SerializationExtension
 import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
@@ -39,7 +39,7 @@ object LimitWindowingStreamTest {
 }
 
 abstract class LimitWindowingStreamTest(configFile: String)
-    extends QueryTestSpec(configFile, LegacyJournalDaoStreamMessagesMemoryTest.configOverrides) {
+    extends QueryTestSpec(configFile, LimitWindowingStreamTest.configOverrides) {
 
   private val log = LoggerFactory.getLogger(this.getClass)
 

@@ -14,21 +14,21 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import com.typesafe.config.{ConfigValue, ConfigValueFactory}
+import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 import org.apache.pekko.persistence.jdbc.query.JournalDaoStreamMessagesMemoryTest.fetchSize
-import org.apache.pekko.persistence.{AtomicWrite, PersistentRepr}
-import org.apache.pekko.stream.scaladsl.{Sink, Source}
+import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.{Materializer, SystemMaterializer}
+import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.slf4j.LoggerFactory
 
-import java.lang.management.{ManagementFactory, MemoryMXBean}
+import java.lang.management.{ ManagementFactory, MemoryMXBean }
 import java.util.UUID
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 object JournalDaoStreamMessagesMemoryTest {
 
@@ -55,6 +55,8 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
     withDao { dao =>
       val persistenceId = UUID.randomUUID().toString
 
+      val writerUuid = UUID.randomUUID().toString
+
       val payloadSize = 5000 // 5000 bytes
       val eventsPerBatch = 1000
 
@@ -74,16 +76,15 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
 
       val lastInsert =
         Source
-          .fromIterator(() => (1 to numberOfInsertBatches).toIterator)
+          .fromIterator(() => (1 to numberOfInsertBatches).iterator)
           .mapAsync(1) { i =>
             val end = i * eventsPerBatch
             val start = end - (eventsPerBatch - 1)
             log.info(s"batch $i - events from $start to $end")
             val atomicWrites =
               (start to end).map { j =>
-                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId)))
+                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid)))
               }
-
             dao.asyncWriteMessages(atomicWrites).map(_ => i)
           }
           .runWith(Sink.last)

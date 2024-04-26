@@ -18,28 +18,28 @@ import com.typesafe.config.ConfigValue
 import org.apache.pekko
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
-import scala.concurrent.duration.{FiniteDuration, _}
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success}
-import pekko.actor.{ActorRef, ActorSystem, ExtendedActorSystem, Props, Stash, Status}
+import scala.concurrent.duration.{ FiniteDuration, _ }
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success }
+import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem, Props, Stash, Status }
 import pekko.event.LoggingReceive
 import pekko.pattern.ask
 import pekko.persistence.jdbc.SingleActorSystemPerTestSpec
 import pekko.persistence.jdbc.config.JournalConfig
 import pekko.persistence.jdbc.journal.dao.JournalDao
-import pekko.persistence.jdbc.query.EventAdapterTest.{Event, TaggedAsyncEvent, TaggedEvent}
-import pekko.persistence.jdbc.query.javadsl.{JdbcReadJournal => JavaJdbcReadJournal}
+import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent, TaggedEvent }
+import pekko.persistence.jdbc.query.javadsl.{ JdbcReadJournal => JavaJdbcReadJournal }
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import pekko.persistence.jdbc.testkit.internal._
 import pekko.persistence.journal.Tagged
-import pekko.persistence.query.{EventEnvelope, Offset, PersistenceQuery}
-import pekko.persistence.{DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor}
-import pekko.serialization.{Serialization, SerializationExtension}
+import pekko.persistence.query.{ EventEnvelope, Offset, PersistenceQuery }
+import pekko.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
+import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.scaladsl.Sink
 import pekko.stream.testkit.TestSubscriber
-import pekko.stream.testkit.javadsl.{TestSink => JavaSink}
+import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
 import pekko.stream.testkit.scaladsl.TestSink
-import pekko.stream.{Materializer, SystemMaterializer}
+import pekko.stream.{ Materializer, SystemMaterializer }
 
 trait ReadJournalOperations {
   def withCurrentPersistenceIds(within: FiniteDuration = 60.second)(f: TestSubscriber.Probe[String] => Unit): Unit
@@ -340,7 +340,7 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
 
   def withDao(f: JournalDao => Unit)(implicit system: ActorSystem, ec: ExecutionContext, mat: Materializer): Unit = {
     val fqcn = journalConfig.pluginConfig.dao
-    val args = Seq(
+    val args: Seq[(Class[_], AnyRef)] = Seq(
       (classOf[Database], db),
       (classOf[JdbcProfile], profile),
       (classOf[JournalConfig], journalConfig),

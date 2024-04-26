@@ -16,12 +16,6 @@ package org.apache.pekko.persistence.jdbc.query
 
 import com.typesafe.config.ConfigValue
 import org.apache.pekko
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcProfile
-
-import scala.concurrent.duration.{ FiniteDuration, _ }
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success, Try }
 import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem, Props, Stash, Status }
 import pekko.event.LoggingReceive
 import pekko.pattern.ask
@@ -41,8 +35,13 @@ import pekko.stream.testkit.TestSubscriber
 import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 
 import scala.collection.immutable
+import scala.concurrent.duration.{ FiniteDuration, _ }
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success }
 
 trait ReadJournalOperations {
   def withCurrentPersistenceIds(within: FiniteDuration = 60.second)(f: TestSubscriber.Probe[String] => Unit): Unit

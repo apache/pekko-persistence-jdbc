@@ -94,7 +94,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
     JournalSequenceActor.props(readJournalDao, readJournalConfig.journalSequenceRetrievalConfiguration),
     s"$configPath.pekko-persistence-jdbc-journal-sequence-actor")
   private val delaySource =
-    Source.tick(readJournalConfig.refreshInterval, 0.seconds, 0).take(1)
+    Source.tick(0.seconds, readJournalConfig.refreshInterval, 0).take(1)
 
   /**
    * Same type of query as `persistenceIds` but the event stream

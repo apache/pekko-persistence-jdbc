@@ -15,13 +15,19 @@
 package org.apache.pekko.persistence.jdbc.query
 
 import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
-import org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao
+import org.apache.pekko.actor.ExtendedActorSystem
+import org.apache.pekko.persistence.jdbc.config.JournalConfig
+import org.apache.pekko.persistence.jdbc.journal.dao.JournalDao
+import org.apache.pekko.persistence.jdbc.query.JournalDaoStreamMessagesMemoryTest.fetchSize
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
-import org.apache.pekko.serialization.SerializationExtension
+import org.apache.pekko.serialization.{ Serialization, SerializationExtension }
 import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.slf4j.LoggerFactory
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 
 import java.lang.management.{ ManagementFactory, MemoryMXBean }
 import java.util.UUID
@@ -30,33 +36,44 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
 
-object LegacyJournalDaoStreamMessagesMemoryTest {
+object JournalDaoStreamMessagesMemoryTest {
+
+  val fetchSize: Int = 100
+  val MB: Int = 1024 * 1024
 
   val configOverrides: Map[String, ConfigValue] = Map(
-    "jdbc-journal.fetch-size" -> ConfigValueFactory.fromAnyRef("100"),
-    "jdbc-journal.dao" -> ConfigValueFactory.fromAnyRef(
-      "org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao"))
-
-  val MB: Int = 1024 * 1024
+    "jdbc-journal.fetch-size" -> ConfigValueFactory.fromAnyRef("100"))
 }
 
-abstract class LegacyJournalDaoStreamMessagesMemoryTest(configFile: String)
-    extends QueryTestSpec(configFile, LegacyJournalDaoStreamMessagesMemoryTest.configOverrides) {
+abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
+    extends QueryTestSpec(configFile, JournalDaoStreamMessagesMemoryTest.configOverrides) {
 
-  import LegacyJournalDaoStreamMessagesMemoryTest.MB
+  import JournalDaoStreamMessagesMemoryTest.MB
 
   private val log = LoggerFactory.getLogger(this.getClass)
 
   val memoryMBean: MemoryMXBean = ManagementFactory.getMemoryMXBean
 
   it should "stream events" in withActorSystem { implicit system =>
-    if (newDao)
-      pending
     withDatabase { db =>
       implicit val ec: ExecutionContext = system.dispatcher
+      implicit val mat: Materializer = SystemMaterializer(system).materializer
+
+      val fqcn = journalConfig.pluginConfig.dao
+      val args = Seq(
+        (classOf[Database], db),
+        (classOf[JdbcProfile], profile),
+        (classOf[JournalConfig], journalConfig),
+        (classOf[Serialization], SerializationExtension(system)),
+        (classOf[ExecutionContext], ec),
+        (classOf[Materializer], mat))
+      val dao: JournalDao =
+        system.asInstanceOf[ExtendedActorSystem].dynamicAccess.createInstanceFor[JournalDao](fqcn, args) match {
+          case Success(dao)   => dao
+          case Failure(cause) => throw cause
+        }
 
       val persistenceId = UUID.randomUUID().toString
-      val dao = new ByteArrayJournalDao(db, profile, journalConfig, SerializationExtension(system))
 
       val payloadSize = 5000 // 5000 bytes
       val eventsPerBatch = 1000
@@ -104,7 +121,7 @@ abstract class LegacyJournalDaoStreamMessagesMemoryTest(configFile: String)
       val usedBefore = memoryMBean.getHeapMemoryUsage.getUsed
 
       val messagesSrc =
-        dao.messagesWithBatch(persistenceId, 0, totalMessages, batchSize = 100, None)
+        dao.messagesWithBatch(persistenceId, 0, totalMessages, batchSize = fetchSize, None)
       val probe =
         messagesSrc
           .map {
@@ -136,5 +153,5 @@ abstract class LegacyJournalDaoStreamMessagesMemoryTest(configFile: String)
   }
 }
 
-class H2LegacyJournalDaoStreamMessagesMemoryTest extends LegacyJournalDaoStreamMessagesMemoryTest("h2-application.conf")
+class H2JournalDaoStreamMessagesMemoryTest extends JournalDaoStreamMessagesMemoryTest("h2-application.conf")
     with H2Cleaner

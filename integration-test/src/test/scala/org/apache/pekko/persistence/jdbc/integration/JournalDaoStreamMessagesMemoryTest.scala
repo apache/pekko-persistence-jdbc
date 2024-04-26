@@ -11,41 +11,25 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   DefaultJournalDaoStreamMessagesMemoryTest,
-  LegacyJournalDaoStreamMessagesMemoryTest,
+  JournalDaoStreamMessagesMemoryTest,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
   SqlServerCleaner
 }
 
-class PostgresLegacyJournalDaoStreamMessagesMemoryTest
-    extends LegacyJournalDaoStreamMessagesMemoryTest("postgres-application.conf")
+class PostgresJournalDaoStreamMessagesMemoryTest
+    extends JournalDaoStreamMessagesMemoryTest("postgres-application.conf")
     with PostgresCleaner
 
-class MySQLLegacyJournalDaoStreamMessagesMemoryTest
-    extends LegacyJournalDaoStreamMessagesMemoryTest("mysql-application.conf")
+class MySQLJournalDaoStreamMessagesMemoryTest
+    extends JournalDaoStreamMessagesMemoryTest("mysql-application.conf")
     with MysqlCleaner
 
-class OracleLegacyJournalDaoStreamMessagesMemoryTest
-    extends LegacyJournalDaoStreamMessagesMemoryTest("oracle-application.conf")
+class OracleJournalDaoStreamMessagesMemoryTest
+    extends JournalDaoStreamMessagesMemoryTest("oracle-application.conf")
     with OracleCleaner
 
-class SqlServerLegacyJournalDaoStreamMessagesMemoryTest
-    extends LegacyJournalDaoStreamMessagesMemoryTest("sqlserver-application.conf")
-    with SqlServerCleaner
-
-class PostgresDefaultJournalDaoStreamMessagesMemoryTest
-    extends DefaultJournalDaoStreamMessagesMemoryTest("postgres-application.conf")
-    with PostgresCleaner
-
-class MySQLDefaultJournalDaoStreamMessagesMemoryTest
-    extends DefaultJournalDaoStreamMessagesMemoryTest("mysql-application.conf")
-    with MysqlCleaner
-
-class OracleDefaultJournalDaoStreamMessagesMemoryTest
-    extends DefaultJournalDaoStreamMessagesMemoryTest("oracle-application.conf")
-    with OracleCleaner
-
-class SqlServerDefaultJournalDaoStreamMessagesMemoryTest
-    extends DefaultJournalDaoStreamMessagesMemoryTest("sqlserver-application.conf")
+class SqlServerJournalDaoStreamMessagesMemoryTest
+    extends JournalDaoStreamMessagesMemoryTest("sqlserver-application.conf")
     with SqlServerCleaner

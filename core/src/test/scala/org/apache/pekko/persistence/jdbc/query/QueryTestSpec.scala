@@ -18,9 +18,10 @@ import com.typesafe.config.ConfigValue
 import org.apache.pekko
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
+
 import scala.concurrent.duration.{ FiniteDuration, _ }
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success }
+import scala.util.{ Failure, Success, Try }
 import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem, Props, Stash, Status }
 import pekko.event.LoggingReceive
 import pekko.pattern.ask
@@ -40,6 +41,8 @@ import pekko.stream.testkit.TestSubscriber
 import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
+
+import scala.collection.immutable
 
 trait ReadJournalOperations {
   def withCurrentPersistenceIds(within: FiniteDuration = 60.second)(f: TestSubscriber.Probe[String] => Unit): Unit
@@ -339,8 +342,8 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
   def withTags(payload: Any, tags: String*) = Tagged(payload, Set(tags: _*))
 
   def withDao(f: JournalDao => Unit)(implicit system: ActorSystem, ec: ExecutionContext, mat: Materializer): Unit = {
-    val fqcn = journalConfig.pluginConfig.dao
-    val args: Seq[(Class[_], AnyRef)] = Seq(
+    val fqcn: String = journalConfig.pluginConfig.dao
+    val args: immutable.Seq[(Class[_], AnyRef)] = immutable.Seq(
       (classOf[Database], db),
       (classOf[JdbcProfile], profile),
       (classOf[JournalConfig], journalConfig),

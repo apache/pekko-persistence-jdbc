@@ -83,7 +83,7 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
             log.info(s"batch $i - events from $start to $end")
             val atomicWrites =
               (start to end).map { j =>
-                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid)))
+                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid = writerUuid)))
               }
             dao.asyncWriteMessages(atomicWrites).map(_ => i)
           }

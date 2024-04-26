@@ -15,6 +15,7 @@
 package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko
+import org.apache.pekko.annotation.InternalApi
 import pekko.NotUsed
 import pekko.actor.Scheduler
 import pekko.persistence.PersistentRepr
@@ -38,7 +39,18 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
       toSequenceNr: Long,
       batchSize: Int,
       refreshInterval: Option[(FiniteDuration, Scheduler)]): Source[Try[(PersistentRepr, Long)], NotUsed] = {
+    internalBatchStream(persistenceId, fromSequenceNr, toSequenceNr, batchSize, refreshInterval).mapConcat(identity)
+  }
 
+  /**
+   * separate this method for unit tests.
+   */
+  @InternalApi
+  private[dao] def internalBatchStream(persistenceId: String,
+      fromSequenceNr: Long,
+      toSequenceNr: Long,
+      batchSize: Int,
+      refreshInterval: Option[(FiniteDuration, Scheduler)]) = {
     Source
       .unfoldAsync[(Long, FlowControl), Seq[Try[(PersistentRepr, Long)]]]((Math.max(1, fromSequenceNr), Continue)) {
         case (from, control) =>
@@ -81,7 +93,6 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
               pekko.pattern.after(delay, scheduler)(retrieveNextBatch())
           }
       }
-      .mapConcat(identity)
   }
 
 }

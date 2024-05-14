@@ -25,7 +25,7 @@ lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
-  .aggregate(core, docs, migrator)
+  .aggregate(core, docs, migrator, integration, migratorIntegration)
   .settings(
     name := "pekko-persistence-jdbc-root",
     publish / skip := true)

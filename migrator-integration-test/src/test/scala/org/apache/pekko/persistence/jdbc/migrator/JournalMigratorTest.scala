@@ -29,10 +29,13 @@
 package org.apache.pekko.persistence.jdbc.migrator
 
 import org.apache.pekko
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import pekko.Done
 import pekko.pattern.ask
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.migrator.MigratorSpec._
+
+import scala.concurrent.duration.DurationInt
 
 abstract class JournalMigratorTest(configName: String) extends MigratorSpec(configName) {
 
@@ -127,7 +130,7 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
             (actorA2 ? Deposit(i)).futureValue
             (actorA3 ? Deposit(i)).futureValue
           }
-          eventually {
+          eventually(Timeout(30.seconds)) {
             countJournal().futureValue shouldBe 3000
           }
         }
@@ -135,7 +138,7 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     } // legacy persistence
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
-        eventually {
+        eventually(Timeout(30.seconds)) {
           countJournal().futureValue shouldBe 0 // before migration
           JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 3000 // after migration

@@ -7,7 +7,7 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
-package org.apache.pekko.persistence.jdbc.integration
+package org.apache.pekko.persistence.jdbc.migrator.integration
 
 import org.apache.pekko
 import pekko.persistence.jdbc.migrator.MigratorSpec._

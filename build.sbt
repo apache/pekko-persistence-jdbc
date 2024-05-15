@@ -63,7 +63,7 @@ lazy val migratorIntegration = project
   .settings(name := "pekko-persistence-jdbc-migrator-integration", libraryDependencies ++= Dependencies.Libraries)
   .settings(publish / skip := true, doc / sources := Seq.empty, Test / fork := true)
   .disablePlugins(MimaPlugin, SitePlugin)
-  .dependsOn(migrator % "compile->compile;test->test")
+  .dependsOn(core % "compile->compile;test->test", migrator)
 
 lazy val themeSettings = Seq(
   pekkoParadoxGithub := Some("https://github.com/apache/pekko-persistence-jdbc"))

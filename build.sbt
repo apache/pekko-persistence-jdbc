@@ -25,7 +25,7 @@ lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
-  .aggregate(core, migrator, integration, docs)
+  .aggregate(core, migrator, docs)
   .settings(
     name := "pekko-persistence-jdbc-root",
     publish / skip := true)
@@ -63,7 +63,7 @@ lazy val migratorIntegration = project
   .settings(name := "pekko-persistence-jdbc-migrator-integration", libraryDependencies ++= Dependencies.Libraries)
   .settings(publish / skip := true, doc / sources := Seq.empty, Test / fork := true)
   .disablePlugins(MimaPlugin, SitePlugin)
-  .dependsOn(core % "compile->compile;test->test")
+  .dependsOn(migrator % "compile->compile;test->test")
 
 lazy val themeSettings = Seq(
   pekkoParadoxGithub := Some("https://github.com/apache/pekko-persistence-jdbc"))

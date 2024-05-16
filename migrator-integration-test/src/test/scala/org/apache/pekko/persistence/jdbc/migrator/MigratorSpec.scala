@@ -30,7 +30,7 @@ package org.apache.pekko.persistence.jdbc.migrator
 
 import com.typesafe.config.{ Config, ConfigFactory, ConfigValue, ConfigValueFactory }
 import org.apache.pekko
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{ stats, BeforeAndAfterEach }
 import org.slf4j.{ Logger, LoggerFactory }
 import pekko.actor.{ ActorRef, ActorSystem, Props, Stash }
 import pekko.event.LoggingReceive

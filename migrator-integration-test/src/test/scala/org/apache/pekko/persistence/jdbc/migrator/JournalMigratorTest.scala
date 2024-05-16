@@ -130,7 +130,7 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
             (actorA2 ? Deposit(i)).futureValue
             (actorA3 ? Deposit(i)).futureValue
           }
-          eventually(Timeout(30.seconds)) {
+          eventually {
             countJournal().futureValue shouldBe 3000
           }
         }
@@ -138,7 +138,7 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     } // legacy persistence
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
-        eventually(Timeout(30.seconds)) {
+        eventually {
           countJournal().futureValue shouldBe 0 // before migration
           JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 3000 // after migration

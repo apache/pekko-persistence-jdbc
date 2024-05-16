@@ -144,7 +144,9 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
   private def writeJournalRowsStatements(
       journalSerializedRow: JournalPekkoSerializationRow,
       tags: Set[String]): DBIO[Unit] = {
-    val journalInsert = newJournalQueries.JournalTable ++= Seq(journalSerializedRow)
+    val journalInsert: DBIO[Long] = newJournalQueries.JournalTable
+      .returning(newJournalQueries.JournalTable.map(_.ordering))
+      .forceInsert(journalSerializedRow)
 
     val tagInserts =
       newJournalQueries.TagTable ++= tags.map(tag => TagRow(journalSerializedRow.ordering, tag)).toSeq

@@ -49,7 +49,7 @@ jobs:
         run: sbt ++2.13 "integration/testOnly org.apache.pekko.persistence.jdbc.integration.Oracle*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
 
       - name: Run Migrator Integration tests for  ${{ matrix.name }}
-        run: sbt ++2.13 "migratorIntegration/testOnly org.apache.pekko.persistence.jdbc.migrator.integration.Oracle*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
+        run: sbt ++2.13 "migratorIntegration/testOnly org.apache.pekko.persistence.jdbc.migrator.integration.Oracle*" -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
 
       - name: Print logs on failure
         if: ${{ failure() }}

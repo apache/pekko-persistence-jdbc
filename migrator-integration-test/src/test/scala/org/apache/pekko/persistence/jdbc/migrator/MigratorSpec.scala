@@ -342,6 +342,7 @@ object MigratorSpec {
       tables.foreach { name =>
         withStatement(stmt => stmt.executeUpdate(s"""DELETE FROM "$name" """))(db)
       }
+      withStatement(stmt => stmt.executeUpdate("""BEGIN "reset_legacy_sequence"; END; """))(db)
       withStatement(stmt => stmt.executeUpdate("""BEGIN "reset_sequence"; END; """))(db)
     }
 

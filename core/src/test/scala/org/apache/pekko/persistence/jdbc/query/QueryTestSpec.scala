@@ -14,7 +14,6 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import com.typesafe.config.ConfigValue
 import org.apache.pekko
 import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem, Props, Stash, Status }
 import pekko.event.LoggingReceive
@@ -35,6 +34,7 @@ import pekko.stream.testkit.TestSubscriber
 import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
+import com.typesafe.config.ConfigValue
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 

@@ -45,7 +45,8 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
    * separate this method for unit tests.
    */
   @InternalApi
-  private[dao] def internalBatchStream(persistenceId: String,
+  private[dao] def internalBatchStream(
+      persistenceId: String,
       fromSequenceNr: Long,
       toSequenceNr: Long,
       batchSize: Int,

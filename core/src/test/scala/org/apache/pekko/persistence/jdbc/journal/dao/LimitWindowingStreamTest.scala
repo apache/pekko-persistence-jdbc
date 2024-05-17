@@ -19,15 +19,15 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 import org.apache.pekko
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
-import org.slf4j.LoggerFactory
 import pekko.persistence.jdbc.journal.dao.LimitWindowingStreamTest.fetchSize
 import pekko.persistence.jdbc.query.{ H2Cleaner, QueryTestSpec }
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
+import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.slf4j.LoggerFactory
 
 import java.util.UUID
 import scala.collection.immutable

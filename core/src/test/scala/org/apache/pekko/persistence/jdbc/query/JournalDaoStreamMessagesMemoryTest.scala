@@ -14,18 +14,19 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
+import java.lang.management.{ ManagementFactory, MemoryMXBean }
+import java.util.UUID
+
 import org.apache.pekko
-import org.scalatest.concurrent.PatienceConfiguration.Timeout
-import org.slf4j.LoggerFactory
 import pekko.persistence.jdbc.query.JournalDaoStreamMessagesMemoryTest.fetchSize
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
+import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.slf4j.LoggerFactory
 
-import java.lang.management.{ ManagementFactory, MemoryMXBean }
-import java.util.UUID
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._

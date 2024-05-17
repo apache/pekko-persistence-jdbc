@@ -8,9 +8,6 @@ DROP TABLE "journal" CASCADE CONSTRAINT
 DROP TABLE "legacy_snapshot" CASCADE CONSTRAINT
 /
 
-DROP TABLE "deleted_to" CASCADE CONSTRAINT
-/
-
 DROP TRIGGER "ordering_seq_trigger"
 /
 

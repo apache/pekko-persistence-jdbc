@@ -19,5 +19,4 @@ class MySQLJournalMigratorTest extends JournalMigratorTest("mysql-application.co
 
 class OracleJournalMigratorTest extends JournalMigratorTest("oracle-application.conf") with OracleCleaner
 
-// ignore this because SQLServer didn't support Slick forceInsert
-// class SqlServerJournalMigratorTest extends JournalMigratorTest("sqlserver-application.conf") with SqlServerCleaner
+class SqlServerJournalMigratorTest extends JournalMigratorTest("sqlserver-application.conf") with SqlServerCleaner

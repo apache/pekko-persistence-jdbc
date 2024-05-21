@@ -1,5 +1,0 @@
-DROP TABLE IF EXISTS PUBLIC."event_tag";
-DROP TABLE IF EXISTS PUBLIC."event_journal";
-DROP TABLE IF EXISTS PUBLIC."snapshot";
-DROP TABLE IF EXISTS PUBLIC."durable_state";
-DROP SEQUENCE IF EXISTS PUBLIC."global_offset_seq";

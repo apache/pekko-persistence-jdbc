@@ -22,6 +22,8 @@ import pekko.persistence.query.Offset
 import pekko.persistence.query.{ EventEnvelope, Sequence }
 import pekko.testkit.TestProbe
 
+import scala.concurrent.Future
+
 abstract class CurrentEventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps
 
@@ -216,6 +218,42 @@ abstract class CurrentEventsByPersistenceIdTest(config: String) extends QueryTes
           .expectNextEventEnvelope(pid, 2, 2)
           .expectNextEventEnvelope(pid, 3, 3)
           .expectComplete()
+      }
+    }
+  }
+
+  it should "return event when has been archived more than batch size" in withActorSystem { implicit system =>
+    import pekko.pattern.ask
+    import system.dispatcher
+    import scala.concurrent.duration._
+
+    val journalOps = new JavaDslJdbcReadJournalOperations(system)
+    val batchSize = readJournalConfig.maxBufferSize
+    withTestActors(replyToMessages = true) { (actor1, _, _) =>
+      def sendMessages(numberOfMessages: Int): Future[Done] = {
+        val futures = for (i <- 1 to numberOfMessages) yield {
+          actor1 ? i
+        }
+        Future.sequence(futures).map(_ => Done)
+      }
+
+      val numberOfEvents = batchSize << 2
+      val archiveEventSum = numberOfEvents >> 1
+      val batch = sendMessages(numberOfEvents)
+
+      // wait for acknowledgement of the batch
+      batch.futureValue
+
+      // and then archive some of event(delete it).
+      val deleteBatch = for (i <- 1 to archiveEventSum) yield {
+        actor1 ? DeleteCmd(i)
+      }
+      // blocking until all delete commands are processed
+      Future.sequence(deleteBatch).futureValue
+
+      journalOps.withCurrentEventsByPersistenceId()("my-1", 0, Long.MaxValue) { tp =>
+        val allEvents = tp.toStrict(atMost = 10.seconds)
+        allEvents.size shouldBe (numberOfEvents - archiveEventSum)
       }
     }
   }

@@ -15,30 +15,33 @@
 package org.apache.pekko.persistence.jdbc.query
 
 import org.apache.pekko
-import pekko.actor.{ ActorRef, ActorSystem, Props, Stash, Status }
-import pekko.pattern.ask
+import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem, Props, Stash, Status }
 import pekko.event.LoggingReceive
-import pekko.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
+import pekko.pattern.ask
 import pekko.persistence.jdbc.SingleActorSystemPerTestSpec
+import pekko.persistence.jdbc.config.JournalConfig
+import pekko.persistence.jdbc.journal.dao.JournalDao
 import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent, TaggedEvent }
 import pekko.persistence.jdbc.query.javadsl.{ JdbcReadJournal => JavaJdbcReadJournal }
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
+import pekko.persistence.jdbc.testkit.internal._
 import pekko.persistence.journal.Tagged
 import pekko.persistence.query.{ EventEnvelope, Offset, PersistenceQuery }
+import pekko.persistence.{ DeleteMessagesFailure, DeleteMessagesSuccess, PersistentActor }
+import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.scaladsl.Sink
 import pekko.stream.testkit.TestSubscriber
 import pekko.stream.testkit.javadsl.{ TestSink => JavaSink }
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
 import com.typesafe.config.ConfigValue
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.collection.immutable
 import scala.concurrent.duration.{ FiniteDuration, _ }
-import pekko.persistence.jdbc.testkit.internal.H2
-import pekko.persistence.jdbc.testkit.internal.MySQL
-import pekko.persistence.jdbc.testkit.internal.Oracle
-import pekko.persistence.jdbc.testkit.internal.Postgres
-import pekko.persistence.jdbc.testkit.internal.SqlServer
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success }
 
 trait ReadJournalOperations {
   def withCurrentPersistenceIds(within: FiniteDuration = 60.second)(f: TestSubscriber.Probe[String] => Unit): Unit
@@ -336,6 +339,23 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
   }
 
   def withTags(payload: Any, tags: String*) = Tagged(payload, Set(tags: _*))
+
+  def withDao(f: JournalDao => Unit)(implicit system: ActorSystem, ec: ExecutionContext, mat: Materializer): Unit = {
+    val fqcn: String = journalConfig.pluginConfig.dao
+    val args: immutable.Seq[(Class[_], AnyRef)] = immutable.Seq(
+      (classOf[Database], db),
+      (classOf[JdbcProfile], profile),
+      (classOf[JournalConfig], journalConfig),
+      (classOf[Serialization], SerializationExtension(system)),
+      (classOf[ExecutionContext], ec),
+      (classOf[Materializer], mat))
+    val journalDao: JournalDao =
+      system.asInstanceOf[ExtendedActorSystem].dynamicAccess.createInstanceFor[JournalDao](fqcn, args) match {
+        case Success(dao)   => dao
+        case Failure(cause) => throw cause
+      }
+    f(journalDao)
+  }
 
 }
 

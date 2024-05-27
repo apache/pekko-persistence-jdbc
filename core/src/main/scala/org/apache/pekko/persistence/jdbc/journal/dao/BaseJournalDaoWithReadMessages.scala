@@ -17,14 +17,14 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.Scheduler
+import pekko.annotation.InternalApi
 import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.journal.dao.FlowControl.{ Continue, ContinueDelayed, Stop }
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Sink, Source }
 
-import scala.collection.immutable.Seq
-import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
@@ -38,13 +38,29 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
       toSequenceNr: Long,
       batchSize: Int,
       refreshInterval: Option[(FiniteDuration, Scheduler)]): Source[Try[(PersistentRepr, Long)], NotUsed] = {
+    internalBatchStream(persistenceId, fromSequenceNr, toSequenceNr, batchSize, refreshInterval).mapConcat(identity)
+  }
 
+  /**
+   * separate this method for unit tests.
+   */
+  @InternalApi
+  private[dao] def internalBatchStream(
+      persistenceId: String,
+      fromSequenceNr: Long,
+      toSequenceNr: Long,
+      batchSize: Int,
+      refreshInterval: Option[(FiniteDuration, Scheduler)]) = {
     Source
       .unfoldAsync[(Long, FlowControl), Seq[Try[(PersistentRepr, Long)]]]((Math.max(1, fromSequenceNr), Continue)) {
         case (from, control) =>
+          def limitWindow(from: Long): Long = {
+            math.min(from + batchSize, toSequenceNr)
+          }
+
           def retrieveNextBatch(): Future[Option[((Long, FlowControl), Seq[Try[(PersistentRepr, Long)]])]] = {
             for {
-              xs <- messages(persistenceId, from, toSequenceNr, batchSize).runWith(Sink.seq)
+              xs <- messages(persistenceId, from, limitWindow(from), batchSize).runWith(Sink.seq)
             } yield {
               val hasMoreEvents = xs.size == batchSize
               // Events are ordered by sequence number, therefore the last one is the largest)
@@ -77,7 +93,6 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
               pekko.pattern.after(delay, scheduler)(retrieveNextBatch())
           }
       }
-      .mapConcat(identity(_))
   }
 
 }

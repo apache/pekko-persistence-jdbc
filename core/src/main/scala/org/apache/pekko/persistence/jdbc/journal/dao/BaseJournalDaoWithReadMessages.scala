@@ -19,7 +19,7 @@ import pekko.NotUsed
 import pekko.actor.Scheduler
 import pekko.annotation.InternalApi
 import pekko.persistence.PersistentRepr
-import pekko.persistence.jdbc.journal.dao.FlowControl.{ Continue, ContinueDelayed, Fallback, Stop }
+import pekko.persistence.jdbc.journal.dao.FlowControl.{ Continue, ContinueDelayed, Stop }
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Sink, Source }
 
@@ -55,20 +55,18 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
     Source
       .unfoldAsync[(Long, FlowControl), Seq[Try[(PersistentRepr, Long)]]]((firstSequenceVer, Continue)) {
         case (from, control) =>
-          def limitWindow(from: Long)(implicit fallback: Boolean): Long = {
-            if (fallback || batchSize <= 0 || (Long.MaxValue - batchSize) < from) {
+          def limitWindow(from: Long): Long = {
+            if (from == firstSequenceVer || batchSize <= 0 || (Long.MaxValue - batchSize) < from) {
               toSequenceNr
             } else {
               Math.min(from + batchSize, toSequenceNr)
             }
           }
 
-          def retrieveNextBatch(implicit fallback: Boolean = false)
-              : Future[Option[((Long, FlowControl), Seq[Try[(PersistentRepr, Long)]])]] = {
+          def retrieveNextBatch(): Future[Option[((Long, FlowControl), Seq[Try[(PersistentRepr, Long)]])]] = {
             for {
               xs <- messages(persistenceId, from, limitWindow(from), batchSize).runWith(Sink.seq)
             } yield {
-              val isEmptyEvents = xs.isEmpty
               val hasMoreEvents = xs.size == batchSize
               // Events are ordered by sequence number, therefore the last one is the largest)
               val lastSeqNrInBatch: Option[Long] = xs.lastOption match {
@@ -80,7 +78,6 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
               val nextControl: FlowControl =
                 if (hasLastEvent || from > toSequenceNr) Stop
                 else if (hasMoreEvents) Continue
-                else if (isEmptyEvents && from == firstSequenceVer) Fallback
                 else if (refreshInterval.isEmpty) Stop
                 else ContinueDelayed
 
@@ -99,7 +96,6 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
             case ContinueDelayed =>
               val (delay, scheduler) = refreshInterval.get
               pekko.pattern.after(delay, scheduler)(retrieveNextBatch())
-            case Fallback => retrieveNextBatch(fallback = true)
           }
       }
   }

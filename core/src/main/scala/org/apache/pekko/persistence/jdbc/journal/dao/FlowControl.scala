@@ -27,11 +27,6 @@ private[jdbc] object FlowControl {
    */
   case object ContinueDelayed extends FlowControl
 
-  /**
-   * if the limited windows unable query anything, then fallback to full windows.
-   */
-  case object Fallback extends FlowControl
-
   /** Stop querying - used when we reach the desired offset */
   case object Stop extends FlowControl
 }

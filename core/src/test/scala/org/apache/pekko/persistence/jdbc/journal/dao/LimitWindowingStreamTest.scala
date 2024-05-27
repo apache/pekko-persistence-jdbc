@@ -50,7 +50,8 @@ abstract class LimitWindowingStreamTest(configFile: String)
     implicit val mat: Materializer = SystemMaterializer(system).materializer
 
     val persistenceId = UUID.randomUUID().toString
-    val payload = 'a'.toByte
+    val writerUuid = UUID.randomUUID().toString
+    val payload = Array.fill(16)('a'.toByte)
     val eventsPerBatch = 1000
     val numberOfInsertBatches = 16
     val totalMessages = numberOfInsertBatches * eventsPerBatch
@@ -58,14 +59,14 @@ abstract class LimitWindowingStreamTest(configFile: String)
     withDao { dao =>
       val lastInsert =
         Source
-          .fromIterator(() => (1 to numberOfInsertBatches).toIterator)
+          .fromIterator(() => (1 to numberOfInsertBatches).iterator)
           .mapAsync(1) { i =>
             val end = i * eventsPerBatch
             val start = end - (eventsPerBatch - 1)
-            log.info(s"batch $i (events from $start to $end")
+            log.info(s"batch $i - events from $start to $end")
             val atomicWrites =
               (start to end).map { j =>
-                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId)))
+                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid = writerUuid)))
               }
             dao.asyncWriteMessages(atomicWrites).map(_ => i)
           }

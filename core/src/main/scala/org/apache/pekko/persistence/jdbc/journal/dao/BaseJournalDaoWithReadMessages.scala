@@ -51,12 +51,12 @@ trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
       toSequenceNr: Long,
       batchSize: Int,
       refreshInterval: Option[(FiniteDuration, Scheduler)]) = {
-    val firstSequenceVer: Long = Math.max(1, fromSequenceNr)
+    val firstSequenceNr: Long = Math.max(1, fromSequenceNr)
     Source
-      .unfoldAsync[(Long, FlowControl), Seq[Try[(PersistentRepr, Long)]]]((firstSequenceVer, Continue)) {
+      .unfoldAsync[(Long, FlowControl), Seq[Try[(PersistentRepr, Long)]]]((firstSequenceNr, Continue)) {
         case (from, control) =>
           def limitWindow(from: Long): Long = {
-            if (from == firstSequenceVer || batchSize <= 0 || (Long.MaxValue - batchSize) < from) {
+            if (from == firstSequenceNr || batchSize <= 0 || (Long.MaxValue - batchSize) < from) {
               toSequenceNr
             } else {
               Math.min(from + batchSize, toSequenceNr)

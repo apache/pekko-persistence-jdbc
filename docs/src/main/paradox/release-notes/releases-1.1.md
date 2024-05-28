@@ -18,8 +18,8 @@ As with all milestone releases, this release is not recommended for production u
 
 ### Changes
 
-* improve journal deletion performance ([PR180](https://github.com/apache/pekko-persistence-jdbc/pull/169))
-* avoid large offset query via limit windowing ([PR169](https://github.com/apache/pekko-persistence-jdbc/pull/180))
+* improve journal deletion performance ([PR169](https://github.com/apache/pekko-persistence-jdbc/pull/169))
+* avoid large offset query via limit windowing ([PR180](https://github.com/apache/pekko-persistence-jdbc/pull/180))
 
 ### Dependency Upgrades
 

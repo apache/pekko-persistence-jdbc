@@ -93,8 +93,6 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
   private[query] lazy val journalSequenceActor = system.systemActorOf(
     JournalSequenceActor.props(readJournalDao, readJournalConfig.journalSequenceRetrievalConfiguration),
     s"$configPath.pekko-persistence-jdbc-journal-sequence-actor")
-  private val delaySource =
-    Source.tick(0.seconds, readJournalConfig.refreshInterval, 0).take(1)
 
   /**
    * Same type of query as `persistenceIds` but the event stream
@@ -119,7 +117,8 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
   override def persistenceIds(): Source[String, NotUsed] =
     Source
       .repeat(0)
-      .flatMapConcat(_ => delaySource.flatMapConcat(_ => currentPersistenceIds()))
+      .throttle(1, readJournalConfig.refreshInterval)
+      .flatMapConcat(_ => currentPersistenceIds())
       .statefulMapConcat[String] { () =>
         var knownIds = Set.empty[String]
         def next(id: String): Iterable[String] = {

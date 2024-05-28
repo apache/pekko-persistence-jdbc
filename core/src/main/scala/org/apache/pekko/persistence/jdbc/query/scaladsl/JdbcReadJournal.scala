@@ -26,8 +26,9 @@ import pekko.persistence.query.scaladsl._
 import pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
 import pekko.persistence.{ Persistence, PersistentRepr }
 import pekko.serialization.{ Serialization, SerializationExtension }
+import pekko.stream.impl.Throttle
 import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.stream.{ Materializer, SystemMaterializer, ThrottleMode }
 import pekko.util.Timeout
 import com.typesafe.config.Config
 import slick.jdbc.JdbcBackend._
@@ -117,7 +118,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
   override def persistenceIds(): Source[String, NotUsed] =
     Source
       .repeat(0)
-      .throttle(1, readJournalConfig.refreshInterval)
+      .throttle(1, readJournalConfig.refreshInterval, Throttle.AutomaticMaximumBurst, ThrottleMode.Shaping)
       .flatMapConcat(_ => currentPersistenceIds())
       .statefulMapConcat[String] { () =>
         var knownIds = Set.empty[String]

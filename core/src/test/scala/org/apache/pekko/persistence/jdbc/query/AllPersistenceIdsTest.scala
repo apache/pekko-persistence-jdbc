@@ -14,12 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
-
 import scala.concurrent.duration._
 
-abstract class AllPersistenceIdsTest(config: String, configOverrides: Map[String, ConfigValue] = Map.empty)
-    extends QueryTestSpec(config, configOverrides) {
+abstract class AllPersistenceIdsTest(config: String) extends QueryTestSpec(config) {
   it should "not terminate the stream when there are not pids" in withActorSystem { implicit system =>
     val journalOps = new ScalaJdbcReadJournalOperations(system)
     journalOps.withPersistenceIds() { tp =>
@@ -65,11 +62,4 @@ abstract class AllPersistenceIdsTest(config: String, configOverrides: Map[String
   }
 }
 
-class H2ScalaAllPersistenceIdsTest
-    extends AllPersistenceIdsTest("h2-application.conf", H2ScalaAllPersistenceIdsTest.configOverrides) with H2Cleaner
-
-object H2ScalaAllPersistenceIdsTest {
-  val refreshInterval: FiniteDuration = 100.millis
-  val configOverrides: Map[String, ConfigValue] =
-    Map("jdbc-read-journal.refresh-interval" -> ConfigValueFactory.fromAnyRef(refreshInterval.toString()))
-}
+class H2ScalaAllPersistenceIdsTest extends AllPersistenceIdsTest("h2-application.conf") with H2Cleaner

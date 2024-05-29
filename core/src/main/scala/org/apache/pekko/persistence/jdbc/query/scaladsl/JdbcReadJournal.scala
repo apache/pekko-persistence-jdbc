@@ -27,7 +27,7 @@ import pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
 import pekko.persistence.{ Persistence, PersistentRepr }
 import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.stream.{ Materializer, OverflowStrategy, SystemMaterializer }
+import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.Timeout
 import com.typesafe.config.Config
 import slick.jdbc.JdbcBackend._
@@ -93,6 +93,8 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
   private[query] lazy val journalSequenceActor = system.systemActorOf(
     JournalSequenceActor.props(readJournalDao, readJournalConfig.journalSequenceRetrievalConfiguration),
     s"$configPath.pekko-persistence-jdbc-journal-sequence-actor")
+  private val delaySource =
+    Source.tick(readJournalConfig.refreshInterval, readJournalConfig.refreshInterval, 0).take(1)
 
   /**
    * Same type of query as `persistenceIds` but the event stream
@@ -117,9 +119,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
   override def persistenceIds(): Source[String, NotUsed] =
     Source
       .repeat(0)
-      .buffer(1, OverflowStrategy.backpressure)
-      .throttle(1, readJournalConfig.refreshInterval)
-      .flatMapConcat(_ => currentPersistenceIds())
+      .flatMapConcat(_ => delaySource.flatMapConcat(_ => currentPersistenceIds()))
       .statefulMapConcat[String] { () =>
         var knownIds = Set.empty[String]
         def next(id: String): Iterable[String] = {

@@ -37,6 +37,9 @@ lazy val core = project
   .settings(
     name := "pekko-persistence-jdbc",
     libraryDependencies ++= Dependencies.Libraries,
+    // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
+    // See: https://github.com/slick/slick/issues/2933
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     mimaReportSignatureProblems := true,
     mimaPreviousArtifacts := Set(
       organization.value %% name.value % mimaCompareVersion))

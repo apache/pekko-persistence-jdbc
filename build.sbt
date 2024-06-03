@@ -36,13 +36,13 @@ lazy val core = project
   .disablePlugins(SitePlugin)
   .settings(
     name := "pekko-persistence-jdbc",
-    libraryDependencies ++= Dependencies.Libraries,
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
     // See: https://github.com/slick/slick/issues/2933
     libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, _)) => Seq("org.scala-lang" % "scala-reflect" % scalaVersion.value)
       case _            => Nil
     }),
+    libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
     mimaPreviousArtifacts := Set(
       organization.value %% name.value % mimaCompareVersion))

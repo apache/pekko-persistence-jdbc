@@ -8,7 +8,7 @@ The Apache Pekko Persistence JDBC plugin allows for using JDBC-compliant databas
 
 * [Overview](overview.md)
 * [Configuration](configuration.md)
-* [Release Notes](release-notes.md)
+* [Release Notes](release-notes/index.md)
 * [Migration](migration.md)
 * [Query](query.md)
 * [Custom DAO](custom-dao.md)

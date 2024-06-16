@@ -53,11 +53,8 @@ class JdbcSnapshotStore(config: Config) extends SnapshotStore {
     val fqcn = snapshotConfig.pluginConfig.dao
     val profile: JdbcProfile = slickDb.profile
     val args = Seq(
-      (classOf[Database], db),
-      (classOf[JdbcProfile], profile),
-      (classOf[SnapshotConfig], snapshotConfig),
-      (classOf[Serialization], SerializationExtension(system)),
-      (classOf[ExecutionContext], ec),
+      (classOf[Database], db), (classOf[JdbcProfile], profile), (classOf[SnapshotConfig], snapshotConfig),
+      (classOf[Serialization], SerializationExtension(system)), (classOf[ExecutionContext], ec),
       (classOf[Materializer], mat))
     system.asInstanceOf[ExtendedActorSystem].dynamicAccess.createInstanceFor[SnapshotDao](fqcn, args) match {
       case Success(dao)   => dao

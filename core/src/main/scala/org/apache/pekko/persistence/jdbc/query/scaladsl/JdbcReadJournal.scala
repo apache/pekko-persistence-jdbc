@@ -77,11 +77,8 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
     val fqcn = readJournalConfig.pluginConfig.dao
     val profile: JdbcProfile = slickDb.profile
     val args = Seq(
-      (classOf[Database], db),
-      (classOf[JdbcProfile], profile),
-      (classOf[ReadJournalConfig], readJournalConfig),
-      (classOf[Serialization], SerializationExtension(system)),
-      (classOf[ExecutionContext], ec),
+      (classOf[Database], db), (classOf[JdbcProfile], profile), (classOf[ReadJournalConfig], readJournalConfig),
+      (classOf[Serialization], SerializationExtension(system)), (classOf[ExecutionContext], ec),
       (classOf[Materializer], mat))
     system.dynamicAccess.createInstanceFor[ReadJournalDao](fqcn, args) match {
       case Success(dao)   => dao

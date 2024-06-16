@@ -66,11 +66,8 @@ class JdbcAsyncWriteJournal(config: Config) extends AsyncWriteJournal {
     val fqcn = journalConfig.pluginConfig.dao
     val profile: JdbcProfile = slickDb.profile
     val args = Seq(
-      (classOf[Database], db),
-      (classOf[JdbcProfile], profile),
-      (classOf[JournalConfig], journalConfig),
-      (classOf[Serialization], SerializationExtension(system)),
-      (classOf[ExecutionContext], ec),
+      (classOf[Database], db), (classOf[JdbcProfile], profile), (classOf[JournalConfig], journalConfig),
+      (classOf[Serialization], SerializationExtension(system)), (classOf[ExecutionContext], ec),
       (classOf[Materializer], mat))
     system.asInstanceOf[ExtendedActorSystem].dynamicAccess.createInstanceFor[JournalDao](fqcn, args) match {
       case Success(dao)   => dao

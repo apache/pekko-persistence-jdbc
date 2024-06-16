@@ -57,7 +57,8 @@ import slick.sql.SqlStreamingAction
   import profile.api._
 
   def getSequenceNextValueExpr() =
-    sql"""SELECT nextval(pg_get_serial_sequence('#${durableStateTableCfg.tableName}', '#${durableStateTableCfg.columnNames.globalOffset}'))""".as[
+    sql"""SELECT nextval(pg_get_serial_sequence('#${durableStateTableCfg.tableName}', '#${durableStateTableCfg
+        .columnNames.globalOffset}'))""".as[
       String]
 }
 
@@ -84,6 +85,7 @@ import slick.sql.SqlStreamingAction
   import profile.api._
 
   def getSequenceNextValueExpr() =
-    sql"""SELECT #${durableStateTableCfg.tableName}__#${durableStateTableCfg.columnNames.globalOffset}_SEQ.nextval FROM DUAL""".as[
+    sql"""SELECT #${durableStateTableCfg.tableName}__#${durableStateTableCfg.columnNames
+        .globalOffset}_SEQ.nextval FROM DUAL""".as[
       String]
 }

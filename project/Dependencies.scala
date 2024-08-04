@@ -28,7 +28,7 @@ object Dependencies {
     "com.h2database" % "h2" % "2.2.224",
     "com.mysql" % "mysql-connector-j" % "9.0.0",
     "com.microsoft.sqlserver" % "mssql-jdbc" % "12.8.0.jre8",
-    "com.oracle.database.jdbc" % "ojdbc8" % "23.4.0.24.05")
+    "com.oracle.database.jdbc" % "ojdbc8" % "23.5.0.24.07")
 
   val Libraries: Seq[ModuleID] = Seq(
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,
@@ -44,6 +44,6 @@ object Dependencies {
   val Migration: Seq[ModuleID] = Seq(
     "com.typesafe" % "config" % "1.4.3",
     "ch.qos.logback" % "logback-classic" % LogbackVersion,
-    "org.testcontainers" % "postgresql" % "1.20.0" % Test,
+    "org.testcontainers" % "postgresql" % "1.20.1" % Test,
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Provided)
 }

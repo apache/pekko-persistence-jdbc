@@ -27,7 +27,7 @@ object Dependencies {
     "org.postgresql" % "postgresql" % "42.7.3",
     "com.h2database" % "h2" % "2.2.224",
     "com.mysql" % "mysql-connector-j" % "9.0.0",
-    "com.microsoft.sqlserver" % "mssql-jdbc" % "12.6.3.jre8",
+    "com.microsoft.sqlserver" % "mssql-jdbc" % "12.8.0.jre8",
     "com.oracle.database.jdbc" % "ojdbc8" % "23.5.0.24.07")
 
   val Libraries: Seq[ModuleID] = Seq(

@@ -1,9 +1,8 @@
 # Release Notes (1.1.x)
 
-## 1.1.0-M1
+## 1.1.0
 
-Release notes for Apache Pekko Persistence JDBC 1.1.0-M1. See [GitHub Milestone](https://github.com/apache/pekko-persistence-jdbc/milestone/1?closed=1) for fuller list of changes.
-As with all milestone releases, this release is not recommended for production use - it is designed to allow users to try out the changes in a test environment.
+Release notes for Apache Pekko Persistence JDBC 1.1.0. See [GitHub Milestone](https://github.com/apache/pekko-persistence-jdbc/milestone/1?closed=1) for a fuller list of changes.
 
 ### Bug Fixes
 
@@ -26,6 +25,7 @@ As with all milestone releases, this release is not recommended for production u
 * slick 3.5.1
 
 We upgraded the JDBC jars for the various databases that we test with. 
+
 * postgresql 42.7
 * mysql 8.4
 * sql server 12.6

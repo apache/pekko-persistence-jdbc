@@ -88,10 +88,10 @@ lazy val docs = project
       // Slick
       "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",
       // Pekko
-      "extref.pekko.base_url" -> "https://pekko.apache.org/docs/pekko/current/%s",
+      "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/${PekkoCoreDependency.default.link}/%s",
       "scaladoc.base_url" -> "https://pekko.apache.org/api/pekko-persistence-jdbc/current/",
-      "scaladoc.org.apache.pekko.base_url" -> "https://pekko.apache.org/api/pekko/current/",
-      "javadoc.org.apache.pekko.base_url" -> "https://pekko.apache.org/japi/pekko/current/",
+      "scaladoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${PekkoCoreDependency.default.link}/",
+      "javadoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${PekkoCoreDependency.default.link}/",
       "javadoc.org.apache.pekko.link_style" -> "direct",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",

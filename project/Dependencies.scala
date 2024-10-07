@@ -34,6 +34,7 @@ object Dependencies {
     "org.apache.pekko" %% "pekko-persistence-query" % PekkoVersion,
     "com.typesafe.slick" %% "slick" % SlickVersion,
     "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
+    "com.zaxxer" % "HikariCP" % "6.0.0",
     "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
     "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion % Test,
     "org.apache.pekko" %% "pekko-persistence-tck" % PekkoVersion % Test,

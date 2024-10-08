@@ -7,6 +7,7 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
+import com.github.pjfanning.pekkobuild._
 import com.lightbend.paradox.apidoc.ApidocPlugin.autoImport.apidocRootPackage
 import org.apache.pekko.PekkoParadoxPlugin.autoImport._
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
@@ -18,7 +19,6 @@ sourceDistIncubating := false
 
 val mimaCompareVersion = "1.0.0"
 
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val `pekko-persistence-jdbc` = project
@@ -34,6 +34,11 @@ lazy val core = project
   .in(file("core"))
   .enablePlugins(MimaPlugin, ReproducibleBuildsPlugin)
   .disablePlugins(SitePlugin)
+  .addPekkoModuleDependency("pekko-persistence-query", "", PekkoCoreDependency.default)
+  .addPekkoModuleDependency("pekko-slf4j", "test", PekkoCoreDependency.default)
+  .addPekkoModuleDependency("pekko-persistence-tck", "test", PekkoCoreDependency.default)
+  .addPekkoModuleDependency("pekko-stream-testkit", "test", PekkoCoreDependency.default)
+  .addPekkoModuleDependency("pekko-testkit", "test", PekkoCoreDependency.default)
   .settings(
     name := "pekko-persistence-jdbc",
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
@@ -109,7 +114,6 @@ lazy val docs = project
       "scaladoc.scala.base_url" -> s"https://www.scala-lang.org/api/${scalaBinaryVersion.value}.x/",
       "scaladoc.org.apache.pekko.persistence.jdbc.base_url" -> s"/${(Preprocess / siteSubdirName).value}/"),
     paradoxGroups := Map("Language" -> Seq("Java", "Scala")),
-    resolvers += Resolver.jcenterRepo,
     apidocRootPackage := "org.apache.pekko")
   .settings(themeSettings)
 

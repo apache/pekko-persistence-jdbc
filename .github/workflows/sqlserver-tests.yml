@@ -46,11 +46,11 @@ jobs:
         run: ./scripts/launch-sqlserver.sh
 
       - name: Run Integration tests for  ${{ matrix.name }}
-        run: sbt ++2.13 "integration/testOnly org.apache.pekko.persistence.jdbc.integration.SqlServer*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
+        run: sbt -Dpekko.build.pekko.version=main ++2.13 "integration/testOnly org.apache.pekko.persistence.jdbc.integration.SqlServer*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
 
       - name: Run Migrator Integration tests for  ${{ matrix.name }}
         if: matrix.name == 'SqlServer'
-        run: sbt ++2.13 "migratorIntegration/testOnly org.apache.pekko.persistence.jdbc.migrator.integration.SqlServer*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
+        run: sbt -Dpekko.build.pekko.version=main ++2.13 "migratorIntegration/testOnly org.apache.pekko.persistence.jdbc.migrator.integration.SqlServer*"  ${{ matrix.extraOpts }} -J-XX:+UnlockExperimentalVMOptions -J-XX:+UseJVMCICompiler
 
       - name: Print logs on failure
         if: ${{ failure() }}

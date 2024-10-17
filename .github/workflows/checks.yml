@@ -67,7 +67,7 @@ jobs:
 
       - name: Compile all code with fatal warnings for Java 11, Scala 2.12, Scala 2.13 and Scala 3
         # Run locally with: sbt 'clean ; +Test/compile'
-        run: sbt "; +Test/compile"
+        run: sbt -Dpekko.build.pekko.version=main "; +Test/compile"
 
   check-docs:
     name: Check Docs

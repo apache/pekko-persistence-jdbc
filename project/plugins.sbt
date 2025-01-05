@@ -16,7 +16,7 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-java-formatter" % "0.8.0")
 // release
 addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.1.0")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.32")
-addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.4.1")
+addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.4.2")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.12")
 // docs
 addSbtPlugin(("com.github.sbt" % "sbt-site-paradox" % "1.7.0").excludeAll(

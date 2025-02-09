@@ -110,6 +110,13 @@ class ScalaJdbcReadJournalOperations(readJournal: JdbcReadJournal)(implicit syst
     tp.within(within)(f(tp))
   }
 
+  def currentLastKnownSequenceNumberByPersistenceId(
+      persistenceId: String
+  ): Future[Option[Long]] = {
+
+    readJournal.currentLastKnownSequenceNumberByPersistenceId(persistenceId)
+  }
+
   override def countJournal: Future[Long] =
     readJournal
       .currentPersistenceIds()

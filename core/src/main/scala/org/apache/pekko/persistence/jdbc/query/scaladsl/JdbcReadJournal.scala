@@ -52,7 +52,8 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
     with CurrentEventsByPersistenceIdQuery
     with EventsByPersistenceIdQuery
     with CurrentEventsByTagQuery
-    with EventsByTagQuery {
+    with EventsByTagQuery
+    with CurrentLastKnownSequenceNumberByPersistenceIdQuery {
 
   PluginVersionChecker.check()
 
@@ -317,4 +318,11 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
 
   def eventsByTag(tag: String, offset: Long): Source[EventEnvelope, NotUsed] =
     eventsByTag(tag, offset, terminateAfterOffset = None)
+
+  override def currentLastKnownSequenceNumberByPersistenceId(
+    persistenceId: String
+  ): Future[Option[Long]] = {
+    
+    readJournalDao.lastPersistenceIdSequenceNumber(persistenceId)
+  }
 }

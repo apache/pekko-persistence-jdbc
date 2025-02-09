@@ -15,11 +15,17 @@
 package org.apache.pekko.persistence.jdbc.query.javadsl
 
 import org.apache.pekko
+
+import java.util.Optional
+import java.util.concurrent.CompletionStage
+
 import pekko.NotUsed
 import pekko.persistence.jdbc.query.scaladsl.{ JdbcReadJournal => ScalaJdbcReadJournal }
 import pekko.persistence.query.{ EventEnvelope, Offset }
 import pekko.persistence.query.javadsl._
 import pekko.stream.javadsl.Source
+import pekko.util.FutureConverters._
+import pekko.util.OptionConverters._
 
 object JdbcReadJournal {
   final val Identifier = ScalaJdbcReadJournal.Identifier
@@ -32,7 +38,8 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
     with CurrentEventsByPersistenceIdQuery
     with EventsByPersistenceIdQuery
     with CurrentEventsByTagQuery
-    with EventsByTagQuery {
+    with EventsByTagQuery
+    with CurrentLastKnownSequenceNumberByPersistenceIdQuery {
 
   /**
    * Same type of query as `persistenceIds` but the event stream
@@ -132,4 +139,14 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
    */
   override def eventsByTag(tag: String, offset: Offset): Source[EventEnvelope, NotUsed] =
     journal.eventsByTag(tag, offset).asJava
+
+  override def currentLastKnownSequenceNumberByPersistenceId(
+      persistenceId: String
+  ): CompletionStage[Optional[Long]] = {
+
+    journal
+      .currentLastKnownSequenceNumberByPersistenceId(persistenceId)
+      .asJava
+      .thenApply(_.toJava)
+  }
 }

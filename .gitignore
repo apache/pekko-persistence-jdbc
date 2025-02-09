@@ -11,5 +11,13 @@ target
 .bsp
 *.code-workspace
 .bloop
-.metals
 dumps
+
+# Metals
+.bloop
+.metals
+metals.sbt
+project/project
+
+# VS Code
+.vscode

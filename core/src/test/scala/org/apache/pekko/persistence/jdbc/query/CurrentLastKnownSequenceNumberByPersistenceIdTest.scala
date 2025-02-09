@@ -19,9 +19,8 @@ package org.apache.pekko.persistence.jdbc.query
 
 import org.scalatest.concurrent.ScalaFutures
 
-abstract class CurrentLastKnownSequenceNumberByPersistenceIdTest(
-    config: String
-) extends QueryTestSpec(config) with ScalaFutures {
+abstract class CurrentLastKnownSequenceNumberByPersistenceIdTest(config: String) extends QueryTestSpec(config)
+    with ScalaFutures {
 
   it should "return None for unknown persistenceId" in withActorSystem { implicit system =>
     val journalOps = new ScalaJdbcReadJournalOperations(system)

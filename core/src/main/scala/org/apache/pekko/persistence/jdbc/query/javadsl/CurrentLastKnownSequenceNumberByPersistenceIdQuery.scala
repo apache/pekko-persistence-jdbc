@@ -23,7 +23,5 @@ trait CurrentLastKnownSequenceNumberByPersistenceIdQuery {
    * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
    * @return Some sequence number or None if the `persistenceId` is unknown.
    */
-  def currentLastKnownSequenceNumberByPersistenceId(
-      persistenceId: String
-  ): CompletionStage[Optional[Long]]
+  def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): CompletionStage[Optional[Long]]
 }

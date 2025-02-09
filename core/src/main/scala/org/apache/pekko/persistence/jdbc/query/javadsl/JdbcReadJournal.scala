@@ -140,13 +140,9 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
   override def eventsByTag(tag: String, offset: Offset): Source[EventEnvelope, NotUsed] =
     journal.eventsByTag(tag, offset).asJava
 
-  override def currentLastKnownSequenceNumberByPersistenceId(
-      persistenceId: String
-  ): CompletionStage[Optional[Long]] = {
-
+  override def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): CompletionStage[Optional[Long]] =
     journal
       .currentLastKnownSequenceNumberByPersistenceId(persistenceId)
       .asJava
       .thenApply(_.toJava)
-  }
 }

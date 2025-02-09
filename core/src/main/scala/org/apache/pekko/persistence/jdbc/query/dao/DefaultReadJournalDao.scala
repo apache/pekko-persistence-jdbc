@@ -60,11 +60,8 @@ class DefaultReadJournalDao(
   override def journalSequence(offset: Long, limit: Long): Source[Long, NotUsed] =
     Source.fromPublisher(db.stream(queries.journalSequenceQuery((offset, limit)).result))
 
-  override def lastPersistenceIdSequenceNumber(
-      persistenceId: String
-  ): Future[Option[Long]] = {
+  override def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]] =
     db.run(queries.lastPersistenceIdSequenceNumberQuery(persistenceId).result)
-  }
 
   override def maxJournalSequence(): Future[Long] =
     db.run(queries.maxJournalSequenceQuery.result)

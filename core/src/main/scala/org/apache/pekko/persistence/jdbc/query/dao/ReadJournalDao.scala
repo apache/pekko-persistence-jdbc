@@ -55,9 +55,7 @@ trait ReadJournalDao extends JournalDaoWithReadMessages {
    * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
    * @return Some sequence number or None if the `persistenceId` is unknown.
    */
-  def lastPersistenceIdSequenceNumber(
-      persistenceId: String
-  ): Future[Option[Long]]
+  def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]]
 
   /**
    * @return The value of the maximum (ordering) id in the journal

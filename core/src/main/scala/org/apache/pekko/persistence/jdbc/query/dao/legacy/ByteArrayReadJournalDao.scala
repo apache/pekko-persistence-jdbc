@@ -59,11 +59,8 @@ trait BaseByteArrayReadJournalDao extends ReadJournalDao with BaseJournalDaoWith
       .via(serializer.deserializeFlow)
   }
 
-  override def lastPersistenceIdSequenceNumber(
-      persistenceId: String
-  ): Future[Option[Long]] = {
+  override def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]] =
     db.run(queries.lastPersistenceIdSequenceNumberQuery(persistenceId).result)
-  }
 
   override def messages(
       persistenceId: String,

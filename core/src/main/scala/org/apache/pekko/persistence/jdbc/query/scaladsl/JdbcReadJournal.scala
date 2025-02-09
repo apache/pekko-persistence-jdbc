@@ -319,10 +319,6 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
   def eventsByTag(tag: String, offset: Long): Source[EventEnvelope, NotUsed] =
     eventsByTag(tag, offset, terminateAfterOffset = None)
 
-  override def currentLastKnownSequenceNumberByPersistenceId(
-    persistenceId: String
-  ): Future[Option[Long]] = {
-    
+  override def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): Future[Option[Long]] =
     readJournalDao.lastPersistenceIdSequenceNumber(persistenceId)
-  }
 }

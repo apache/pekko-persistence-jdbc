@@ -38,8 +38,7 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
     with CurrentEventsByPersistenceIdQuery
     with EventsByPersistenceIdQuery
     with CurrentEventsByTagQuery
-    with EventsByTagQuery
-    with CurrentLastKnownSequenceNumberByPersistenceIdQuery {
+    with EventsByTagQuery {
 
   /**
    * Same type of query as `persistenceIds` but the event stream
@@ -140,7 +139,13 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
   override def eventsByTag(tag: String, offset: Offset): Source[EventEnvelope, NotUsed] =
     journal.eventsByTag(tag, offset).asJava
 
-  override def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): CompletionStage[Optional[Long]] =
+  /**
+   * Returns the last known sequence number for the given `persistenceId`. Empty if the `persistenceId` is unknown.
+   *
+   * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
+   * @return Some sequence number or None if the `persistenceId` is unknown.
+   */
+  def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): CompletionStage[Optional[Long]] =
     journal
       .currentLastKnownSequenceNumberByPersistenceId(persistenceId)
       .asJava

@@ -29,6 +29,7 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
   val messagesQuery = Compiled(_messagesQuery _)
   val eventsByTag = Compiled(_eventsByTag _)
   val journalSequenceQuery = Compiled(_journalSequenceQuery _)
+  val lastPersistenceIdSequenceNumberQuery = Compiled(_lastPersistenceIdSequenceNumberQuery _)
   val maxJournalSequenceQuery = Compiled {
     JournalTable.map(_.ordering).max.getOrElse(0L)
   }
@@ -42,6 +43,12 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
   private def baseTableWithTagsQuery() = {
     baseTableQuery().join(TagTable).on(_.ordering === _.eventId)
   }
+
+  private def _lastPersistenceIdSequenceNumberQuery(persistenceId: Rep[String]) =
+    baseTableQuery()
+      .filter(_.persistenceId === persistenceId)
+      .map(_.sequenceNumber)
+      .max
 
   private def _messagesQuery(
       persistenceId: Rep[String],

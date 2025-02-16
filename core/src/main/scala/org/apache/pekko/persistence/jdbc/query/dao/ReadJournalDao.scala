@@ -50,6 +50,14 @@ trait ReadJournalDao extends JournalDaoWithReadMessages {
   def journalSequence(offset: Long, limit: Long): Source[Long, NotUsed]
 
   /**
+   * Returns the last known sequence number for the given `persistenceId`. Empty if the `persistenceId` is unknown.
+   *
+   * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
+   * @return Some sequence number or None if the `persistenceId` is unknown.
+   */
+  def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]]
+
+  /**
    * @return The value of the maximum (ordering) id in the journal
    */
   def maxJournalSequence(): Future[Long]

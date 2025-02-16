@@ -54,6 +54,8 @@ class TestProbeReadJournalDao(val probe: TestProbe) extends ReadJournalDao {
       maxOffset: Long,
       max: Long): Source[Try[(PersistentRepr, Set[String], Long)], NotUsed] = ???
 
+  override def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]] = ???
+
   /**
    * Returns a Source of bytes for a certain persistenceId
    */

@@ -317,4 +317,13 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
 
   def eventsByTag(tag: String, offset: Long): Source[EventEnvelope, NotUsed] =
     eventsByTag(tag, offset, terminateAfterOffset = None)
+
+  /**
+   * Returns the last known sequence number for the given `persistenceId`. Empty if the `persistenceId` is unknown.
+   *
+   * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
+   * @return Some sequence number or None if the `persistenceId` is unknown.
+   */
+  def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): Future[Option[Long]] =
+    readJournalDao.lastPersistenceIdSequenceNumber(persistenceId)
 }

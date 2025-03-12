@@ -324,6 +324,6 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
    * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
    * @return Some sequence number or None if the `persistenceId` is unknown.
    */
-  def currentLastKnownSequenceNumberByPersistenceId(persistenceId: String): Future[Option[Long]] =
+  def currentLastSequenceNumberByPersistenceId(persistenceId: String): Future[Option[Long]] =
     readJournalDao.lastPersistenceIdSequenceNumber(persistenceId)
 }

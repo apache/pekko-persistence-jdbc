@@ -19,14 +19,14 @@ package org.apache.pekko.persistence.jdbc.query
 
 import org.scalatest.concurrent.ScalaFutures
 
-abstract class CurrentLastKnownSequenceNumberByPersistenceIdTest(config: String) extends QueryTestSpec(config)
+abstract class CurrentLastSequenceNumberByPersistenceIdTest(config: String) extends QueryTestSpec(config)
     with ScalaFutures {
 
   it should "return None for unknown persistenceId" in withActorSystem { implicit system =>
     val journalOps = new ScalaJdbcReadJournalOperations(system)
 
     journalOps
-      .currentLastKnownSequenceNumberByPersistenceId("unknown")
+      .currentLastSequenceNumberByPersistenceId("unknown")
       .futureValue shouldBe None
   }
 
@@ -41,18 +41,18 @@ abstract class CurrentLastKnownSequenceNumberByPersistenceIdTest(config: String)
 
       eventually {
         journalOps
-          .currentLastKnownSequenceNumberByPersistenceId("my-1")
+          .currentLastSequenceNumberByPersistenceId("my-1")
           .futureValue shouldBe Some(4)
 
         // Just ensuring that query targets the correct persistenceId.
         journalOps
-          .currentLastKnownSequenceNumberByPersistenceId("my-2")
+          .currentLastSequenceNumberByPersistenceId("my-2")
           .futureValue shouldBe None
       }
     }
   }
 }
 
-class H2ScalaCurrentLastKnownSequenceNumberByPersistenceIdTest
-    extends CurrentLastKnownSequenceNumberByPersistenceIdTest("h2-shared-db-application.conf")
+class H2ScalaCurrentLastSequenceNumberByPersistenceIdTest
+    extends CurrentLastSequenceNumberByPersistenceIdTest("h2-shared-db-application.conf")
     with H2Cleaner

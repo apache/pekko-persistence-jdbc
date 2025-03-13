@@ -146,7 +146,8 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
    * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
    * @return Some sequence number or None if the `persistenceId` is unknown.
    */
-  override def currentLastSequenceNumberByPersistenceId(persistenceId: String): CompletionStage[Optional[java.lang.Long]] =
+  override def currentLastSequenceNumberByPersistenceId(
+      persistenceId: String): CompletionStage[Optional[java.lang.Long]] =
     journal
       .currentLastSequenceNumberByPersistenceId(persistenceId)
       .asJava

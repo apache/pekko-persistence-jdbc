@@ -57,7 +57,7 @@ import slick.sql.SqlStreamingAction
   import profile.api._
 
   def getSequenceNextValueExpr() =
-    sql"""SELECT nextval(pg_get_serial_sequence('#${durableStateTableCfg.tableName}', '#${durableStateTableCfg
+    sql"""SELECT nextval(pg_get_serial_sequence('#${durableStateTableCfg.schemaAndTableName}', '#${durableStateTableCfg
         .columnNames.globalOffset}'))""".as[
       String]
 }

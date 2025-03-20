@@ -11,7 +11,11 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import com.typesafe.config.ConfigFactory
 import slick.jdbc.PostgresProfile
-import org.apache.pekko.persistence.jdbc.state.scaladsl.DurableStateStorePluginSpec
+import org.apache.pekko.persistence.jdbc.state.scaladsl.{DurableStateStorePluginSpec, DurableStateStorePostgresSchemaPluginSpec}
 
 class PostgresDurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("postgres-shared-db-application.conf"), PostgresProfile) {}
+
+
+class PostgresDurableStateStorePluginSchemaSpec
+    extends DurableStateStorePostgresSchemaPluginSpec(ConfigFactory.load("postgres-application.conf"), PostgresProfile) {}

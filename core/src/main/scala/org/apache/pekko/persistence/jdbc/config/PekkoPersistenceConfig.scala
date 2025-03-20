@@ -221,7 +221,13 @@ class DurableStateTableConfiguration(config: Config) {
   val batchSize: Int = config.getInt("batchSize")
   val schemaName: Option[String] = cfg.asStringOption("schemaName")
   val columnNames: DurableStateTableColumnNames = new DurableStateTableColumnNames(config)
-  val stateSequenceConfig = DurableStateSequenceRetrievalConfig(config)
+  val stateSequenceConfig: DurableStateSequenceRetrievalConfig = DurableStateSequenceRetrievalConfig(config)
+  private val schemaPrefix: String = schemaName.fold("")(schema => s"$schema.")
+
+  /**
+   * @since "1.1.1"
+   */
+  def schemaAndTableName: String = s"$schemaPrefix$tableName"
   override def toString: String = s"DurableStateTableConfiguration($tableName,$schemaName,$columnNames)"
 }
 

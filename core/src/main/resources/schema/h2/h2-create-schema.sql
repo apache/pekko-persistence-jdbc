@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC."event_journal" (
     PRIMARY KEY("persistence_id","sequence_number")
     );
 
-CREATE UNIQUE INDEX "event_journal_ordering_idx" on "event_journal" ("ordering");
+CREATE UNIQUE INDEX "event_journal_ordering_idx" on PUBLIC."event_journal" ("ordering");
 
 CREATE TABLE IF NOT EXISTS PUBLIC."event_tag" (
     "event_id" BIGINT NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS PUBLIC."snapshot" (
 CREATE SEQUENCE IF NOT EXISTS PUBLIC."global_offset_seq";
 
 CREATE TABLE IF NOT EXISTS PUBLIC."durable_state" (
-    "global_offset" BIGINT DEFAULT NEXT VALUE FOR "global_offset_seq",
+    "global_offset" BIGINT DEFAULT NEXT VALUE FOR PUBLIC."global_offset_seq",
     "persistence_id" VARCHAR(255) NOT NULL,
     "revision" BIGINT NOT NULL,
     "state_payload" BLOB NOT NULL,

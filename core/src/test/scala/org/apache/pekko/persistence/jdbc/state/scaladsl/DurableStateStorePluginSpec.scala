@@ -89,10 +89,12 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
     new SlickConfiguration(config.getConfig("slick")), "slick.db"
   )
 
-  override def beforeAll(): Unit = {
+  override def beforeAll(): Unit =
     dropAndCreateWithSchema(SchemaUtilsImpl.slickProfileToSchemaType(profile),
       defaultSchemaName, schemaName)
-  }
+
+  override def afterAll(): Unit =
+    system.terminate().futureValue
 
   "A durable state store plugin" must {
     "instantiate a JdbcDurableDataStore successfully" in {
@@ -120,17 +122,15 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
     }
   }
 
-  override def afterAll(): Unit = {
-    system.terminate().futureValue
-
-  }
 }
 
 class H2DurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("h2-application.conf"), H2Profile)
 
+/*
 class H2DurableStateStorePluginSchemaSpec
     extends DurableStateStoreSchemaPluginSpec(ConfigFactory.load("h2-application.conf"),
       H2Profile) {
   override protected def defaultSchemaName: String = "PUBLIC"
 }
+

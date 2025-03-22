@@ -100,9 +100,33 @@ private[jdbc] object SchemaUtilsImpl {
    * INTERNAL API
    */
   @InternalApi
+  private[jdbc] def dropWithSlickButChangeSchema(schemaType: SchemaType, logger: Logger, db: Database,
+      oldSchemaName: String, newSchemaName: String): Done = {
+    val (fileToLoad, separator) = dropScriptFor(schemaType, false)
+    val script = SchemaUtilsImpl.fromClasspathAsString(fileToLoad)
+      .replaceAll(s"$oldSchemaName.", s"$newSchemaName.")
+    SchemaUtilsImpl.applyScriptWithSlick(script, separator, logger, db)
+  }
+
+  /**
+   * INTERNAL API
+   */
+  @InternalApi
   private[jdbc] def createWithSlick(schemaType: SchemaType, logger: Logger, db: Database, legacy: Boolean): Done = {
     val (fileToLoad, separator) = createScriptFor(schemaType, legacy)
     SchemaUtilsImpl.applyScriptWithSlick(SchemaUtilsImpl.fromClasspathAsString(fileToLoad), separator, logger, db)
+  }
+
+  /**
+   * INTERNAL API
+   */
+  @InternalApi
+  private[jdbc] def createWithSlickButChangeSchema(schemaType: SchemaType, logger: Logger, db: Database,
+      oldSchemaName: String, newSchemaName: String): Done = {
+    val (fileToLoad, separator) = createScriptFor(schemaType, false)
+    val script = SchemaUtilsImpl.fromClasspathAsString(fileToLoad)
+      .replaceAll(s"$oldSchemaName.", s"$newSchemaName.")
+    SchemaUtilsImpl.applyScriptWithSlick(script, separator, logger, db)
   }
 
   private def applyScriptWithSlick(script: String, separator: String, logger: Logger, database: Database): Done = {
@@ -152,7 +176,11 @@ private[jdbc] object SchemaUtilsImpl {
     }
   }
 
-  private def slickProfileToSchemaType(profile: JdbcProfile): SchemaType =
+  /**
+   * INTERNAL API
+   */
+  @InternalApi
+  private[jdbc] def slickProfileToSchemaType(profile: JdbcProfile): SchemaType =
     profile match {
       case PostgresProfile  => Postgres
       case MySQLProfile     => MySQL

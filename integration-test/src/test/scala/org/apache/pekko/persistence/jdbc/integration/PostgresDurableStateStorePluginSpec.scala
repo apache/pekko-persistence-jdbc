@@ -20,5 +20,5 @@ class PostgresDurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("postgres-shared-db-application.conf"), PostgresProfile) {}
 
 class PostgresDurableStateStorePluginSchemaSpec
-    extends DurableStateStorePostgresSchemaPluginSpec(ConfigFactory.load("postgres-application.conf"),
+    extends DurableStateStoreSchemaPluginSpec(ConfigFactory.load("postgres-application.conf"),
       PostgresProfile) {}

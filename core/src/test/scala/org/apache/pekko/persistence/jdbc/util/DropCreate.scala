@@ -47,6 +47,17 @@ private[jdbc] trait DropCreate {
     SchemaUtilsImpl.createWithSlick(schemaType, logger, db, !newDao)
   }
 
+  /**
+   * INTERNAL API
+   */
+  @InternalApi
+  private[jdbc] def dropAndCreateWithSchema(schemaType: SchemaType,
+      oldSchemaName: String, schemaName: String): Unit = {
+    // blocking calls, usually done in our before test methods
+    SchemaUtilsImpl.dropWithSlickButChangeSchema(schemaType, logger, db, oldSchemaName, schemaName)
+    SchemaUtilsImpl.createWithSlickButChangeSchema(schemaType, logger, db, oldSchemaName, schemaName)
+  }
+
   def withSession[A](f: Session => A): A = {
     withDatabase { db =>
       val session = db.createSession()

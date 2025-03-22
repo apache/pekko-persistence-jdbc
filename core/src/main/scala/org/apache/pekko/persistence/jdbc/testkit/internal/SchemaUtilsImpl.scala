@@ -126,7 +126,8 @@ private[jdbc] object SchemaUtilsImpl {
     val (fileToLoad, separator) = createScriptFor(schemaType, false)
     val script = SchemaUtilsImpl.fromClasspathAsString(fileToLoad)
       .replaceAll(s"$oldSchemaName.", s"$newSchemaName.")
-    SchemaUtilsImpl.applyScriptWithSlick(script, separator, logger, db)
+    val scriptWithSchemaCreate = s"CREATE SCHEMA IF NOT EXISTS $newSchemaName$separator$script"
+    SchemaUtilsImpl.applyScriptWithSlick(scriptWithSchemaCreate, separator, logger, db)
   }
 
   private def applyScriptWithSlick(script: String, separator: String, logger: Logger, database: Database): Done = {

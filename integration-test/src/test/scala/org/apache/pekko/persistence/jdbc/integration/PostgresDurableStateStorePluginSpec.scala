@@ -13,7 +13,7 @@ import com.typesafe.config.ConfigFactory
 import slick.jdbc.PostgresProfile
 import org.apache.pekko.persistence.jdbc.state.scaladsl.{
   DurableStateStorePluginSpec,
-  DurableStateStorePostgresSchemaPluginSpec
+  DurableStateStoreSchemaPluginSpec
 }
 
 class PostgresDurableStateStorePluginSpec

@@ -133,4 +133,4 @@ class H2DurableStateStorePluginSchemaSpec
       H2Profile) {
   override protected def defaultSchemaName: String = "PUBLIC"
 }
-
+ */

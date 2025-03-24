@@ -50,6 +50,7 @@ abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)
   }
 
   override def afterAll(): Unit = {
+    db.close()
     system.terminate().futureValue
   }
 }
@@ -98,6 +99,7 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
     SchemaUtilsImpl.dropWithSlickButChangeSchema(
       SchemaUtilsImpl.slickProfileToSchemaType(profile),
       logger, db, defaultSchemaName, schemaName)
+    db.close()
     system.terminate().futureValue
   }
 

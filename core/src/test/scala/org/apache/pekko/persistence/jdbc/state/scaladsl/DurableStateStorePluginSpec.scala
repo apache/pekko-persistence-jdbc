@@ -132,10 +132,8 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
 class H2DurableStateStorePluginSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("h2-application.conf"), H2Profile)
 
-/*
 class H2DurableStateStorePluginSchemaSpec
     extends DurableStateStoreSchemaPluginSpec(ConfigFactory.load("h2-application.conf"),
       H2Profile) {
   override protected def defaultSchemaName: String = "PUBLIC"
 }
- */

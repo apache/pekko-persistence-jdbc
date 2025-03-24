@@ -60,3 +60,4 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
 }
 
 class H2SnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("h2-application.conf"), H2)
+class H2SnapshotStoreSchemaSpec extends JdbcSnapshotStoreSchemaSpec(ConfigFactory.load("h2-application.conf"), H2)

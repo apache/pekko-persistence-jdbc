@@ -12,11 +12,11 @@ package org.apache.pekko.persistence.jdbc.state.scaladsl
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.pekko
 import pekko.actor._
+import pekko.persistence.state.DurableStateStoreRegistry
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
-import pekko.persistence.state.DurableStateStoreRegistry
 import slick.jdbc.{ H2Profile, JdbcProfile }
 
 abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)

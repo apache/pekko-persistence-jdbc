@@ -48,7 +48,7 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
     durableStateTable.filter(_.persistenceId === persistenceId)
 
   private[jdbc] def insertDbWithDurableState(row: DurableStateTables.DurableStateRow, seqNextValue: String) = {
-    sqlu"""INSERT INTO #${durableStateTableCfg.tableName}
+    sqlu"""INSERT INTO #${durableStateTableCfg.schemaAndTableName}
             (
              #${durableStateTableCfg.columnNames.persistenceId},
              #${durableStateTableCfg.columnNames.globalOffset},
@@ -74,7 +74,7 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
   }
 
   private[jdbc] def updateDbWithDurableState(row: DurableStateTables.DurableStateRow, seqNextValue: String) = {
-    sqlu"""UPDATE #${durableStateTableCfg.tableName}
+    sqlu"""UPDATE #${durableStateTableCfg.schemaAndTableName}
            SET #${durableStateTableCfg.columnNames.globalOffset} = #$seqNextValue,
                #${durableStateTableCfg.columnNames.revision} = ${row.revision},
                #${durableStateTableCfg.columnNames.statePayload} = ${row.statePayload},

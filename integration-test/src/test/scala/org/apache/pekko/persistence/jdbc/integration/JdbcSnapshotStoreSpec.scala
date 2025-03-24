@@ -19,6 +19,9 @@ import com.typesafe.config.ConfigFactory
 
 class PostgresSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("postgres-application.conf"), Postgres)
 
+class PostgresSnapshotStoreSchemaSpec
+    extends JdbcSnapshotStoreSchemaSpec(ConfigFactory.load("postgres-application.conf"), Postgres)
+
 class MySQLSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("mysql-application.conf"), MySQL)
 
 class OracleSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("oracle-application.conf"), Oracle)

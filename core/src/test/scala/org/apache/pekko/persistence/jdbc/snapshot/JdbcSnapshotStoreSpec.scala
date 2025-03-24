@@ -20,8 +20,9 @@ import pekko.persistence.jdbc.config._
 import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.H2
-import pekko.persistence.jdbc.testkit.internal.SchemaType
+import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SchemaUtilsImpl }
 import pekko.persistence.snapshot.SnapshotStoreSpec
+
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
@@ -63,9 +64,12 @@ abstract class JdbcSnapshotStoreSchemaSpec(config: Config, schemaType: SchemaTyp
     extends SnapshotStoreSpec(config)
     with BeforeAndAfterAll
     with ScalaFutures
-    with ClasspathResources {
-  
+    with ClasspathResources
+    with DropCreate {
+
   private val logger = LoggerFactory.getLogger(this.getClass)
+  protected def defaultSchemaName: String = "public"
+  private val schemaName: String = "pekko"
 
   implicit val pc: PatienceConfig = PatienceConfig(timeout = 10.seconds)
 
@@ -93,15 +97,13 @@ abstract class JdbcSnapshotStoreSchemaSpec(config: Config, schemaType: SchemaTyp
 
   override def beforeAll(): Unit = {
     SchemaUtilsImpl.createWithSlickButChangeSchema(
-      SchemaUtilsImpl.slickProfileToSchemaType(profile),
-      logger, db, defaultSchemaName, schemaName)
+      schemaType, logger, db, defaultSchemaName, schemaName)
     super.beforeAll()
   }
 
   override def afterAll(): Unit = {
     SchemaUtilsImpl.dropWithSlickButChangeSchema(
-      SchemaUtilsImpl.slickProfileToSchemaType(profile),
-      logger, db, defaultSchemaName, schemaName)
+      schemaType, logger, db, defaultSchemaName, schemaName)
     db.close()
     system.terminate().futureValue
   }
@@ -109,4 +111,6 @@ abstract class JdbcSnapshotStoreSchemaSpec(config: Config, schemaType: SchemaTyp
 
 class H2SnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("h2-application.conf"), H2)
 
-class H2SnapshotStoreSchemaSpec extends JdbcSnapshotStoreSchemaSpec(ConfigFactory.load("h2-application.conf"), H2)
+class H2SnapshotStoreSchemaSpec extends JdbcSnapshotStoreSchemaSpec(ConfigFactory.load("h2-application.conf"), H2) {
+  override protected def defaultSchemaName: String = "PUBLIC"
+}

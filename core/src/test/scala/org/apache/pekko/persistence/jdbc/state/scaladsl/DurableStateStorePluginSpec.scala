@@ -50,7 +50,6 @@ abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)
   }
 
   override def afterAll(): Unit = {
-    db.close()
     system.terminate().futureValue
   }
 }

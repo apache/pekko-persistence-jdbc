@@ -15,7 +15,6 @@ import pekko.actor._
 import pekko.persistence.jdbc.config.SlickConfiguration
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
-import pekko.persistence.jdbc.util.DropCreate
 import pekko.persistence.state.DurableStateStoreRegistry
 import pekko.util.Timeout
 import org.scalatest.concurrent.Eventually.eventually
@@ -24,6 +23,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
+import org.slf4j.LoggerFactory
 import slick.jdbc.{ H2Profile, JdbcProfile }
 
 import scala.concurrent.duration.DurationInt
@@ -59,9 +59,9 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
     with BeforeAndAfterAll
     with Matchers
     with ScalaFutures
-    with DropCreate
     with DataGenerationHelper {
 
+  private val logger = LoggerFactory.getLogger(this.getClass)
   protected def defaultSchemaName: String = "public"
   val schemaName: String = "pekko"
   implicit val timeout: Timeout = Timeout(1.minute)
@@ -90,11 +90,16 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
   )
 
   override def beforeAll(): Unit =
-    dropAndCreateWithSchema(SchemaUtilsImpl.slickProfileToSchemaType(profile),
-      defaultSchemaName, schemaName)
+    SchemaUtilsImpl.createWithSlickButChangeSchema(
+      SchemaUtilsImpl.slickProfileToSchemaType(profile),
+      logger, db, defaultSchemaName, schemaName)
 
-  override def afterAll(): Unit =
+  override def afterAll(): Unit = {
+    SchemaUtilsImpl.dropWithSlickButChangeSchema(
+      SchemaUtilsImpl.slickProfileToSchemaType(profile),
+      logger, db, defaultSchemaName, schemaName)
     system.terminate().futureValue
+  }
 
   "A durable state store plugin" must {
     "instantiate a JdbcDurableDataStore successfully" in {

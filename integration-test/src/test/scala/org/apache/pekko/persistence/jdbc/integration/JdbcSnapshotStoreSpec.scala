@@ -10,11 +10,8 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko
-import pekko.persistence.jdbc.snapshot.JdbcSnapshotStoreSpec
-import pekko.persistence.jdbc.testkit.internal.MySQL
-import pekko.persistence.jdbc.testkit.internal.Oracle
-import pekko.persistence.jdbc.testkit.internal.Postgres
-import pekko.persistence.jdbc.testkit.internal.SqlServer
+import pekko.persistence.jdbc.snapshot.{ JdbcSnapshotStoreSchemaSpec, JdbcSnapshotStoreSpec }
+import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
 import com.typesafe.config.ConfigFactory
 
 class PostgresSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("postgres-application.conf"), Postgres)

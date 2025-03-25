@@ -68,7 +68,7 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
   implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = Span(60, Seconds), interval = Span(100, Millis))
 
-  val customConfig: Config = ConfigFactory.parseString(s"""
+  val customConfig: Config = ConfigFactory.parseString("""
     jdbc-durable-state-store {
       tables {
         durable_state {

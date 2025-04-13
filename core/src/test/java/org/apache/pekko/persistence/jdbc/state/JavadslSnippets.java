@@ -10,46 +10,25 @@
 package org.apache.pekko.persistence.jdbc.state;
 
 import java.util.concurrent.CompletionStage;
-import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 // #create
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
+// #jdbc-durable-state-store
+// #get-object
 import org.apache.pekko.persistence.jdbc.testkit.javadsl.SchemaUtils;
 // #create
 // #jdbc-durable-state-store
-import org.apache.pekko.persistence.state.DurableStateStoreRegistry;
-import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
-// #jdbc-durable-state-store
-// #get-object
-import org.apache.pekko.persistence.state.DurableStateStoreRegistry;
-import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
-import org.apache.pekko.persistence.state.javadsl.GetObjectResult;
-// #get-object
-// #upsert-get-object
-import org.apache.pekko.persistence.state.DurableStateStoreRegistry;
-import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
-import org.apache.pekko.persistence.state.javadsl.GetObjectResult;
-// #upsert-get-object
-// #delete-object
-import org.apache.pekko.persistence.state.DurableStateStoreRegistry;
-import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
-// #delete-object
-// #current-changes
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.persistence.state.DurableStateStoreRegistry;
-import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
 import org.apache.pekko.persistence.query.DurableStateChange;
 import org.apache.pekko.persistence.query.NoOffset;
 // #current-changes
 // #changes
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.persistence.state.DurableStateStoreRegistry;
-import org.apache.pekko.persistence.jdbc.state.javadsl.JdbcDurableStateStore;
-import org.apache.pekko.persistence.query.DurableStateChange;
-import org.apache.pekko.persistence.query.NoOffset;
-// #changes
+import org.apache.pekko.persistence.state.javadsl.GetObjectResult;
+// #get-object
+// #upsert-get-object
+import org.apache.pekko.stream.javadsl.Source;
 
 final class JavadslSnippets {
   void create() {

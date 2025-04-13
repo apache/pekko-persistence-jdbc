@@ -14,35 +14,21 @@
 
 package org.apache.pekko.persistence.jdbc;
 
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 // #create
+import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
+// #read-journal
+// #persistence-ids
 import org.apache.pekko.persistence.jdbc.testkit.javadsl.SchemaUtils;
 // #create
 // #read-journal
 import org.apache.pekko.persistence.query.*;
-import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
-// #read-journal
-// #persistence-ids
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.persistence.query.PersistenceQuery;
-import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
-// #persistence-ids
-// #events-by-persistence-id
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.persistence.query.PersistenceQuery;
 import org.apache.pekko.persistence.query.EventEnvelope;
-import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
-// #events-by-persistence-id
-// #events-by-tag
-import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.persistence.query.PersistenceQuery;
-import org.apache.pekko.persistence.query.EventEnvelope;
-import org.apache.pekko.persistence.jdbc.query.javadsl.JdbcReadJournal;
-// #events-by-tag
-
-import java.util.concurrent.CompletionStage;
+import org.apache.pekko.stream.javadsl.Source;
 
 final class JavadslSnippets {
   void create() {

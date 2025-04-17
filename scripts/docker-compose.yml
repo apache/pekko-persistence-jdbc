@@ -34,7 +34,7 @@ services:
       - "1521:1521" # DB_CONN: credentials (system:oracle | pass: oracle)
 
   sqlserver:
-    image: pjfanning/mmssql-server:2022-latest
+    image: pjfanning/mssql-server:2022-latest
     container_name: sqlserver-test
     environment:
       - "TZ=Europe/Amsterdam"

@@ -2,7 +2,6 @@
 # To start all docker containers required to execute the tests locally run:
 # docker compose up
 
-version: '2.2'
 services:
   postgres:
     image: postgres:latest

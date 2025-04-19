@@ -16,6 +16,7 @@ import pekko.persistence.jdbc.config.SlickConfiguration
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
 import pekko.persistence.state.DurableStateStoreRegistry
+import pekko.testkit.TestKit
 import pekko.util.Timeout
 import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.ScalaFutures
@@ -50,7 +51,7 @@ abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)
   }
 
   override def afterAll(): Unit = {
-    system.terminate().futureValue
+    TestKit.shutdownActorSystem(system)
   }
 }
 
@@ -99,7 +100,7 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
       SchemaUtilsImpl.slickProfileToSchemaType(profile),
       logger, db, defaultSchemaName, schemaName)
     db.close()
-    system.terminate().futureValue
+    TestKit.shutdownActorSystem(system)
   }
 
   "A durable state store plugin" must {

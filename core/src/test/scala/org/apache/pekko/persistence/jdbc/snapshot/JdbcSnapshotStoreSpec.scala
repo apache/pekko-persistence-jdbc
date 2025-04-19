@@ -19,15 +19,17 @@ import pekko.persistence.CapabilityFlag
 import pekko.persistence.jdbc.config._
 import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.testkit.internal.H2
+import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SchemaUtilsImpl }
 import pekko.persistence.snapshot.SnapshotStoreSpec
+import pekko.testkit.TestKit
+
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
+import org.slf4j.LoggerFactory
+
 import scala.concurrent.duration._
-
-import pekko.persistence.jdbc.testkit.internal.H2
-import pekko.persistence.jdbc.testkit.internal.SchemaType
-
 import scala.concurrent.ExecutionContext
 
 abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
@@ -40,11 +42,7 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
 
   implicit lazy val ec: ExecutionContext = system.dispatcher
 
-  lazy val cfg = system.settings.config.getConfig("jdbc-journal")
-
-  lazy val journalConfig = new JournalConfig(cfg)
-
-  lazy val db = SlickDatabase.database(cfg, new SlickConfiguration(cfg.getConfig("slick")), "slick.db")
+  lazy val db = SlickDatabase.database(config, new SlickConfiguration(config.getConfig("slick")), "slick.db")
 
   protected override def supportsSerialization: CapabilityFlag = newDao
   protected override def supportsMetadata: CapabilityFlag = newDao
@@ -56,7 +54,46 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
 
   override def afterAll(): Unit = {
     db.close()
+    TestKit.shutdownActorSystem(system)
+    super.afterAll()
   }
 }
 
+abstract class JdbcSnapshotStoreSchemaSpec(config: Config, schemaType: SchemaType)
+    extends JdbcSnapshotStoreSpec(config, schemaType) {
+  private val logger = LoggerFactory.getLogger(this.getClass)
+  protected def defaultSchemaName: String = "public"
+  private val schemaName: String = "pekko"
+
+  override def beforeAll(): Unit = {
+    SchemaUtilsImpl.createWithSlickButChangeSchema(
+      schemaType, logger, db, defaultSchemaName, schemaName)
+    super.beforeAll()
+  }
+
+  override def afterAll(): Unit = {
+    SchemaUtilsImpl.dropWithSlickButChangeSchema(
+      schemaType, logger, db, defaultSchemaName, schemaName)
+    super.afterAll()
+  }
+
+}
+
 class H2SnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("h2-application.conf"), H2)
+
+object H2SnapshotStoreSchemaSpec {
+  val config: Config = ConfigFactory.parseString("""
+    jdbc-snapshot-store {
+      tables {
+        snapshot {
+          schemaName = "pekko"
+        }
+      }
+    }
+  """).withFallback(
+    ConfigFactory.load("h2-application.conf"))
+}
+
+class H2SnapshotStoreSchemaSpec extends JdbcSnapshotStoreSchemaSpec(H2SnapshotStoreSchemaSpec.config, H2) {
+  override protected def defaultSchemaName: String = "PUBLIC"
+}

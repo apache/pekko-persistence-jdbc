@@ -10,18 +10,33 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko
-import pekko.persistence.jdbc.snapshot.JdbcSnapshotStoreSpec
-import pekko.persistence.jdbc.testkit.internal.MySQL
-import pekko.persistence.jdbc.testkit.internal.Oracle
-import pekko.persistence.jdbc.testkit.internal.Postgres
-import pekko.persistence.jdbc.testkit.internal.SqlServer
-import com.typesafe.config.ConfigFactory
+import pekko.persistence.jdbc.snapshot.{ JdbcSnapshotStoreSchemaSpec, JdbcSnapshotStoreSpec }
+import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
+import com.typesafe.config.{ Config, ConfigFactory }
 
 class PostgresSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("postgres-application.conf"), Postgres)
 
-class MySQLSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("mysql-application.conf"), MySQL)
+object PostgresSnapshotStoreSchemaSpec {
+  val config: Config = ConfigFactory.parseString("""
+    jdbc-snapshot-store {
+      tables {
+        snapshot {
+          schemaName = "pekko"
+        }
+      }
+    }
+  """).withFallback(
+    ConfigFactory.load("postgres-application.conf"))
+}
 
-class OracleSnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("oracle-application.conf"), Oracle)
+class PostgresSnapshotStoreSchemaSpec
+    extends JdbcSnapshotStoreSchemaSpec(PostgresSnapshotStoreSchemaSpec.config, Postgres)
+
+class MySQLSnapshotStoreSpec
+    extends JdbcSnapshotStoreSpec(ConfigFactory.load("mysql-application.conf"), MySQL)
+
+class OracleSnapshotStoreSpec
+    extends JdbcSnapshotStoreSpec(ConfigFactory.load("oracle-application.conf"), Oracle)
 
 class SqlServerSnapshotStoreSpec
     extends JdbcSnapshotStoreSpec(ConfigFactory.load("sqlserver-application.conf"), SqlServer)

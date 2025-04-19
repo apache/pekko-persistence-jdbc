@@ -22,6 +22,7 @@ import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.H2
 import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SchemaUtilsImpl }
 import pekko.persistence.snapshot.SnapshotStoreSpec
+import pekko.testkit.TestKit
 
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
@@ -53,7 +54,8 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
 
   override def afterAll(): Unit = {
     db.close()
-    system.terminate().futureValue
+    TestKit.shutdownActorSystem(system)
+    super.afterAll()
   }
 }
 

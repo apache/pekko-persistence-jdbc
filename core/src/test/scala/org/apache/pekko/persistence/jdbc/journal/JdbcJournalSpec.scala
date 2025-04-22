@@ -20,10 +20,11 @@ import pekko.persistence.CapabilityFlag
 import pekko.persistence.journal.JournalSpec
 import pekko.persistence.jdbc.config.JournalConfig
 import pekko.persistence.jdbc.db.SlickExtension
-import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
+import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType, SchemaUtilsImpl }
 import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -61,5 +62,41 @@ abstract class JdbcJournalSpec(config: Config, schemaType: SchemaType)
   }
 }
 
+abstract class JdbcJournalSchemaSpec(config: Config, schemaType: SchemaType)
+    extends JdbcJournalSpec(config, schemaType) {
+  private val logger = LoggerFactory.getLogger(this.getClass)
+  protected def defaultSchemaName: String = "public"
+  private val schemaName: String = "pekko"
+
+  override def beforeAll(): Unit = {
+    SchemaUtilsImpl.createWithSlickButChangeSchema(
+      schemaType, logger, db, defaultSchemaName, schemaName)
+    super.beforeAll()
+  }
+
+  override def afterAll(): Unit = {
+    SchemaUtilsImpl.dropWithSlickButChangeSchema(
+      schemaType, logger, db, defaultSchemaName, schemaName)
+    super.afterAll()
+  }
+}
+
 class H2JournalSpec extends JdbcJournalSpec(ConfigFactory.load("h2-application.conf"), H2)
 class H2JournalSpecSharedDb extends JdbcJournalSpec(ConfigFactory.load("h2-shared-db-application.conf"), H2)
+
+object H2JournalSchemaSpec {
+  val config: Config = ConfigFactory.parseString("""
+    jdbc-journal {
+      tables {
+        snapshot {
+          schemaName = "pekko"
+        }
+      }
+    }
+  """).withFallback(
+    ConfigFactory.load("h2-application.conf"))
+}
+
+class H2JournalSchemaSpec extends JdbcJournalSchemaSpec(H2JournalSchemaSpec.config, H2) {
+  override protected def defaultSchemaName: String = "PUBLIC"
+}

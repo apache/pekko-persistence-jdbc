@@ -19,8 +19,7 @@ import pekko.persistence.CapabilityFlag
 import pekko.persistence.jdbc.config._
 import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import pekko.persistence.jdbc.db.SlickDatabase
-import pekko.persistence.jdbc.testkit.internal.H2
-import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SchemaUtilsImpl }
+import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType, SchemaUtilsImpl }
 import pekko.persistence.snapshot.SnapshotStoreSpec
 import pekko.testkit.TestKit
 
@@ -76,7 +75,6 @@ abstract class JdbcSnapshotStoreSchemaSpec(config: Config, schemaType: SchemaTyp
       schemaType, logger, db, defaultSchemaName, schemaName)
     super.afterAll()
   }
-
 }
 
 class H2SnapshotStoreSpec extends JdbcSnapshotStoreSpec(ConfigFactory.load("h2-application.conf"), H2)

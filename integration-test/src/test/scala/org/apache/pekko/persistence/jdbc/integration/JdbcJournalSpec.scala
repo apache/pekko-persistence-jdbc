@@ -10,7 +10,7 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko
-import pekko.persistence.jdbc.journal.{ JdbcJournalSpec, JdbcJournalSchemaSpec }
+import pekko.persistence.jdbc.journal.{ JdbcJournalSchemaSpec, JdbcJournalSpec }
 import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
 import com.typesafe.config.{ Config, ConfigFactory }
 

@@ -69,6 +69,8 @@ abstract class JdbcJournalSchemaSpec(config: Config, schemaType: SchemaType)
   private val schemaName: String = "pekko"
 
   override def beforeAll(): Unit = {
+    // need to drop the schema first, because a previous test may have left tables behind
+    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db, false)
     SchemaUtilsImpl.createWithSlickButChangeSchema(
       schemaType, logger, db, defaultSchemaName, schemaName)
     super.beforeAll()

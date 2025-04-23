@@ -10,13 +10,29 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko
-import pekko.persistence.jdbc.journal.JdbcJournalSpec
+import pekko.persistence.jdbc.journal.{ JdbcJournalSchemaSpec, JdbcJournalSpec }
 import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{ Config, ConfigFactory }
 
 class PostgresJournalSpec extends JdbcJournalSpec(ConfigFactory.load("postgres-application.conf"), Postgres)
 class PostgresJournalSpecSharedDb
     extends JdbcJournalSpec(ConfigFactory.load("postgres-shared-db-application.conf"), Postgres)
+
+object PostgresJournalSchemaSpec {
+  val config: Config = ConfigFactory.parseString("""
+    jdbc-journal{
+      tables {
+        snapshot {
+          schemaName = "pekko"
+        }
+      }
+    }
+  """).withFallback(
+    ConfigFactory.load("postgres-application.conf"))
+}
+
+class PostgresJournalSchemaSpec
+    extends JdbcJournalSchemaSpec(PostgresJournalSchemaSpec.config, Postgres)
 
 class MySQLJournalSpec extends JdbcJournalSpec(ConfigFactory.load("mysql-application.conf"), MySQL)
 class MySQLJournalSpecSharedDb extends JdbcJournalSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQL)

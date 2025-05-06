@@ -1,5 +1,19 @@
 # Release Notes (1.1.x)
 
+## 1.1.1
+
+Release notes for Apache Pekko Persistence JDBC 1.1.1. See [GitHub Milestone](https://github.com/apache/pekko-persistence-jdbc/milestone/5?closed=1) for a fuller list of changes.
+
+### Bug Fixes
+
+* Durable State: setting non-default schemaName leads to write errors ([PR276](https://github.com/apache/pekko-persistence-jdbc/pull/276))
+* Remove unused param in JdbcDurableStateStore causing memory leak ([PR290](https://github.com/apache/pekko-persistence-jdbc/pull/290))
+
+
+### Additions
+
+* Add support for querying last known sequence number by persistenceId ([PR267](https://github.com/apache/pekko-persistence-jdbc/pull/267))
+
 ## 1.1.0
 
 Release notes for Apache Pekko Persistence JDBC 1.1.0. See [GitHub Milestone](https://github.com/apache/pekko-persistence-jdbc/milestone/1?closed=1) for a fuller list of changes.

@@ -28,7 +28,7 @@ object Dependencies {
     "com.h2database" % "h2" % "2.2.224",
     "com.mysql" % "mysql-connector-j" % "9.3.0",
     "com.microsoft.sqlserver" % "mssql-jdbc" % "12.10.1.jre8",
-    "com.oracle.database.jdbc" % "ojdbc8" % "23.8.0.25.04")
+    "com.oracle.database.jdbc" % "ojdbc8" % "23.9.0.25.07")
 
   val Libraries: Seq[ModuleID] = Seq(
     "com.typesafe.slick" %% "slick" % SlickVersion,

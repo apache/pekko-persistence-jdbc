@@ -21,6 +21,6 @@ addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.12")
 // docs
 addSbtPlugin(("com.github.sbt" % "sbt-site-paradox" % "1.7.0").excludeAll(
   "com.lightbend.paradox", "sbt-paradox"))
-addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
+addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.0")
 
 addSbtPlugin("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.1")

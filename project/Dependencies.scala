@@ -26,9 +26,9 @@ object Dependencies {
   val JdbcDrivers = Seq(
     "org.postgresql" % "postgresql" % "42.7.7",
     "com.h2database" % "h2" % "2.2.224",
-    "com.mysql" % "mysql-connector-j" % "9.3.0",
-    "com.microsoft.sqlserver" % "mssql-jdbc" % "12.10.1.jre8",
-    "com.oracle.database.jdbc" % "ojdbc8" % "23.8.0.25.04")
+    "com.mysql" % "mysql-connector-j" % "9.4.0",
+    "com.microsoft.sqlserver" % "mssql-jdbc" % "13.2.0.jre8",
+    "com.oracle.database.jdbc" % "ojdbc8" % "23.9.0.25.07")
 
   val Libraries: Seq[ModuleID] = Seq(
     "com.typesafe.slick" %% "slick" % SlickVersion,
@@ -37,7 +37,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Test)
 
   val Migration: Seq[ModuleID] = Seq(
-    "com.typesafe" % "config" % "1.4.3",
+    "com.typesafe" % "config" % "1.4.4",
     "ch.qos.logback" % "logback-classic" % LogbackVersion,
     "org.testcontainers" % "postgresql" % "1.21.3" % Test,
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Provided)

@@ -3,6 +3,8 @@ name: Nightly Testing with Pekko 1.0
 permissions: {}
 
 on:
+  schedule:
+    - cron: "0 4 * * *"
   workflow_dispatch:
 
 jobs:
@@ -42,7 +44,7 @@ jobs:
         uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c # v6.4.7
 
       - name: Run tests with Scala ${{ matrix.scala-version }} and Java ${{ matrix.java-version }}
-        run: sbt -Dpekko.build.pekko.version=1.0.x "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
+        run: sbt -Dpekko.build.pekko.version=1.2.x "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
 
       - name: Print logs on failure
         if: ${{ failure() }}

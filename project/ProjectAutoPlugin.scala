@@ -57,6 +57,13 @@ object ProjectAutoPlugin extends AutoPlugin {
         Nil
     }).toSeq,
     scalacOptions += "-Ydelambdafy:method",
+    Compile / javacOptions ++= Seq(
+      "-encoding",
+      "UTF-8",
+      "-Xlint:unchecked",
+      "-Xlint:deprecation",
+      "--release",
+      "17"),
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
       "Apache Pekko Persistence JDBC",
@@ -83,16 +90,10 @@ object ProjectAutoPlugin extends AutoPlugin {
   val disciplineScalacOptions = Set(
 //    "-Xfatal-warnings",
     "-feature",
-    "-Yno-adapted-args",
     "-deprecation",
     "-Xlint",
     "-Ywarn-dead-code",
-    "-Ywarn-inaccessible",
-    "-Ywarn-infer-any",
-    "-Ywarn-nullary-override",
-    "-Ywarn-nullary-unit",
     "-Ywarn-unused:_",
-    "-Ypartial-unification",
     "-Ywarn-extra-implicit")
 
 }

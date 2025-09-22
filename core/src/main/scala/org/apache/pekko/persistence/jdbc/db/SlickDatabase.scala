@@ -26,22 +26,6 @@ import slick.jdbc.JdbcBackend._
 /**
  * INTERNAL API
  */
-@deprecated(message = "Internal API, will be removed in pekko-persistence-jdbc 2.0.0",
-  since = "akka-persistence-jdbc 3.4.0")
-object SlickDriver {
-
-  /**
-   * INTERNAL API
-   */
-  @deprecated(message = "Internal API, will be removed in pekko-persistence-jdbc 2.0.0",
-    since = "akka-persistence-jdbc 3.4.0")
-  def forDriverName(config: Config): JdbcProfile =
-    SlickDatabase.profile(config, "slick")
-}
-
-/**
- * INTERNAL API
- */
 object SlickDatabase {
 
   /**

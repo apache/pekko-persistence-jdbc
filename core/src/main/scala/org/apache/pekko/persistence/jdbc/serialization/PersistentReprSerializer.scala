@@ -24,8 +24,8 @@ import scala.collection.immutable._
 
 import scala.util.Try
 
-@deprecated("use Apache Pekko Serialization for the payloads instead", since = "akka-persistence-jdbc 5.0.0")
-trait PersistentReprSerializer[T] {
+// package private since 2.0.0
+private[jdbc] trait PersistentReprSerializer[T] {
 
   /**
    * An org.apache.pekko.persistence.AtomicWrite contains a Sequence of events (with metadata, the PersistentRepr)
@@ -55,8 +55,8 @@ trait PersistentReprSerializer[T] {
   def deserialize(t: T): Try[(PersistentRepr, Set[String], Long)]
 }
 
-@deprecated("use Apache Pekko Serialization for the payloads instead", since = "akka-persistence-jdbc 5.0.0")
-trait FlowPersistentReprSerializer[T] extends PersistentReprSerializer[T] {
+// package private since 2.0.0
+private[jdbc] trait FlowPersistentReprSerializer[T] extends PersistentReprSerializer[T] {
 
   /**
    * A flow which deserializes each element into a PersistentRepr,

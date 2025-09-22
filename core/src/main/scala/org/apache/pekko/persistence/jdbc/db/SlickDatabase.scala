@@ -31,15 +31,6 @@ object SlickDatabase {
   /**
    * INTERNAL API
    */
-  @deprecated(message = "Internal API, will be removed in pekko-persistence-jdbc 2.0.0",
-    since = "akka-persistence-jdbc 3.4.0")
-  def forConfig(config: Config, slickConfiguration: SlickConfiguration): Database = {
-    database(config, slickConfiguration, "slick.db")
-  }
-
-  /**
-   * INTERNAL API
-   */
   private[jdbc] def profile(config: Config, path: String): JdbcProfile =
     DatabaseConfig.forConfig[JdbcProfile](path, config).profile
 

@@ -24,8 +24,9 @@ import pekko.persistence.jdbc.query.scaladsl.{ JdbcReadJournal => ScalaJdbcReadJ
 import pekko.persistence.query.{ EventEnvelope, Offset }
 import pekko.persistence.query.javadsl._
 import pekko.stream.javadsl.Source
-import pekko.util.FutureConverters._
-import pekko.util.OptionConverters._
+
+import scala.jdk.FutureConverters._
+import scala.jdk.OptionConverters._
 
 object JdbcReadJournal {
   final val Identifier = ScalaJdbcReadJournal.Identifier

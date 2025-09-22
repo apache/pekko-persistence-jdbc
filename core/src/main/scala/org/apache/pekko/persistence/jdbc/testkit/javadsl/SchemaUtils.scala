@@ -21,8 +21,9 @@ import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.ApiMayChange
 import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
-import pekko.util.FutureConverters._
 import org.slf4j.LoggerFactory
+
+import scala.jdk.FutureConverters._
 
 object SchemaUtils {
 

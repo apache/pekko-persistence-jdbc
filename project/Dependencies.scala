@@ -17,7 +17,7 @@ object Dependencies {
 
   val PekkoVersion = PekkoCoreDependency.version
 
-  val LogbackVersion = "1.3.15"
+  val LogbackVersion = "1.5.18"
 
   val SlickVersion = "3.5.1"
   val ScalaTestVersion = "3.2.19"

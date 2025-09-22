@@ -49,22 +49,21 @@ object ProjectAutoPlugin extends AutoPlugin {
       "-Xlog-reflective-calls",
       "-language:higherKinds",
       "-language:implicitConversions",
-      "-release:8"),
+      "-release:17"),
     Compile / scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 13)) =>
-        disciplineScalacOptions -- Set(
-          "-Ywarn-inaccessible",
-          "-Ywarn-infer-any",
-          "-Ywarn-nullary-override",
-          "-Ywarn-nullary-unit",
-          "-Ypartial-unification",
-          "-Yno-adapted-args")
-      case Some((2, 12)) =>
+      case Some((2, _)) =>
         disciplineScalacOptions
       case _ =>
         Nil
     }).toSeq,
     scalacOptions += "-Ydelambdafy:method",
+    Compile / javacOptions ++= Seq(
+      "-encoding",
+      "UTF-8",
+      "-Xlint:unchecked",
+      "-Xlint:deprecation",
+      "--release",
+      "17"),
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
       "Apache Pekko Persistence JDBC",
@@ -91,16 +90,10 @@ object ProjectAutoPlugin extends AutoPlugin {
   val disciplineScalacOptions = Set(
 //    "-Xfatal-warnings",
     "-feature",
-    "-Yno-adapted-args",
     "-deprecation",
     "-Xlint",
     "-Ywarn-dead-code",
-    "-Ywarn-inaccessible",
-    "-Ywarn-infer-any",
-    "-Ywarn-nullary-override",
-    "-Ywarn-nullary-unit",
     "-Ywarn-unused:_",
-    "-Ypartial-unification",
     "-Ywarn-extra-implicit")
 
 }

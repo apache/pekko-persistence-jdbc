@@ -23,7 +23,6 @@ import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ExtendedActorSystem
 import pekko.annotation.ApiMayChange
-import pekko.dispatch.ExecutionContexts
 import pekko.pattern.ask
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.state.DurableStateQueries
@@ -131,7 +130,7 @@ class JdbcDurableStateStore[A](
           .foreach(throw _)
       }
       Done
-    }(ExecutionContexts.parasitic)
+    }(ExecutionContext.parasitic)
 
   override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
     Source

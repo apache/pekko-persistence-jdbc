@@ -21,7 +21,6 @@ import pekko.persistence.jdbc.config.SnapshotConfig
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import SnapshotTables._
-import pekko.dispatch.ExecutionContexts
 import pekko.persistence.jdbc.PekkoSerialization
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -107,23 +106,23 @@ class DefaultSnapshotDao(
 
   override def save(snapshotMetadata: SnapshotMetadata, snapshot: Any): Future[Unit] = {
     val eventualSnapshotRow = Future.fromTry(serializeSnapshot(snapshotMetadata, snapshot))
-    eventualSnapshotRow.map(queries.insertOrUpdate).flatMap(db.run).map(_ => ())(ExecutionContexts.parasitic)
+    eventualSnapshotRow.map(queries.insertOrUpdate).flatMap(db.run).map(_ => ())(ExecutionContext.parasitic)
   }
 
   override def delete(persistenceId: String, sequenceNr: Long): Future[Unit] =
     db.run(queries.selectByPersistenceIdAndSequenceNr((persistenceId, sequenceNr)).delete)
-      .map(_ => ())(ExecutionContexts.parasitic)
+      .map(_ => ())(ExecutionContext.parasitic)
 
   override def deleteAllSnapshots(persistenceId: String): Future[Unit] =
-    db.run(queries.selectAll(persistenceId).delete).map(_ => ())(ExecutionContexts.parasitic)
+    db.run(queries.selectAll(persistenceId).delete).map(_ => ())(ExecutionContext.parasitic)
 
   override def deleteUpToMaxSequenceNr(persistenceId: String, maxSequenceNr: Long): Future[Unit] =
     db.run(queries.selectByPersistenceIdUpToMaxSequenceNr((persistenceId, maxSequenceNr)).delete)
-      .map(_ => ())(ExecutionContexts.parasitic)
+      .map(_ => ())(ExecutionContext.parasitic)
 
   override def deleteUpToMaxTimestamp(persistenceId: String, maxTimestamp: Long): Future[Unit] =
     db.run(queries.selectByPersistenceIdUpToMaxTimestamp((persistenceId, maxTimestamp)).delete)
-      .map(_ => ())(ExecutionContexts.parasitic)
+      .map(_ => ())(ExecutionContext.parasitic)
 
   override def deleteUpToMaxSequenceNrAndMaxTimestamp(
       persistenceId: String,
@@ -133,5 +132,5 @@ class DefaultSnapshotDao(
       queries
         .selectByPersistenceIdUpToMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
         .delete)
-      .map(_ => ())(ExecutionContexts.parasitic)
+      .map(_ => ())(ExecutionContext.parasitic)
 }

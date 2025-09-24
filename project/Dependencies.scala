@@ -19,7 +19,8 @@ object Dependencies {
 
   val LogbackVersion = "1.5.18"
 
-  val SlickVersion = "3.5.1"
+  val SlickVersion = "3.5.2"
+  val SlickDocVersion = "3.5.1" // Slick 3.5.2 does not have docs published
   val ScalaTestVersion = "3.2.19"
 
   val JdbcDrivers = Seq(

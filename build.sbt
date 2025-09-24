@@ -101,7 +101,7 @@ lazy val docs = project
       "extref.github.base_url" -> s"https://github.com/apache/pekko-persistence-jdbc/blob/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       // Slick
-      "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",
+      "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickDocVersion}/%s",
       // Pekko
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/${PekkoCoreDependency.default.link}/%s",
       "scaladoc.base_url" -> "https://pekko.apache.org/api/pekko-persistence-jdbc/current/",

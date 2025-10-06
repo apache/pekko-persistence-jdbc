@@ -14,11 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.query.javadsl
 
-import org.apache.pekko
-
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 
+import org.apache.pekko
 import pekko.NotUsed
 import pekko.persistence.jdbc.query.scaladsl.{ JdbcReadJournal => ScalaJdbcReadJournal }
 import pekko.persistence.query.{ EventEnvelope, Offset }
@@ -39,7 +38,8 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
     with CurrentEventsByPersistenceIdQuery
     with EventsByPersistenceIdQuery
     with CurrentEventsByTagQuery
-    with EventsByTagQuery {
+    with EventsByTagQuery
+    with CurrentLastSequenceNumberByPersistenceIdQuery {
 
   /**
    * Same type of query as `persistenceIds` but the event stream
@@ -146,7 +146,8 @@ class JdbcReadJournal(journal: ScalaJdbcReadJournal)
    * @param persistenceId The `persistenceId` for which the last known sequence number should be returned.
    * @return Some sequence number or None if the `persistenceId` is unknown.
    */
-  def currentLastSequenceNumberByPersistenceId(persistenceId: String): CompletionStage[Optional[java.lang.Long]] =
+  override def currentLastSequenceNumberByPersistenceId(
+      persistenceId: String): CompletionStage[Optional[java.lang.Long]] =
     journal
       .currentLastSequenceNumberByPersistenceId(persistenceId)
       .asJava

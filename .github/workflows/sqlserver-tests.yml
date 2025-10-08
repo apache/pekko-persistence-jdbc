@@ -22,7 +22,7 @@ jobs:
           
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -34,19 +34,19 @@ jobs:
           git checkout scratch
 
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: temurin
           java-version: 17
 
       - name: Install sbt
-        uses: sbt/setup-sbt@v1
+        uses: sbt/setup-sbt@3e125ece5c3e5248e18da9ed8d2cce3d335ec8dd # v1.1.14
 
       - name: Install sbt
         uses: sbt/setup-sbt@17575ea4e18dd928fe5968dbe32294b97923d65b # v1.1.13
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c # v6.4.7
+        uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c # 6.4.7
 
       - name: Start docker
         run: ./scripts/launch-sqlserver.sh

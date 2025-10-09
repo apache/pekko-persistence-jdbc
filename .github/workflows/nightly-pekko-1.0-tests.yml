@@ -22,12 +22,7 @@ jobs:
         with:
           fetch-depth: 0
           fetch-tags: true
-
-      - name: Checkout GitHub merge
-        if: github.event.pull_request
-        run: |-
-          git fetch origin pull/${{ github.event.pull_request.number }}/merge:scratch
-          git checkout scratch
+          ref: 1.2.x
 
       - name: Setup JDK ${{ matrix.java-version }}
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0

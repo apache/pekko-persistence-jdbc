@@ -78,7 +78,7 @@ class JdbcAsyncWriteJournal(config: Config) extends AsyncWriteJournal {
   def journalDaoWithUpdates: JournalDaoWithUpdates =
     journalDao match {
       case upgraded: JournalDaoWithUpdates => upgraded
-      case _ =>
+      case _                               =>
         throw new IllegalStateException(s"The ${journalDao.getClass} does NOT implement [JournalDaoWithUpdates], " +
           s"which is required to perform updates of events! Please configure a valid update capable DAO (e.g. the default [ByteArrayJournalDao].")
     }

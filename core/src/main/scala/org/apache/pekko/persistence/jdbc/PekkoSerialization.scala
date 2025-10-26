@@ -58,7 +58,7 @@ object PekkoSerialization {
       // This means that failure to deserialize the meta will fail the read, I think this is the correct to do
       for {
         withMeta <- metadata match {
-          case None => Success(repr)
+          case None                => Success(repr)
           case Some((payload, id)) =>
             serialization.deserialize(payload, id, row.metaSerManifest.getOrElse("")).map { meta =>
               repr.withMetadata(meta)

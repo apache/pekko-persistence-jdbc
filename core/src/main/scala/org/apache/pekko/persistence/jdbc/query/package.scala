@@ -22,7 +22,7 @@ package object query {
       that match {
         case Sequence(offsetValue) => offsetValue
         case NoOffset              => 0L
-        case _ =>
+        case _                     =>
           throw new IllegalArgumentException(
             "pekko-persistence-jdbc does not support " + that.getClass.getName + " offsets")
       }

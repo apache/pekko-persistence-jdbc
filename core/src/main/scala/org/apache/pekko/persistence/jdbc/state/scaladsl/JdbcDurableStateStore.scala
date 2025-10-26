@@ -204,8 +204,8 @@ class JdbcDurableStateStore[A](
           }
 
           control match {
-            case Stop     => Future.successful(None)
-            case Continue => retrieveNextBatch()
+            case Stop            => Future.successful(None)
+            case Continue        => retrieveNextBatch()
             case ContinueDelayed =>
               pekko.pattern.after(durableStateConfig.refreshInterval, system.scheduler)(retrieveNextBatch())
           }

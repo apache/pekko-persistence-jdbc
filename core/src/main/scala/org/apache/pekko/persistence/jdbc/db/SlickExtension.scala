@@ -88,7 +88,7 @@ class DefaultSlickDatabaseProvider(system: ActorSystem) extends SlickDatabasePro
 
   def database(config: Config): SlickDatabase = {
     config.asStringOption(ConfigKeys.useSharedDb) match {
-      case None => SlickDatabase.initializeEagerly(config, new SlickConfiguration(config.getConfig("slick")), "slick")
+      case None               => SlickDatabase.initializeEagerly(config, new SlickConfiguration(config.getConfig("slick")), "slick")
       case Some(sharedDbName) =>
         getSharedDbOrThrow(sharedDbName)
     }

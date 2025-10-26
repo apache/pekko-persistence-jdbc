@@ -270,8 +270,8 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
         }
 
         control match {
-          case Stop     => Future.successful(None)
-          case Continue => retrieveNextBatch()
+          case Stop            => Future.successful(None)
+          case Continue        => retrieveNextBatch()
           case ContinueDelayed =>
             pekko.pattern.after(readJournalConfig.refreshInterval, system.scheduler)(retrieveNextBatch())
         }

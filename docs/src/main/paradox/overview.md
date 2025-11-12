@@ -2,7 +2,7 @@
 
 The Apache Pekko Persistence JDBC plugin allows for using JDBC-compliant databases as backend for @extref:[Apache Pekko Persistence](pekko:persistence.html) and @extref:[Apache Pekko Persistence Query](pekko:persistence-query.html).
 
-This plugin supports both **Event Sourcing** and **Durable State** persistence modes, but does not support DurableState under the backend of MySQL.
+This plugin supports both **Event Sourcing** and **Durable State** persistence modes.
 
 In EventSourcing mode, pekko-persistence-jdbc writes journal and snapshot entries to a configured JDBC store. It also implements the full pekko-persistence-query API and is therefore very useful for implementing DDD-style application models using Apache Pekko and Scala for creating reactive applications.
 

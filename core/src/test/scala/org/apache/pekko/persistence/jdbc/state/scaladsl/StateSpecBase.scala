@@ -27,7 +27,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.config._
-import pekko.persistence.jdbc.testkit.internal.{ H2, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout
@@ -47,13 +47,11 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   implicit lazy val e: ExecutionContext = system.dispatcher
 
   private[jdbc] def schemaTypeToProfile(s: SchemaType) = s match {
-    case H2       => slick.jdbc.H2Profile
-    case Postgres => slick.jdbc.PostgresProfile
-    // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
-    // case MySQL     => slick.jdbc.MySQLProfile
+    case H2        => slick.jdbc.H2Profile
+    case Postgres  => slick.jdbc.PostgresProfile
+    case MySQL     => slick.jdbc.MySQLProfile
     case SqlServer => slick.jdbc.SQLServerProfile
     case Oracle    => slick.jdbc.OracleProfile
-    case _         => throw new UnsupportedOperationException(s"Unsupported <$s> for durableState.")
   }
 
   val customSerializers = ConfigFactory.parseString("""
@@ -109,11 +107,10 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
       f(system)
     } finally {
       system.actorSelection("system/" + "pekko-persistence-jdbc-durable-state-sequence-actor").resolveOne().onComplete {
-        case Success(actorRef) => {
+        case Success(actorRef) =>
           system.stop(actorRef)
           Thread.sleep(1000)
           system.log.debug(s"Is terminated: ${actorRef.isTerminated}")
-        }
         case Failure(_) =>
           system.log.warning("system/" + "-persistence-jdbc-durable-state-sequence-actorsomename" + " does not exist")
       }

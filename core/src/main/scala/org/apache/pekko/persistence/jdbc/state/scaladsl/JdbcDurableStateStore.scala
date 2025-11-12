@@ -18,7 +18,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 import scala.util.Try
 
-import slick.jdbc.{ JdbcBackend, JdbcProfile }
+import slick.jdbc.{ JdbcBackend, JdbcProfile, MySQLProfile }
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ExtendedActorSystem
@@ -101,7 +101,11 @@ class JdbcDurableStateStore[A](
     Future
       .fromTry(row)
       .flatMap { r =>
-        val action = if (revision == 1) insertDurableState(r) else updateDurableState(r)
+        val action = profile match {
+          case _: MySQLProfile    => replaceDurableState(r)
+          case _ if revision == 1 => insertDurableState(r)
+          case _                  => updateDurableState(r)
+        }
         db.run(action)
       }
       .map { rowsAffected =>
@@ -247,6 +251,12 @@ class JdbcDurableStateStore[A](
       s <- getSequenceNextValueExpr()
       u <- insertDbWithDurableState(row, s.head)
     } yield u
+  }
+
+  private def replaceDurableState(row: DurableStateTables.DurableStateRow) = {
+    import queries._
+
+    replaceDbWithDurableState(row)
   }
 
   def deleteAllFromDb() = db.run(queries.deleteAllFromDb())

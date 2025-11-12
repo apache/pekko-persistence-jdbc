@@ -19,7 +19,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
 import OffsetSyntax._
-import pekko.persistence.jdbc.testkit.internal.{ H2, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.query.{ NoOffset, Offset, Sequence, UpdatedDurableState }
 import pekko.stream.scaladsl.Sink
 import org.scalatest.time.{ Millis, Seconds, Span }
@@ -83,9 +83,8 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
             e shouldBe an[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
           case Postgres =>
             e shouldBe an[org.postgresql.util.PSQLException]
-          // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
-          // case MySQL =>
-          //  e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
+          case MySQL =>
+            e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case Oracle =>
             e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
           case SqlServer =>
@@ -281,7 +280,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       // trick to complete the future
       val f = source
         .takeWhile { e =>
-          m += ((e.persistenceId, e.offset.value))
+          m += e.persistenceId -> e.offset.value
           e.offset.value < 12
         }
         .runWith(Sink.seq)
@@ -312,7 +311,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         // trick to complete the future
         val f = source
           .takeWhile { e =>
-            m += ((e.persistenceId, e.offset.value))
+            m += e.persistenceId -> e.offset.value
             e.offset.value < 12
           }
           .runWith(Sink.seq)
@@ -370,7 +369,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         // trick to complete the future
         val f = source
           .takeWhile { e =>
-            m += ((e.persistenceId, e.offset.value))
+            m += e.persistenceId -> e.offset.value
             e.offset.value < 21
           }
           .runWith(Sink.seq)
@@ -401,7 +400,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         // trick to complete the future
         val f = source
           .takeWhile { e =>
-            m += ((e.persistenceId, e.offset.value))
+            m += e.persistenceId -> e.offset.value
             e.offset.value < 3060
           }
           .runWith(Sink.seq)

@@ -35,8 +35,7 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
     case PostgresProfile  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
     case SQLServerProfile => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
     case OracleProfile    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
-    // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
-    // case MySQLProfile     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
+    // MySQLProfile uses the AUTO_INCREMENT column feature, so we not extract manually the next `globalOffset` value
     case _ => throw new UnsupportedOperationException(s"Unsupported JdbcProfile <$profile> for durableState.")
   }
 
@@ -84,6 +83,30 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
                #${durableStateTableCfg.columnNames.stateTimestamp} = ${System.currentTimeMillis}
            WHERE #${durableStateTableCfg.columnNames.persistenceId} = ${row.persistenceId}
              AND #${durableStateTableCfg.columnNames.revision} = ${row.revision} - 1
+        """
+  }
+
+  private[jdbc] def replaceDbWithDurableState(row: DurableStateTables.DurableStateRow) = {
+    sqlu"""REPLACE INTO #${durableStateTableCfg.schemaAndTableName}
+           (
+              #${durableStateTableCfg.columnNames.persistenceId},
+              #${durableStateTableCfg.columnNames.revision},
+              #${durableStateTableCfg.columnNames.statePayload},
+              #${durableStateTableCfg.columnNames.stateSerId},
+              #${durableStateTableCfg.columnNames.stateSerManifest},
+              #${durableStateTableCfg.columnNames.tag},
+              #${durableStateTableCfg.columnNames.stateTimestamp}
+            )
+            VALUES
+            (
+              ${row.persistenceId},
+              ${row.revision},
+              ${row.statePayload},
+              ${row.stateSerId},
+              ${row.stateSerManifest},
+              ${row.tag},
+              #${System.currentTimeMillis()}
+            )
         """
   }
 

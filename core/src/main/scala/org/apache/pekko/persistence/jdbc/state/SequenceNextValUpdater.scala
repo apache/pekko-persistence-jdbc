@@ -37,7 +37,7 @@ import slick.sql.SqlStreamingAction
 
   import profile.api._
 
-  // H2 dependent (https://stackoverflow.com/questions/36244641/h2-equivalent-of-postgres-serial-or-bigserial-column)
+  // H2 dependent (based on https://www.h2database.com/html/systemtables.html)
   def getSequenceNextValueExpr() = {
     sql"""SELECT COLUMN_DEFAULT
           FROM INFORMATION_SCHEMA.COLUMNS

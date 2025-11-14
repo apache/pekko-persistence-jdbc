@@ -39,6 +39,11 @@ import org.apache.pekko.annotation.InternalApi
 /**
  * INTERNAL API
  */
+@InternalApi private[jdbc] case object MariaDB extends SchemaType
+
+/**
+ * INTERNAL API
+ */
 @InternalApi private[jdbc] case object Oracle extends SchemaType
 
 /**

@@ -17,7 +17,7 @@
 export VM_HOST="${VM_HOST:-localhost}"
 
 # Wait for a certain service to become available
-# Usage: wait 3306 Mysql
+# Usage: wait 3306 MySQL
 wait() {
 while true; do
   if ! nc -z $VM_HOST $1
@@ -35,6 +35,7 @@ docker compose -f scripts/docker-compose.yml kill
 docker compose -f scripts/docker-compose.yml rm -f
 docker compose -f scripts/docker-compose.yml up -d
 wait 3306 MySQL
+wait 3307 MariaDB
 wait 5432 Postgres
 wait 1521 Oracle
 wait 1433 SqlServer

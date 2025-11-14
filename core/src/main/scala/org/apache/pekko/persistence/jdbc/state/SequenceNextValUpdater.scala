@@ -89,3 +89,15 @@ import slick.sql.SqlStreamingAction
         .globalOffset}_SEQ.nextval FROM DUAL""".as[
       String]
 }
+
+/**
+ * INTERNAL API
+ */
+@InternalApi private[jdbc] final class MySQLSequenceNextValUpdater(profile: JdbcProfile)
+    extends SequenceNextValUpdater {
+
+  import profile.api._
+
+  def getSequenceNextValueExpr() =
+    sql"""SELECT LAST_INSERT_ID()""".as[String]
+}

@@ -17,8 +17,15 @@ package org.apache.pekko.persistence.jdbc.state
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
-
-import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLServerProfile, SetParameter }
+import slick.jdbc.{
+  H2Profile,
+  JdbcProfile,
+  MySQLProfile,
+  OracleProfile,
+  PostgresProfile,
+  SQLServerProfile,
+  SetParameter
+}
 
 /**
  * INTERNAL API
@@ -35,9 +42,8 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
     case PostgresProfile  => new PostgresSequenceNextValUpdater(profile, durableStateTableCfg)
     case SQLServerProfile => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
     case OracleProfile    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
-    // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
-    // case MySQLProfile     => new MySQLSequenceNextValUpdater(profile, durableStateTableCfg)
-    case _ => throw new UnsupportedOperationException(s"Unsupported JdbcProfile <$profile> for durableState.")
+    case MySQLProfile     => new MySQLSequenceNextValUpdater(profile)
+    case _                => throw new UnsupportedOperationException(s"Unsupported JdbcProfile <$profile> for durableState.")
   }
 
   implicit val uuidSetter: SetParameter[Array[Byte]] = SetParameter[Array[Byte]] { case (bytes, params) =>
@@ -87,7 +93,18 @@ import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLS
         """
   }
 
-  private[jdbc] def getSequenceNextValueExpr() = sequenceNextValUpdater.getSequenceNextValueExpr()
+  private def replaceDbGlobalOffsetTable() = {
+    sqlu"""REPLACE INTO #${durableStateTableCfg.globalOffsetTableName} (dummy) VALUES (0)"""
+  }
+
+  private[jdbc] def getSequenceNextValueExpr() = profile match {
+    case MySQLProfile =>
+      replaceDbGlobalOffsetTable()
+        .andThen(sequenceNextValUpdater.getSequenceNextValueExpr())
+        .transactionally
+    case _ =>
+      sequenceNextValUpdater.getSequenceNextValueExpr()
+  }
 
   def deleteFromDb(persistenceId: String) = {
     durableStateTable.filter(_.persistenceId === persistenceId).delete

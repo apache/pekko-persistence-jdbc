@@ -11,6 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   HardDeleteQueryTest,
+  MariaDBCleaner,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
@@ -20,6 +21,8 @@ import org.apache.pekko.persistence.jdbc.query.{
 class PostgresHardDeleteQueryTest extends HardDeleteQueryTest("postgres-application.conf") with PostgresCleaner
 
 class MySQLHardDeleteQueryTest extends HardDeleteQueryTest("mysql-application.conf") with MysqlCleaner
+
+class MariaDBHardDeleteQueryTest extends HardDeleteQueryTest("mariadb-application.conf") with MariaDBCleaner
 
 class OracleHardDeleteQueryTest extends HardDeleteQueryTest("oracle-application.conf") with OracleCleaner
 

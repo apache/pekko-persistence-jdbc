@@ -11,6 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   AllPersistenceIdsTest,
+  MariaDBCleaner,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
@@ -20,6 +21,8 @@ import org.apache.pekko.persistence.jdbc.query.{
 class PostgresScalaAllPersistenceIdsTest extends AllPersistenceIdsTest("postgres-application.conf") with PostgresCleaner
 
 class MySQLScalaAllPersistenceIdsTest extends AllPersistenceIdsTest("mysql-application.conf") with MysqlCleaner
+
+class MariaDBScalaAllPersistenceIdsTest extends AllPersistenceIdsTest("mariadb-application.conf") with MariaDBCleaner
 
 class OracleScalaAllPersistenceIdsTest extends AllPersistenceIdsTest("oracle-application.conf") with OracleCleaner
 

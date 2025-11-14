@@ -11,6 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   EventsByTagTest,
+  MariaDBCleaner,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
@@ -20,6 +21,8 @@ import org.apache.pekko.persistence.jdbc.query.{
 class PostgresScalaEventsByTagTest extends EventsByTagTest("postgres-application.conf") with PostgresCleaner
 
 class MySQLScalaEventByTagTest extends EventsByTagTest("mysql-application.conf") with MysqlCleaner
+
+class MariaDBScalaEventByTagTest extends EventsByTagTest("mariadb-application.conf") with MariaDBCleaner
 
 class OracleScalaEventByTagTest extends EventsByTagTest("oracle-application.conf") with OracleCleaner {
   override def timeoutMultiplier: Int = 4

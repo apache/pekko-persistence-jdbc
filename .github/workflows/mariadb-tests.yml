@@ -1,0 +1,60 @@
+name: MariaDB Integration Tests
+
+permissions: {}
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags-ignore: [ v.* ]
+
+jobs:
+   integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "MariaDB", extraOpts: '' }
+          - { name: "MariaDB (old dao)", extraOpts: ' -Djdbc-journal.dao=org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao -Djdbc-snapshot-store.dao=org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao -Djdbc-read-journal.dao=org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao' }
+          
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Checkout GitHub merge
+        if: github.event.pull_request
+        run: |-
+          git fetch origin pull/${{ github.event.pull_request.number }}/merge:scratch
+          git checkout scratch
+
+      - name: Setup Java 17
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install sbt
+        uses: sbt/setup-sbt@17575ea4e18dd928fe5968dbe32294b97923d65b # v1.1.13
+
+      - name: Cache Coursier cache
+        uses: coursier/cache-action@4e2615869d13561d626ed48655e1a39e5b192b3c # 6.4.7
+
+      - name: Start docker
+        run: ./scripts/launch-mariadb.sh
+
+      - name: Run Integration tests for  ${{ matrix.name }}
+        run: sbt ++2.13 "integration/testOnly org.apache.pekko.persistence.jdbc.integration.MariaDB*"  ${{ matrix.extraOpts }}
+
+      - name: Run Migrator Integration tests for  ${{ matrix.name }}
+        if: matrix.name == 'MariaDB'
+        run: sbt ++2.13 "migratorIntegration/testOnly org.apache.pekko.persistence.jdbc.migrator.integration.MariaDB*"  ${{ matrix.extraOpts }}
+
+      - name: Print logs on failure
+        if: ${{ failure() }}
+        run: find . -name "*.log" -exec ./scripts/cat-log.sh {} \;

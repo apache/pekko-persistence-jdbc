@@ -11,6 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   EventsByPersistenceIdTest,
+  MariaDBCleaner,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
@@ -22,6 +23,9 @@ class PostgresScalaEventsByPersistenceIdTest
     with PostgresCleaner
 
 class MySQLScalaEventsByPersistenceIdTest extends EventsByPersistenceIdTest("mysql-application.conf") with MysqlCleaner
+
+class MariaDBScalaEventsByPersistenceIdTest extends EventsByPersistenceIdTest("mariadb-application.conf")
+    with MariaDBCleaner
 
 class OracleScalaEventsByPersistenceIdTest
     extends EventsByPersistenceIdTest("oracle-application.conf")

@@ -11,6 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   CurrentLastSequenceNumberByPersistenceIdTest,
+  MariaDBCleaner,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
@@ -26,6 +27,10 @@ class PostgresScalaCurrentLastSequenceNumberByPersistenceIdTest
 class MySQLScalaCurrentLastSequenceNumberByPersistenceIdTest
     extends CurrentLastSequenceNumberByPersistenceIdTest("mysql-shared-db-application.conf")
     with MysqlCleaner
+
+class MariaDBScalaCurrentLastSequenceNumberByPersistenceIdTest
+    extends CurrentLastSequenceNumberByPersistenceIdTest("mariadb-shared-db-application.conf")
+    with MariaDBCleaner
 
 class OracleScalaCurrentLastSequenceNumberByPersistenceIdTest
     extends CurrentLastSequenceNumberByPersistenceIdTest("oracle-shared-db-application.conf")

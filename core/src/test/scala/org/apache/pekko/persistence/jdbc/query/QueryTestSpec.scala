@@ -396,6 +396,27 @@ trait MysqlCleaner extends QueryTestSpec {
   }
 }
 
+trait MariaDBCleaner extends QueryTestSpec {
+
+  def clearMariaDB(): Unit = {
+    withStatement { stmt =>
+      stmt.execute("SET FOREIGN_KEY_CHECKS = 0")
+      tables.foreach { name => stmt.executeUpdate(s"TRUNCATE $name") }
+      stmt.execute("SET FOREIGN_KEY_CHECKS = 1")
+    }
+  }
+
+  override def beforeAll(): Unit = {
+    dropAndCreate(MariaDB)
+    super.beforeAll()
+  }
+
+  override def beforeEach(): Unit = {
+    clearMariaDB()
+    super.beforeEach()
+  }
+}
+
 trait OracleCleaner extends QueryTestSpec {
 
   def clearOracle(): Unit = {

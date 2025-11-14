@@ -80,18 +80,18 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       } { e =>
         schemaType match {
           case H2 =>
-            e shouldBe an[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
+            e shouldBe a[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
           case Postgres =>
-            e shouldBe an[org.postgresql.util.PSQLException]
+            e shouldBe a[org.postgresql.util.PSQLException]
           // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
           // case MySQL =>
-          //  e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
+          //  e shouldBe a[java.sql.SQLIntegrityConstraintViolationException]
           case MariaDB =>
             e shouldBe a[java.sql.SQLIntegrityConstraintViolationException]
           case Oracle =>
-            e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
+            e shouldBe a[java.sql.SQLIntegrityConstraintViolationException]
           case SqlServer =>
-            e shouldBe an[com.microsoft.sqlserver.jdbc.SQLServerException]
+            e shouldBe a[com.microsoft.sqlserver.jdbc.SQLServerException]
           case _ => throw new UnsupportedOperationException(s"Unsupported <$schemaType> for durableState.")
         }
       }

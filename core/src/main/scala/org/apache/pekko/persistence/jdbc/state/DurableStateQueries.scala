@@ -15,7 +15,7 @@
 package org.apache.pekko.persistence.jdbc.state
 
 import org.apache.pekko
-import org.apache.pekko.persistence.jdbc.db.MariaDBProfile
+import pekko.persistence.jdbc.db.MariaDBProfile
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 

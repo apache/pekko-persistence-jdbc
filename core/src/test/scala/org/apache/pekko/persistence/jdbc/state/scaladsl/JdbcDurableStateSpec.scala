@@ -19,7 +19,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
 import OffsetSyntax._
-import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MariaDB, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.query.{ NoOffset, Offset, Sequence, UpdatedDurableState }
 import pekko.stream.scaladsl.Sink
 import org.scalatest.time.{ Millis, Seconds, Span }
@@ -80,15 +80,17 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       } { e =>
         schemaType match {
           case H2 =>
-            e shouldBe an[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
+            e shouldBe a[org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException]
           case Postgres =>
-            e shouldBe an[org.postgresql.util.PSQLException]
+            e shouldBe a[org.postgresql.util.PSQLException]
           case MySQL =>
             e shouldBe a[java.sql.SQLIntegrityConstraintViolationException]
+          case MariaDB =>
+            e shouldBe a[java.sql.SQLIntegrityConstraintViolationException]
           case Oracle =>
-            e shouldBe an[java.sql.SQLIntegrityConstraintViolationException]
+            e shouldBe a[java.sql.SQLIntegrityConstraintViolationException]
           case SqlServer =>
-            e shouldBe an[com.microsoft.sqlserver.jdbc.SQLServerException]
+            e shouldBe a[com.microsoft.sqlserver.jdbc.SQLServerException]
           case _ => throw new UnsupportedOperationException(s"Unsupported <$schemaType> for durableState.")
         }
       }

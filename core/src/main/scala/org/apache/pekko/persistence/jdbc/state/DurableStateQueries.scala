@@ -17,6 +17,8 @@ package org.apache.pekko.persistence.jdbc.state
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.jdbc.db.MariaDBProfile
+
 import slick.jdbc.{
   H2Profile,
   JdbcProfile,
@@ -43,6 +45,7 @@ import slick.jdbc.{
     case SQLServerProfile => new SqlServerSequenceNextValUpdater(profile, durableStateTableCfg)
     case OracleProfile    => new OracleSequenceNextValUpdater(profile, durableStateTableCfg)
     case MySQLProfile     => new MySQLSequenceNextValUpdater(profile)
+    case MariaDBProfile   => new MariaDBSequenceNextValUpdater(profile, durableStateTableCfg)
     case _                => throw new UnsupportedOperationException(s"Unsupported JdbcProfile <$profile> for durableState.")
   }
 

@@ -218,6 +218,7 @@ class DurableStateTableConfiguration(config: Config) {
   private val cfg = config.getConfig("tables.durable_state")
   val tableName: String = cfg.getString("tableName")
   val globalOffsetTableName: String = cfg.getString("globalOffsetTableName")
+  val globalOffsetSequenceName: String = cfg.getString("globalOffsetSequenceName")
   val refreshInterval: FiniteDuration = config.asFiniteDuration("refreshInterval")
   val batchSize: Int = config.getInt("batchSize")
   val schemaName: Option[String] = cfg.asStringOption("schemaName")

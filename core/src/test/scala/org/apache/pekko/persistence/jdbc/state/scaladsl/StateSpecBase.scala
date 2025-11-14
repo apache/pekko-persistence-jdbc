@@ -27,7 +27,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.config._
-import pekko.persistence.jdbc.testkit.internal.{ H2, MySQL, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MariaDB, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout
@@ -50,6 +50,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     case H2        => slick.jdbc.H2Profile
     case Postgres  => slick.jdbc.PostgresProfile
     case MySQL     => slick.jdbc.MySQLProfile
+    case MariaDB   => org.apache.pekko.persistence.jdbc.db.MariaDBProfile
     case SqlServer => slick.jdbc.SQLServerProfile
     case Oracle    => slick.jdbc.OracleProfile
     case _         => throw new UnsupportedOperationException(s"Unsupported <$s> for durableState.")

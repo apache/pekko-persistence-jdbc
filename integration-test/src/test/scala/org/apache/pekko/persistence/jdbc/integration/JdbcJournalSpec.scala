@@ -11,7 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko
 import pekko.persistence.jdbc.journal.{ JdbcJournalSchemaSpec, JdbcJournalSpec }
-import pekko.persistence.jdbc.testkit.internal.{ MySQL, Oracle, Postgres, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ MariaDB, MySQL, Oracle, Postgres, SqlServer }
 import com.typesafe.config.{ Config, ConfigFactory }
 
 class PostgresJournalSpec extends JdbcJournalSpec(ConfigFactory.load("postgres-application.conf"), Postgres)
@@ -36,6 +36,10 @@ class PostgresJournalSchemaSpec
 
 class MySQLJournalSpec extends JdbcJournalSpec(ConfigFactory.load("mysql-application.conf"), MySQL)
 class MySQLJournalSpecSharedDb extends JdbcJournalSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQL)
+
+class MariaDBJournalSpec extends JdbcJournalSpec(ConfigFactory.load("mariadb-application.conf"), MariaDB)
+class MariaDBJournalSpecSharedDb
+    extends JdbcJournalSpec(ConfigFactory.load("mariadb-shared-db-application.conf"), MariaDB)
 
 class OracleJournalSpec extends JdbcJournalSpec(ConfigFactory.load("oracle-application.conf"), Oracle)
 class OracleJournalSpecSharedDb extends JdbcJournalSpec(ConfigFactory.load("oracle-shared-db-application.conf"), Oracle)

@@ -163,6 +163,7 @@ private[jdbc] object SchemaUtilsImpl {
       case Oracle            => (s"schema/oracle/oracle-drop-schema$suffix.sql", "/")
       case SqlServer         => (s"schema/sqlserver/sqlserver-drop-schema$suffix.sql", ";")
       case H2                => (s"schema/h2/h2-drop-schema$suffix.sql", ";")
+      case _                 => throw new UnsupportedOperationException(s"Unsupported schema request for $schemaType")
     }
   }
 
@@ -176,6 +177,7 @@ private[jdbc] object SchemaUtilsImpl {
       case Oracle            => (s"schema/oracle/oracle-create-schema$suffix.sql", "/")
       case SqlServer         => (s"schema/sqlserver/sqlserver-create-schema$suffix.sql", ";")
       case H2                => (s"schema/h2/h2-create-schema$suffix.sql", ";")
+      case _                 => throw new UnsupportedOperationException(s"Unsupported schema request for $schemaType")
     }
   }
 

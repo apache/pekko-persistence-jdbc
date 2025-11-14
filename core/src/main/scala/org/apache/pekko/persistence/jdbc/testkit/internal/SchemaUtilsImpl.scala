@@ -15,15 +15,13 @@
 package org.apache.pekko.persistence.jdbc.testkit.internal
 
 import java.sql.Statement
-
 import scala.concurrent.Future
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.InternalApi
 import pekko.dispatch.Dispatchers
-import pekko.persistence.jdbc.db.SlickDatabase
-import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.db.{ MariaDBProfile, SlickDatabase, SlickExtension }
 import com.typesafe.config.Config
 import org.slf4j.Logger
 import slick.jdbc.H2Profile
@@ -158,22 +156,26 @@ private[jdbc] object SchemaUtilsImpl {
   private def dropScriptFor(schemaType: SchemaType, legacy: Boolean): (String, String) = {
     val suffix = if (legacy) "-legacy" else ""
     schemaType match {
-      case Postgres  => (s"schema/postgres/postgres-drop-schema$suffix.sql", ";")
-      case MySQL     => (s"schema/mysql/mysql-drop-schema$suffix.sql", ";")
-      case Oracle    => (s"schema/oracle/oracle-drop-schema$suffix.sql", "/")
-      case SqlServer => (s"schema/sqlserver/sqlserver-drop-schema$suffix.sql", ";")
-      case H2        => (s"schema/h2/h2-drop-schema$suffix.sql", ";")
+      case Postgres          => (s"schema/postgres/postgres-drop-schema$suffix.sql", ";")
+      case MySQL             => (s"schema/mysql/mysql-drop-schema$suffix.sql", ";")
+      case MariaDB if legacy => throw new IllegalArgumentException(s"Invalid legacy schema request for $schemaType")
+      case MariaDB           => (s"schema/mariadb/mariadb-drop-schema$suffix.sql", ";")
+      case Oracle            => (s"schema/oracle/oracle-drop-schema$suffix.sql", "/")
+      case SqlServer         => (s"schema/sqlserver/sqlserver-drop-schema$suffix.sql", ";")
+      case H2                => (s"schema/h2/h2-drop-schema$suffix.sql", ";")
     }
   }
 
   private def createScriptFor(schemaType: SchemaType, legacy: Boolean): (String, String) = {
     val suffix = if (legacy) "-legacy" else ""
     schemaType match {
-      case Postgres  => (s"schema/postgres/postgres-create-schema$suffix.sql", ";")
-      case MySQL     => (s"schema/mysql/mysql-create-schema$suffix.sql", ";")
-      case Oracle    => (s"schema/oracle/oracle-create-schema$suffix.sql", "/")
-      case SqlServer => (s"schema/sqlserver/sqlserver-create-schema$suffix.sql", ";")
-      case H2        => (s"schema/h2/h2-create-schema$suffix.sql", ";")
+      case Postgres          => (s"schema/postgres/postgres-create-schema$suffix.sql", ";")
+      case MySQL             => (s"schema/mysql/mysql-create-schema$suffix.sql", ";")
+      case MariaDB if legacy => throw new IllegalArgumentException(s"Invalid legacy schema request for $schemaType")
+      case MariaDB           => (s"schema/mariadb/mariadb-create-schema$suffix.sql", ";")
+      case Oracle            => (s"schema/oracle/oracle-create-schema$suffix.sql", "/")
+      case SqlServer         => (s"schema/sqlserver/sqlserver-create-schema$suffix.sql", ";")
+      case H2                => (s"schema/h2/h2-create-schema$suffix.sql", ";")
     }
   }
 
@@ -185,6 +187,7 @@ private[jdbc] object SchemaUtilsImpl {
     profile match {
       case PostgresProfile  => Postgres
       case MySQLProfile     => MySQL
+      case MariaDBProfile   => MariaDB
       case OracleProfile    => Oracle
       case SQLServerProfile => SqlServer
       case H2Profile        => H2

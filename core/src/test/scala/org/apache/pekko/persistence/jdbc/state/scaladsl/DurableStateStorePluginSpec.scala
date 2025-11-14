@@ -25,7 +25,7 @@ import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import org.slf4j.LoggerFactory
-import slick.jdbc.{ H2Profile, JdbcProfile }
+import slick.jdbc.{ H2Profile, JdbcProfile, MySQLProfile }
 
 import scala.concurrent.duration.DurationInt
 
@@ -69,15 +69,19 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
   implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = Span(60, Seconds), interval = Span(100, Millis))
 
-  val customConfig: Config = ConfigFactory.parseString("""
-    jdbc-durable-state-store {
-      tables {
-        durable_state {
-          schemaName = "pekko"
+  val customConfig: Config = profile match {
+    case _: MySQLProfile => ConfigFactory.empty()
+    case _               =>
+      ConfigFactory.parseString("""
+        jdbc-durable-state-store {
+          tables {
+            durable_state {
+              schemaName = "pekko"
+            }
+          }
         }
-      }
-    }
-  """)
+      """)
+  }
 
   implicit lazy val system: ExtendedActorSystem =
     ActorSystem(

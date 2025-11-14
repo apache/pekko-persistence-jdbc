@@ -11,10 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko
 import pekko.persistence.jdbc.journal.JdbcJournalPerfSpec
-import pekko.persistence.jdbc.testkit.internal.MySQL
-import pekko.persistence.jdbc.testkit.internal.Oracle
-import pekko.persistence.jdbc.testkit.internal.Postgres
-import pekko.persistence.jdbc.testkit.internal.SqlServer
+import pekko.persistence.jdbc.testkit.internal.{ MariaDB, MySQL, Oracle, Postgres, SqlServer }
 import com.typesafe.config.ConfigFactory
 
 class PostgresJournalPerfSpec extends JdbcJournalPerfSpec(ConfigFactory.load("postgres-application.conf"), Postgres) {
@@ -32,6 +29,15 @@ class MySQLJournalPerfSpec extends JdbcJournalPerfSpec(ConfigFactory.load("mysql
 
 class MySQLJournalPerfSpecSharedDb
     extends JdbcJournalPerfSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQL) {
+  override def eventsCount: Int = 100
+}
+
+class MariaDBJournalPerfSpec extends JdbcJournalPerfSpec(ConfigFactory.load("mariadb-application.conf"), MariaDB) {
+  override def eventsCount: Int = 100
+}
+
+class MariaDBJournalPerfSpecSharedDb
+    extends JdbcJournalPerfSpec(ConfigFactory.load("mariadb-shared-db-application.conf"), MariaDB) {
   override def eventsCount: Int = 100
 }
 

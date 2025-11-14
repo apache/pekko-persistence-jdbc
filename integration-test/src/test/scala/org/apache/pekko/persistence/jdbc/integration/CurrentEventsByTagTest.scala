@@ -11,6 +11,7 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
   CurrentEventsByTagTest,
+  MariaDBCleaner,
   MysqlCleaner,
   OracleCleaner,
   PostgresCleaner,
@@ -26,6 +27,10 @@ class PostgresScalaCurrentEventsByTagTest
 class MySQLScalaCurrentEventsByTagTest
     extends CurrentEventsByTagTest("mysql-shared-db-application.conf")
     with MysqlCleaner
+
+class MariaDBScalaCurrentEventsByTagTest
+    extends CurrentEventsByTagTest("mariadb-shared-db-application.conf")
+    with MariaDBCleaner
 
 class OracleScalaCurrentEventsByTagTest
     extends CurrentEventsByTagTest("oracle-shared-db-application.conf")

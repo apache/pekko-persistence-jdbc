@@ -17,10 +17,14 @@ Configure `slick`:
   - `slick.jdbc.OracleProfile$`
   - `slick.jdbc.SQLServerProfile$`
 
+- The following custom slick profiles are available:
+  - `org.apache.pekko.persistence.jdbc.db.MariaDBProfile$`
+
 ## Database Schema
 
 - @extref:[Postgres Schema](github:/core/src/main/resources/schema/postgres/postgres-create-schema.sql)
 - @extref:[MySQL Schema](github:/core/src/main/resources/schema/mysql/mysql-create-schema.sql)
+- @extref:[MariaDB Schema](github:/core/src/main/resources/schema/mariadb/mariadb-create-schema.sql)
 - @extref:[H2 Schema](github:/core/src/main/resources/schema/h2/h2-create-schema.sql)
 - @extref:[Oracle Schema](github:/core/src/main/resources/schema/oracle/oracle-create-schema.sql)
 - @extref:[SQL Server Schema](github:/core/src/main/resources/schema/sqlserver/sqlserver-create-schema.sql)
@@ -64,6 +68,9 @@ Postgres
 MySQL
 : @@snip[MySQL](/core/src/test/resources/mysql-application.conf)
 
+MariaDB
+: @@snip[MariaDB](/core/src/test/resources/mariadb-application.conf)
+
 H2
 : @@snip[H2](/core/src/test/resources/h2-application.conf)
 
@@ -82,6 +89,9 @@ Postgres
 
 MySQL
 : @@snip[MySQL](/core/src/test/resources/mysql-shared-db-application.conf)
+
+MariaDB
+: @@snip[MariaDB](/core/src/test/resources/mariadb-shared-db-application.conf)
 
 H2
 : @@snip[H2](/core/src/test/resources/h2-shared-db-application.conf)

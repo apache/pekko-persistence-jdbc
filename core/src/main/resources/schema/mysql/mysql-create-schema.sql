@@ -53,6 +53,7 @@ CREATE INDEX state_tag_idx on durable_state (tag);
 CREATE INDEX state_global_offset_idx on durable_state (global_offset);
 
 CREATE TABLE IF NOT EXISTS durable_state_global_offset (
-    id SERIAL primary key,
-    dummy TINYINT(1) NOT NULL UNIQUE
+    id SERIAL,
+    dummy TINYINT(1) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
 );

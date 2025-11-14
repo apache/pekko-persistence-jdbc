@@ -15,9 +15,9 @@
 package org.apache.pekko.persistence.jdbc.state
 
 import org.apache.pekko
-import pekko.persistence.jdbc.db.MariaDBProfile
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
+import pekko.persistence.jdbc.db.MariaDBProfile
 
 import slick.jdbc.{ H2Profile, JdbcProfile, OracleProfile, PostgresProfile, SQLServerProfile, SetParameter }
 

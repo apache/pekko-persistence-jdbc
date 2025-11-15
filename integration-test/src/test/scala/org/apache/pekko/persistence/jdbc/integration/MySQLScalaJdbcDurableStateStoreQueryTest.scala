@@ -23,8 +23,26 @@ import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.JdbcDurableStateSpec
 import pekko.persistence.jdbc.testkit.internal.MySQL
 
-class MySQLScalaJdbcDurableStateStoreQueryTest
+class MySQLScalaJdbcDurableStateStoreQuerySharedTest
     extends JdbcDurableStateSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQL) {
+  implicit lazy val system: ActorSystem =
+    ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
+}
+
+class MySQLScalaJdbcDurableStateStoreQueryTest
+    extends JdbcDurableStateSpec(ConfigFactory.load("mysql-application.conf"), MySQL) {
+  implicit lazy val system: ActorSystem =
+    ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
+}
+
+class MySQLScalaJdbcDurableStateStoreQueryExplicitSelectSharedTest
+    extends JdbcDurableStateSpec(ConfigFactory.load("mysql-shared-db-explicit-select-application.conf"), MySQL) {
+  implicit lazy val system: ActorSystem =
+    ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
+}
+
+class MySQLScalaJdbcDurableStateStoreQueryExplicitSelectTest
+    extends JdbcDurableStateSpec(ConfigFactory.load("mysql-explicit-select-application.conf"), MySQL) {
   implicit lazy val system: ActorSystem =
     ActorSystem("JdbcDurableStateSpec", config.withFallback(customSerializers))
 }

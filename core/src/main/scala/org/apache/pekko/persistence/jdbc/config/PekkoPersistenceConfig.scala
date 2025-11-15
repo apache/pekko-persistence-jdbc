@@ -212,6 +212,7 @@ class DurableStateTableColumnNames(config: Config) {
   val stateSerManifest: String = cfg.getString("stateSerManifest")
   val tag: String = cfg.getString("tag")
   val stateTimestamp: String = cfg.getString("stateTimestamp")
+  val globalOffsetId: String = cfg.getString("globalOffsetId")
 }
 
 class DurableStateTableConfiguration(config: Config) {
@@ -219,6 +220,7 @@ class DurableStateTableConfiguration(config: Config) {
   val tableName: String = cfg.getString("tableName")
   val globalOffsetTableName: String = cfg.getString("globalOffsetTableName")
   val globalOffsetSequenceName: String = cfg.getString("globalOffsetSequenceName")
+  val useExplicitSelectForGlobalOffset: Boolean = cfg.getBoolean("useExplicitSelectForGlobalOffset")
   val refreshInterval: FiniteDuration = config.asFiniteDuration("refreshInterval")
   val batchSize: Int = config.getInt("batchSize")
   val schemaName: Option[String] = cfg.asStringOption("schemaName")

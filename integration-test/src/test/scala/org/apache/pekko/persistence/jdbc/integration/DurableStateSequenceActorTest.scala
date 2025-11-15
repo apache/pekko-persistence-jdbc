@@ -48,6 +48,12 @@ class MySQLDurableStateSequenceActorTest
     ActorSystem("test", config.withFallback(customSerializers))
 }
 
+class MySQLDurableStateSequenceExplicitSelectActorTest
+    extends DurableStateSequenceActorTest(ConfigFactory.load("mysql-explicit-select-application.conf"), MySQL) {
+  implicit lazy val system: ActorSystem =
+    ActorSystem("test", config.withFallback(customSerializers))
+}
+
 class MariaDBDurableStateSequenceActorTest
     extends DurableStateSequenceActorTest(ConfigFactory.load("mariadb-application.conf"), MariaDB) {
   implicit lazy val system: ActorSystem =

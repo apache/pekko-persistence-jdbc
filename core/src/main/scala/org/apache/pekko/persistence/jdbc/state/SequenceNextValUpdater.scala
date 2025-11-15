@@ -93,13 +93,18 @@ import slick.sql.SqlStreamingAction
 /**
  * INTERNAL API
  */
-@InternalApi private[jdbc] final class MySQLSequenceNextValUpdater(profile: JdbcProfile)
+@InternalApi private[jdbc] final class MySQLSequenceNextValUpdater(profile: JdbcProfile,
+    durableStateTableCfg: DurableStateTableConfiguration)
     extends SequenceNextValUpdater {
 
   import profile.api._
 
-  def getSequenceNextValueExpr() =
+  def getSequenceNextValueExpr() = if (durableStateTableCfg.useExplicitSelectForGlobalOffset) {
+    sql"""SELECT #${durableStateTableCfg.columnNames.globalOffsetId} FROM #${durableStateTableCfg.globalOffsetTableName}""".as[
+      String]
+  } else {
     sql"""SELECT LAST_INSERT_ID()""".as[String]
+  }
 }
 
 /**

@@ -22,6 +22,15 @@ services:
     ports:
       - "3306:3306" # credentials (root:root)
 
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-test
+    environment:
+      - "TZ=Europe/Amsterdam"
+      - "MARIADB_ROOT_PASSWORD=root"
+    ports:
+      - "3307:3306" # credentials (root:root)
+
   oracle:
     image: gvenzl/oracle-xe:21.3.0-slim-faststart
     container_name: oracle-test

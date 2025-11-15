@@ -51,7 +51,6 @@ object JournalTables {
 }
 
 /**
- * For the schema added in 5.0.0
  * INTERNAL API
  */
 @InternalApi

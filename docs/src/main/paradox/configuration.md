@@ -6,7 +6,7 @@ Configure `pekko-persistence`:
 
 - instruct Apache Pekko persistence to use the `jdbc-journal` plugin,
 - instruct Apache Pekko persistence to use the `jdbc-snapshot-store` plugin,
-- instruct Apache Pekko persistence to use the `jdbc-durable-state-store` plugin (No MySQL support)
+- instruct Apache Pekko persistence to use the `jdbc-durable-state-store` plugin
 
 Configure `slick`:
 

@@ -43,9 +43,6 @@ Java
 
 A `dropIfExists` variant is also available.
 
-**Note**: `SchemaUtils` was introduced in version 5.0.0.
-
-
 ## Reference Configuration
 
 pekko-persistence-jdbc provides the defaults as part of the @extref:[reference.conf](github:/core/src/main/resources/reference.conf). This file documents all the values which can be configured.

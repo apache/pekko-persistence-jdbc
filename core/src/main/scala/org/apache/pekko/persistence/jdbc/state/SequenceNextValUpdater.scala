@@ -100,7 +100,7 @@ import slick.sql.SqlStreamingAction
   import profile.api._
 
   def getSequenceNextValueExpr() = if (durableStateTableCfg.useExplicitSelectForGlobalOffset) {
-    sql"""SELECT #${durableStateTableCfg.columnNames.globalOffsetId} FROM #${durableStateTableCfg.globalOffsetTableName}""".as[
+    sql"""SELECT #${durableStateTableCfg.columnNames.nextGlobalOffset} FROM #${durableStateTableCfg.globalOffsetTableName}""".as[
       String]
   } else {
     sql"""SELECT LAST_INSERT_ID()""".as[String]

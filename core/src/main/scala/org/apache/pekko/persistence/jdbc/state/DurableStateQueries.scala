@@ -96,9 +96,10 @@ import slick.jdbc.{
         """
   }
 
-  private def replaceDbGlobalOffsetTable() = {
-    sqlu"""REPLACE INTO #${durableStateTableCfg.globalOffsetTableName} (dummy) VALUES (0)"""
-  }
+  private def replaceDbGlobalOffsetTable() =
+    sqlu"""UPDATE #${durableStateTableCfg.globalOffsetTableName}
+           SET #${durableStateTableCfg.columnNames.nextGlobalOffset} = LAST_INSERT_ID(#${durableStateTableCfg.columnNames.nextGlobalOffset} + 1)
+           WHERE singleton = 0"""
 
   private[jdbc] def getSequenceNextValueExpr() = profile match {
     case MySQLProfile =>

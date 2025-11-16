@@ -52,8 +52,10 @@ CREATE TABLE IF NOT EXISTS durable_state
 CREATE INDEX state_tag_idx on durable_state (tag);
 CREATE INDEX state_global_offset_idx on durable_state (global_offset);
 
-CREATE TABLE IF NOT EXISTS durable_state_global_offset (
-    id SERIAL,
-    dummy TINYINT(1) NOT NULL UNIQUE,
-    PRIMARY KEY (id)
+CREATE TABLE durable_state_global_offset
+(
+    singleton           TINYINT NOT NULL,
+    next_global_offset  BIGINT UNSIGNED NOT NULL UNIQUE,
+    PRIMARY KEY (singleton)
 );
+INSERT INTO durable_state_global_offset (singleton, next_global_offset) VALUES (0, 0);

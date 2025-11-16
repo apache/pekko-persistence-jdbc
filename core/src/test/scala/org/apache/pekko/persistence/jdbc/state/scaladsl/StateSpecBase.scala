@@ -132,6 +132,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   }
 
   override def afterAll(): Unit = {
+    drop(schemaType)
     db.close()
     system.terminate().futureValue
   }

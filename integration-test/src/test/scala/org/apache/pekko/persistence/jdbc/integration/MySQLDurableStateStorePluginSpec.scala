@@ -25,8 +25,22 @@ import org.apache.pekko.persistence.jdbc.state.scaladsl.{
 import slick.jdbc.MySQLProfile
 
 class MySQLDurableStateStorePluginSpec
+    extends DurableStateStorePluginSpec(ConfigFactory.load("mysql-application.conf"), MySQLProfile) {}
+
+class MySQLDurableStateStorePluginSharedSpec
     extends DurableStateStorePluginSpec(ConfigFactory.load("mysql-shared-db-application.conf"), MySQLProfile) {}
+
+class MySQLDurableStateStorePluginExplicitSelectSpec
+    extends DurableStateStorePluginSpec(ConfigFactory.load("mysql-explicit-select-application.conf"), MySQLProfile) {}
+
+class MySQLDurableStateStorePluginSharedExplicitSelectSpec
+    extends DurableStateStorePluginSpec(ConfigFactory.load("mysql-shared-db-explicit-select-application.conf"),
+      MySQLProfile) {}
 
 class MySQLDurableStateStorePluginSchemaSpec
     extends DurableStateStoreSchemaPluginSpec(ConfigFactory.load("mysql-application.conf"),
+      MySQLProfile) {}
+
+class MySQLDurableStateStorePluginSchemaExplicitSelectSpec
+    extends DurableStateStoreSchemaPluginSpec(ConfigFactory.load("mysql-explicit-select-application.conf"),
       MySQLProfile) {}

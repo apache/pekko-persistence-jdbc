@@ -96,14 +96,14 @@ import slick.jdbc.{
         """
   }
 
-  private def replaceDbGlobalOffsetTable() =
+  private def updateDbGlobalOffsetTable() =
     sqlu"""UPDATE #${durableStateTableCfg.globalOffsetTableName}
-           SET #${durableStateTableCfg.columnNames.nextGlobalOffset} = LAST_INSERT_ID(#${durableStateTableCfg.columnNames.nextGlobalOffset} + 1)
-           WHERE singleton = 0"""
+           SET #${durableStateTableCfg.columnNames.globalOffsetValue} = LAST_INSERT_ID(#${durableStateTableCfg.columnNames.globalOffsetValue} + 1)
+           WHERE #${durableStateTableCfg.columnNames.globalOffsetSingleton} = 0"""
 
   private[jdbc] def getSequenceNextValueExpr() = profile match {
     case MySQLProfile =>
-      replaceDbGlobalOffsetTable()
+      updateDbGlobalOffsetTable()
         .andThen(sequenceNextValUpdater.getSequenceNextValueExpr())
         .transactionally
     case _ =>

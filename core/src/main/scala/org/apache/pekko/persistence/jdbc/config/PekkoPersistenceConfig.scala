@@ -212,7 +212,8 @@ class DurableStateTableColumnNames(config: Config) {
   val stateSerManifest: String = cfg.getString("stateSerManifest")
   val tag: String = cfg.getString("tag")
   val stateTimestamp: String = cfg.getString("stateTimestamp")
-  val nextGlobalOffset: String = cfg.getString("nextGlobalOffset")
+  val globalOffsetSingleton: String = cfg.getString("globalOffsetSingleton")
+  val globalOffsetValue: String = cfg.getString("globalOffsetValue")
 }
 
 class DurableStateTableConfiguration(config: Config) {

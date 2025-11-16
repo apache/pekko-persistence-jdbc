@@ -54,8 +54,8 @@ CREATE INDEX state_global_offset_idx on durable_state (global_offset);
 
 CREATE TABLE durable_state_global_offset
 (
-    singleton TINYINT NOT NULL,
-    offset    BIGINT UNSIGNED NOT NULL UNIQUE,
+    singleton      TINYINT NOT NULL,
+    current_offset BIGINT UNSIGNED NOT NULL UNIQUE,
     PRIMARY KEY (singleton)
 );
-INSERT INTO durable_state_global_offset (singleton, offset) VALUES (0, 0);
+INSERT INTO durable_state_global_offset (singleton, current_offset) VALUES (0, 0);

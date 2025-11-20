@@ -27,7 +27,7 @@ import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.config._
-import pekko.persistence.jdbc.testkit.internal.{ H2, MariaDB, Oracle, Postgres, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ H2, MariaDB, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout
@@ -47,10 +47,9 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   implicit lazy val e: ExecutionContext = system.dispatcher
 
   private[jdbc] def schemaTypeToProfile(s: SchemaType) = s match {
-    case H2       => slick.jdbc.H2Profile
-    case Postgres => slick.jdbc.PostgresProfile
-    // TODO https://github.com/apache/pekko-persistence-jdbc/issues/174
-    // case MySQL     => slick.jdbc.MySQLProfile
+    case H2        => slick.jdbc.H2Profile
+    case Postgres  => slick.jdbc.PostgresProfile
+    case MySQL     => slick.jdbc.MySQLProfile
     case MariaDB   => org.apache.pekko.persistence.jdbc.db.MariaDBProfile
     case SqlServer => slick.jdbc.SQLServerProfile
     case Oracle    => slick.jdbc.OracleProfile
@@ -133,6 +132,7 @@ abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
   }
 
   override def afterAll(): Unit = {
+    drop(schemaType)
     db.close()
     system.terminate().futureValue
   }

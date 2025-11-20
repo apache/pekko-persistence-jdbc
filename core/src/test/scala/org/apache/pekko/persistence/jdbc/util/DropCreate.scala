@@ -41,9 +41,18 @@ private[jdbc] trait DropCreate {
    * INTERNAL API
    */
   @InternalApi
+  private[jdbc] def drop(schemaType: SchemaType): Unit = {
+    // blocking call, usually done in our before test methods
+    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db, !newDao)
+  }
+
+  /**
+   * INTERNAL API
+   */
+  @InternalApi
   private[jdbc] def dropAndCreate(schemaType: SchemaType): Unit = {
     // blocking calls, usually done in our before test methods
-    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db, !newDao)
+    drop(schemaType)
     SchemaUtilsImpl.createWithSlick(schemaType, logger, db, !newDao)
   }
 

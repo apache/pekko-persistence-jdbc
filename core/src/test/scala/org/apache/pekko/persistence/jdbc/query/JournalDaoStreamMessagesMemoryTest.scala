@@ -114,7 +114,7 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
             case Failure(exception) =>
               log.error("Failure when reading messages.", exception)
           }
-          .runWith(TestSink.probe)
+          .runWith(TestSink())
 
       probe.request(10)
       probe.within(20.seconds) {

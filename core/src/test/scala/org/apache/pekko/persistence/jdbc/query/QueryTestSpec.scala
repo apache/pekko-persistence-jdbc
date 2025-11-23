@@ -94,7 +94,7 @@ class ScalaJdbcReadJournalOperations(readJournal: JdbcReadJournal)(implicit syst
       f: TestSubscriber.Probe[EventEnvelope] => Unit): Unit = {
     val tp = readJournal
       .eventsByPersistenceId(persistenceId, fromSequenceNr, toSequenceNr)
-      .runWith(TestSink.create[EventEnvelope])
+      .runWith(TestSink[EventEnvelope]())
     tp.within(within)(f(tp))
   }
 

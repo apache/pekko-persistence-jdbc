@@ -242,7 +242,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
 
     def getLoopMaxOrderingId(offset: Long, latestOrdering: MaxOrderingId): MaxOrderingId =
       maxOrderingRange match {
-        case None => latestOrdering
+        case None                 => latestOrdering
         case Some(numberOfEvents) =>
           val limitedMaxOrderingId = offset + numberOfEvents
           if (limitedMaxOrderingId < 0 || limitedMaxOrderingId >= latestOrdering.maxOrdering) latestOrdering
@@ -276,7 +276,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
               /* If no events matched the tag between `from` and `maxOrdering` then there is no need to execute the exact
                * same query again. We can continue querying from `maxOrdering`, which will save some load on the db.
                * (Note: we may never return a value smaller than `from`, otherwise we might return duplicate events) */
-              math.max(from, queryUntil.maxOrdering)
+              math.max(from, loopMaxOrderingId.maxOrdering)
             } else {
               // Continue querying from the largest offset
               xs.map(_.offset.value).max

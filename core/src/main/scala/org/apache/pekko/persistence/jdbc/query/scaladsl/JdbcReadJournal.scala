@@ -242,7 +242,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
 
     def getLoopMaxOrderingId(offset: Long, latestOrdering: MaxOrderingId): MaxOrderingId =
       maxOrderingRange match {
-        case None                 => latestOrdering
+        case None => latestOrdering
         case Some(numberOfEvents) =>
           val limitedMaxOrderingId = offset + numberOfEvents
           if (limitedMaxOrderingId < 0 || limitedMaxOrderingId >= latestOrdering.maxOrdering) latestOrdering

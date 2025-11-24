@@ -235,15 +235,31 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
     import FlowControl._
     implicit val askTimeout: Timeout = Timeout(readJournalConfig.journalSequenceRetrievalConfiguration.askTimeout)
     val batchSize = readJournalConfig.maxBufferSize
+    val maxOrderingRange = readJournalConfig.eventsByTagBufferSizesPerQuery match {
+      case 0 => None
+      case x => Some(x * batchSize)
+    }
+
+    def getLoopMaxOrderingId(offset: Long, latestOrdering: MaxOrderingId): MaxOrderingId =
+      maxOrderingRange match {
+        case None => latestOrdering
+        case Some(numberOfEvents) =>
+          val limitedMaxOrderingId = offset + numberOfEvents
+          if (limitedMaxOrderingId < 0 || limitedMaxOrderingId >= latestOrdering.maxOrdering) latestOrdering
+          else MaxOrderingId(limitedMaxOrderingId)
+      }
 
     Source
       .unfoldAsync[(Long, FlowControl), Seq[EventEnvelope]]((offset, Continue)) { case (from, control) =>
         def retrieveNextBatch() = {
           for {
             queryUntil <- journalSequenceActor.ask(GetMaxOrderingId).mapTo[MaxOrderingId]
-            xs <- currentJournalEventsByTag(tag, from, batchSize, queryUntil).runWith(Sink.seq)
+            loopMaxOrderingId = getLoopMaxOrderingId(from, queryUntil)
+            xs <- currentJournalEventsByTag(tag, from, batchSize, loopMaxOrderingId).runWith(Sink.seq)
           } yield {
-            val hasMoreEvents = xs.size == batchSize
+            // continue if query over entire journal was fewer than full batch or if we are limiting
+            // the query through eventsByTagBufferSizesPerQuery and didn't reach the last 'ordering' yet
+            val hasMoreEvents = (xs.size == batchSize) || (loopMaxOrderingId.maxOrdering < queryUntil.maxOrdering)
             val nextControl: FlowControl =
               terminateAfterOffset match {
                 // we may stop if target is behind queryUntil and we don't have more events to fetch
@@ -260,7 +276,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
               /* If no events matched the tag between `from` and `maxOrdering` then there is no need to execute the exact
                * same query again. We can continue querying from `maxOrdering`, which will save some load on the db.
                * (Note: we may never return a value smaller than `from`, otherwise we might return duplicate events) */
-              math.max(from, queryUntil.maxOrdering)
+              math.max(from, loopMaxOrderingId.maxOrdering)
             } else {
               // Continue querying from the largest offset
               xs.map(_.offset.value).max

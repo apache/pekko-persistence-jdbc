@@ -71,7 +71,7 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
 
   val customConfig: Config = profile match {
     case _: MySQLProfile => ConfigFactory.empty()
-    case _               =>
+    case _ =>
       ConfigFactory.parseString("""
         jdbc-durable-state-store {
           tables {

@@ -16,10 +16,16 @@
  */
 package org.apache.pekko.persistence.jdbc.integration
 
-import org.apache.pekko.persistence.jdbc.query.{EventsByTagMigrationTest, OracleCleaner, PostgresCleaner, SqlServerCleaner, MysqlCleaner}
+import org.apache.pekko.persistence.jdbc.query.{
+  EventsByTagMigrationTest,
+  MysqlCleaner,
+  OracleCleaner,
+  PostgresCleaner,
+  SqlServerCleaner
+}
 
 class PostgresScalaEventsByTagMigrationTest
-  extends EventsByTagMigrationTest("postgres-application.conf")
+    extends EventsByTagMigrationTest("postgres-application.conf")
     with PostgresCleaner {}
 
 class MySQLScalaEventByTagMigrationTest extends EventsByTagMigrationTest("mysql-application.conf") with MysqlCleaner {
@@ -46,7 +52,7 @@ class MySQLScalaEventByTagMigrationTest extends EventsByTagMigrationTest("mysql-
 }
 
 class OracleScalaEventByTagMigrationTest
-  extends EventsByTagMigrationTest("oracle-application.conf")
+    extends EventsByTagMigrationTest("oracle-application.conf")
     with OracleCleaner {
 
   override def addNewColumn(): Unit = {
@@ -75,7 +81,7 @@ class OracleScalaEventByTagMigrationTest
 }
 
 class SqlServerScalaEventByTagMigrationTest
-  extends EventsByTagMigrationTest("sqlserver-application.conf")
+    extends EventsByTagMigrationTest("sqlserver-application.conf")
     with SqlServerCleaner {
 
   override def addNewPKConstraint(): Unit = {

@@ -7,3 +7,4 @@ ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence
 ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalTables$TagRow$")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalTables#TagRow.apply")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalTables#TagRow.unapply")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.persistence.jdbc.journal.dao.JournalQueries.writeJournalRows")

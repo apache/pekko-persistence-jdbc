@@ -9,6 +9,19 @@ CREATE TABLE journal (
 )
 CREATE UNIQUE INDEX journal_ordering_idx ON journal (ordering);
 
+create table event_tag
+(
+    "event_id"        BIGINT,
+    "persistence_id"  NVARCHAR(255),
+    "sequence_number" NUMERIC(10, 0),
+    "tag"             NVARCHAR(255) NOT NULL
+    primary key ("persistence_id", "sequence_number","tag"),
+    constraint "fk_event_journal"
+        foreign key ("persistence_id", "sequence_number")
+            references "dbo"."event_journal" ("persistence_id", "sequence_number")
+            on delete CASCADE
+);
+
 CREATE TABLE legacy_snapshot (
   "persistence_id" VARCHAR(255) NOT NULL,
   "sequence_number" NUMERIC(10,0) NOT NULL,

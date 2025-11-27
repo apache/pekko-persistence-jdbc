@@ -82,7 +82,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |      // slick will use an async executor with a fixed size queue of 10.000 objects
       |      // The async executor is a connection pool for asynchronous execution of blocking I/O actions.
       |      // This is used for the asynchronous query execution API on top of blocking back-ends like JDBC.
-      |      queueSize = 10000 // number of objects that can be queued by the async exector
+      |      queueSize = 10000 // number of objects that can be queued by the async executor
       |
       |      connectionTimeout = 30000 // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException will be thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
       |      validationTimeout = 5000 // This property controls the maximum amount of time that a connection will be tested for aliveness. This value must be less than the connectionTimeout. The lowest accepted validation timeout is 1000ms (1 second). Default: 5000
@@ -142,7 +142,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |      // slick will use an async executor with a fixed size queue of 10.000 objects
       |      // The async executor is a connection pool for asynchronous execution of blocking I/O actions.
       |      // This is used for the asynchronous query execution API on top of blocking back-ends like JDBC.
-      |      queueSize = 10000 // number of objects that can be queued by the async exector
+      |      queueSize = 10000 // number of objects that can be queued by the async executor
       |
       |      connectionTimeout = 30000 // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException will be thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
       |      validationTimeout = 5000 // This property controls the maximum amount of time that a connection will be tested for aliveness. This value must be less than the connectionTimeout. The lowest accepted validation timeout is 1000ms (1 second). Default: 5000
@@ -212,7 +212,7 @@ abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
       |      // slick will use an async executor with a fixed size queue of 10.000 objects
       |      // The async executor is a connection pool for asynchronous execution of blocking I/O actions.
       |      // This is used for the asynchronous query execution API on top of blocking back-ends like JDBC.
-      |      queueSize = 10000 // number of objects that can be queued by the async exector
+      |      queueSize = 10000 // number of objects that can be queued by the async executor
       |
       |      connectionTimeout = 30000 // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException will be thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
       |      validationTimeout = 5000 // This property controls the maximum amount of time that a connection will be tested for aliveness. This value must be less than the connectionTimeout. The lowest accepted validation timeout is 1000ms (1 second). Default: 5000

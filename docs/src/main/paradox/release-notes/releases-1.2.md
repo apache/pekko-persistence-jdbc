@@ -8,7 +8,9 @@ This release includes some changes from Akka Persistence JDBC 5.2.0, which have 
 
 ### Schema Changes
 
-If you have a pre-existing Pekko Persistence JDBC database and want to upgrade to 1.2.0, it is encouraged for you to update the table definitions. This is not done automatically. We do not expect that there will be issues if you don't update the table definitions. Please take care when updating the table definitions (if you do). We would recommend backing up your database first and ideally, trying the whole process in a test environment before approaching your production database.
+If you have a pre-existing Pekko Persistence JDBC database and want to upgrade to 1.2.0, it is encouraged for you to update the table definitions. This is not done automatically. We do not expect that there will be issues if you don't update the table definitions (unless you try to use new feature like Durable State support for MySQL and MariaDB).
+
+Please take care when updating the table definitions. We would recommend backing up your database first and ideally, trying the whole process in a test environment before approaching your production database.
 
 We don't provide migration scripts but we believe that it should be straightforward to review your existing table definitions and check them against the changes in these Pull Requests.
 

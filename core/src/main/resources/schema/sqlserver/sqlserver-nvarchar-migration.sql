@@ -17,7 +17,6 @@ ALTER TABLE "snapshot" ALTER COLUMN
   "snapshot_ser_manifest" NVARCHAR(255),
   "meta_ser_manifest" NVARCHAR(255);
 
-
 ALTER TABLE durable_state ALTER COLUMN
   "persistence_id" NVARCHAR(255),
   "state_serial_manifest" NVARCHAR(MAX),

@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS event_journal(
     event_ser_id INTEGER NOT NULL,
     event_ser_manifest TEXT NOT NULL,
     meta_payload BLOB,
-    meta_ser_id INTEGER,meta_ser_manifest TEXT,
+    meta_ser_id INTEGER,
+    meta_ser_manifest TEXT,
     PRIMARY KEY(persistence_id,sequence_number)
 );
 

@@ -40,8 +40,11 @@ class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJo
   private def _allPersistenceIdsDistinct(max: ConstColumn[Long]): Query[Rep[String], String, Seq] =
     baseTableQuery().map(_.persistenceId).distinct.take(max)
 
-  private def baseTableWithTagsQuery() = {
-    baseTableQuery().join(TagTable).on(_.ordering === _.eventId)
+  private def baseTableWithTagsQuery() = tagTableCfg.legacyTagKey match {
+    case true  => baseTableQuery().join(TagTable).on(_.ordering === _.eventId)
+    case false => baseTableQuery()
+        .join(TagTable)
+        .on((e, t) => e.persistenceId === t.persistenceId && e.sequenceNumber === t.sequenceNumber)
   }
 
   private def _lastPersistenceIdSequenceNumberQuery(persistenceId: Rep[String]) =

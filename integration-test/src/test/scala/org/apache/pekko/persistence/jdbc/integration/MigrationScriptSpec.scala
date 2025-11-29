@@ -55,7 +55,7 @@ class OracleMigrationScriptSpec extends MigrationScriptSpec(
       ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
   "Oracle migration script" must {
     "apply without errors" in {
-      val script = getClass.getResource("/schema/sqlserver/oracle-number-boolean-migration.sql").getPath
+      val script = getClass.getResource("/schema/oracle/oracle-number-boolean-migration.sql").getPath
       val sql = scala.io.Source.fromFile(script).mkString
       applyScriptWithSlick(sql, "/", db)
     }

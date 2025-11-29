@@ -31,16 +31,21 @@ abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) exten
 
   implicit lazy val system: ActorSystem = ActorSystem("migration-test", config)
 
-  protected def applyScriptWithSlick(script: String, separator: String, database: Database): Done = {
+  protected def withStatement(database: Database)(f: Statement => Unit): Done = {
+    val session = database.createSession()
+    try session.withStatement()(f)
+    finally session.close()
+    Done
+  }
 
-    def withStatement(f: Statement => Unit): Done = {
-      val session = database.createSession()
-      try session.withStatement()(f)
-      finally session.close()
-      Done
+  protected def applyScriptWithSlick(script: String, database: Database): Done = {
+    withStatement(database) { stmt =>
+      stmt.executeUpdate(script)
     }
+  }
 
-    withStatement { stmt =>
+  protected def applyScriptWithSlick(script: String, separator: String, database: Database): Done = {
+    withStatement(database) { stmt =>
       val lines = script.split(separator).map(_.trim)
       for {
         line <- lines if line.nonEmpty
@@ -52,7 +57,7 @@ abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) exten
 }
 
 class OracleMigrationScriptSpec extends MigrationScriptSpec(
-      ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
+      ConfigFactory.load("oracle-application.conf"), Oracle) {
   "Oracle migration script" must {
     "apply without errors" in {
       val script = getClass.getResource("/schema/oracle/oracle-number-boolean-migration.sql").getPath
@@ -63,12 +68,15 @@ class OracleMigrationScriptSpec extends MigrationScriptSpec(
 }
 
 class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
-      ConfigFactory.load("sqlserver-shared-db-application.conf"), SqlServer) {
+      ConfigFactory.load("sqlserver-application.conf"), SqlServer) {
   "SQL Server nvarchar migration script" must {
     "apply without errors" in {
       val script = getClass.getResource("/schema/sqlserver/sqlserver-nvarchar-migration.sql").getPath
       val sql = scala.io.Source.fromFile(script).mkString
-      applyScriptWithSlick(sql, ";", db)
+      val parts = sql.split("(?<=END;)")
+      parts.length should be > 1
+      applyScriptWithSlick(parts(0), db) // need to add procedure as a whole
+      parts.tail.foreach(part => applyScriptWithSlick(part, db))
     }
   }
 }

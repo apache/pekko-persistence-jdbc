@@ -50,7 +50,7 @@ CREATE TABLE durable_state
     "global_offset"         BIGINT
         CONSTRAINT [df_global_offset] DEFAULT
         (NEXT VALUE FOR global_offset),
-    "persistence_id"        NVARCHAR(255)   NOT NULL,
+    "persistence_id"        NVARCHAR(255)  NOT NULL,
     "revision"              NUMERIC(10, 0) NOT NULL,
     "state_payload"         VARBINARY(MAX) NOT NULL,
     "state_serial_id"       INTEGER        NOT NULL,

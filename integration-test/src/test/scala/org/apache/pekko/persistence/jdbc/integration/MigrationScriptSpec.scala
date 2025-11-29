@@ -17,14 +17,19 @@
 
 package org.apache.pekko.persistence.jdbc.integration
 
-import com.typesafe.config.Config
+import java.sql.Statement
+
+import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.pekko
 import pekko.Done
+import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.StateSpecBase
 import pekko.persistence.jdbc.testkit.internal.{ Oracle, SchemaType, SqlServer }
-import slick.jdbc.JdbcBackend.{ Database, Statement }
+import slick.jdbc.JdbcBackend.Database
 
-abstract class MigrationScriptSpec extends StateSpecBase(config: Config, schemaType: SchemaType) {
+abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) extends StateSpecBase(config, schemaType) {
+
+  implicit lazy val system: ActorSystem = ActorSystem("migration-test", config)
 
   protected def applyScriptWithSlick(script: String, separator: String, database: Database): Done = {
 
@@ -48,18 +53,22 @@ abstract class MigrationScriptSpec extends StateSpecBase(config: Config, schemaT
 
 class OracleMigrationScriptSpec extends MigrationScriptSpec(
     ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
-  "Oracle migration script" should "apply without errors" in {
-    val script = getClass.getResource("/schema/sqlserver/oracle-number-boolean-migration.sql").getPath
-    val sql = scala.io.Source.fromFile(script).mkString
-    applyScriptWithSlick(sql, "/", db)
+  "Oracle migration script" must {
+    "apply without errors" in {
+      val script = getClass.getResource("/schema/sqlserver/oracle-number-boolean-migration.sql").getPath
+      val sql = scala.io.Source.fromFile(script).mkString
+      applyScriptWithSlick(sql, "/", db)
+    }
   }
 }
 
 class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
     ConfigFactory.load("sqlserver-shared-db-application.conf"), SqlServer) {
-  "SQL Server nvarchar migration script" should "apply without errors" in {
-    val script = getClass.getResource("/schema/sqlserver/sqlserver-nvarchar-migration.sql").getPath
-    val sql = scala.io.Source.fromFile(script).mkString
-    applyScriptWithSlick(sql, ";", db)
+  "SQL Server nvarchar migration script" must {
+    "apply without errors" in {
+      val script = getClass.getResource("/schema/sqlserver/sqlserver-nvarchar-migration.sql").getPath
+      val sql = scala.io.Source.fromFile(script).mkString
+      applyScriptWithSlick(sql, ";", db)
+    }
   }
 }

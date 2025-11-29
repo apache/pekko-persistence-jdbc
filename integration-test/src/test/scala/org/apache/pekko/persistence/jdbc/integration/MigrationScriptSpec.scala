@@ -52,7 +52,7 @@ abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) exten
 }
 
 class OracleMigrationScriptSpec extends MigrationScriptSpec(
-    ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
+      ConfigFactory.load("oracle-shared-db-application.conf"), Oracle) {
   "Oracle migration script" must {
     "apply without errors" in {
       val script = getClass.getResource("/schema/sqlserver/oracle-number-boolean-migration.sql").getPath
@@ -63,7 +63,7 @@ class OracleMigrationScriptSpec extends MigrationScriptSpec(
 }
 
 class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
-    ConfigFactory.load("sqlserver-shared-db-application.conf"), SqlServer) {
+      ConfigFactory.load("sqlserver-shared-db-application.conf"), SqlServer) {
   "SQL Server nvarchar migration script" must {
     "apply without errors" in {
       val script = getClass.getResource("/schema/sqlserver/sqlserver-nvarchar-migration.sql").getPath

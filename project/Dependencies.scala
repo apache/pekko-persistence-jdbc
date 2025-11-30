@@ -11,8 +11,8 @@ import sbt._
 
 object Dependencies {
   // Keep in sync with .github CI build
-  val Scala212 = "2.12.20"
-  val Scala213 = "2.13.17"
+  val Scala212 = "2.12.21"
+  val Scala213 = "2.13.18"
   val Scala3 = "3.3.7"
   val ScalaVersions = Seq(Scala212, Scala213, Scala3)
 

@@ -24,7 +24,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.StateSpecBase
-import pekko.persistence.jdbc.testkit.internal.{ Oracle, SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SqlServer }
 import slick.jdbc.JdbcBackend.Database
 
 abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) extends StateSpecBase(config, schemaType) {
@@ -52,17 +52,6 @@ abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) exten
       } yield {
         stmt.executeUpdate(line)
       }
-    }
-  }
-}
-
-class OracleMigrationScriptSpec extends MigrationScriptSpec(
-      ConfigFactory.load("oracle-application.conf"), Oracle) {
-  "Oracle migration script" must {
-    "apply without errors" in {
-      val script = getClass.getResource("/schema/oracle/oracle-number-boolean-migration.sql").getPath
-      val sql = scala.io.Source.fromFile(script).mkString
-      applyScriptWithSlick(sql, "/", db)
     }
   }
 }

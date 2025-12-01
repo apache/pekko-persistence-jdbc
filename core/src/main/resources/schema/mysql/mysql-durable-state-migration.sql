@@ -2,6 +2,11 @@
 
 -- see https://github.com/apache/pekko-persistence-jdbc/pull/366
 
+-- Script is provided as an example only and only been partially tested.
+-- Please review and test thoroughly before using in production and
+-- ideally, in a test environment first.
+-- Always back up your database before running migration scripts.
+
 CREATE TABLE IF NOT EXISTS durable_state
 (
     global_offset         SERIAL,

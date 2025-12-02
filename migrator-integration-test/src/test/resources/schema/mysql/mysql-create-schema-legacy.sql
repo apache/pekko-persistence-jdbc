@@ -16,3 +16,15 @@ CREATE TABLE IF NOT EXISTS legacy_snapshot (
   snapshot BLOB NOT NULL,
   PRIMARY KEY (persistence_id, sequence_number)
 );
+
+CREATE TABLE IF NOT EXISTS event_tag
+(
+    event_id BIGINT UNSIGNED,
+    persistence_id     VARCHAR(255),
+    sequence_number    BIGINT,
+    tag      VARCHAR(255) NOT NULL,
+    PRIMARY KEY (persistence_id, sequence_number, tag),
+    FOREIGN KEY (persistence_id, sequence_number)
+    REFERENCES event_journal (persistence_id, sequence_number)
+    ON DELETE CASCADE
+    );

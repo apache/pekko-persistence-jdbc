@@ -37,7 +37,7 @@ jobs:
         uses: sbt/setup-sbt@3e125ece5c3e5248e18da9ed8d2cce3d335ec8dd # v1.1.14
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # 6.4.7
+        uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # v7.0.0
 
       - name: Code style check and binary-compatibility check
         # Run locally with: sbt 'verifyCodeFmt ; mimaReportBinaryIssues'
@@ -69,7 +69,7 @@ jobs:
         uses: sbt/setup-sbt@3e125ece5c3e5248e18da9ed8d2cce3d335ec8dd # v1.1.14
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # 6.4.7
+        uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # v7.0.0
 
       - name: Compile all code with fatal warnings for Java 11, Scala 2.13 and Scala 3
         # Run locally with: sbt 'clean ; +Test/compile'
@@ -101,7 +101,7 @@ jobs:
         uses: sbt/setup-sbt@3e125ece5c3e5248e18da9ed8d2cce3d335ec8dd # v1.1.14
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # 6.4.7
+        uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # v7.0.0
 
       - name: Create all API docs for artifacts/website and all reference docs
         run: sbt docs/paradox

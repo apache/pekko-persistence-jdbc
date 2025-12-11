@@ -14,7 +14,6 @@
 
 package org.apache.pekko.persistence.jdbc.state.javadsl
 
-import java.util.Optional
 import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
@@ -27,6 +26,7 @@ import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.query.javadsl.DurableStateStoreQuery
 import pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
 import pekko.stream.javadsl.Source
+import pekko.util.OptionalUtil
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
@@ -52,7 +52,7 @@ class JdbcDurableStateStore[A](
   def getObject(persistenceId: String): CompletionStage[GetObjectResult[A]] =
     scalaStore
       .getObject(persistenceId)
-      .map(x => GetObjectResult(Optional.ofNullable(x.value.getOrElse(null.asInstanceOf[A])), x.revision)).asJava
+      .map(x => GetObjectResult(OptionalUtil.convertOption(x.value), x.revision)).asJava
 
   def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): CompletionStage[Done] =
     scalaStore.upsertObject(persistenceId, revision, value, tag).asJava

@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS durable_state
     state_timestamp       BIGINT       NOT NULL,
     PRIMARY KEY (persistence_id)
 );
-CREATE INDEX state_tag_idx on durable_state (tag);
-CREATE INDEX state_global_offset_idx on durable_state (global_offset);
+CREATE INDEX IF NOT EXISTS state_tag_idx on durable_state (tag);
+CREATE INDEX IF NOT EXISTS state_global_offset_idx on durable_state (global_offset);
 
 CREATE SEQUENCE IF NOT EXISTS durable_state_global_offset_seq
     INCREMENT BY 1

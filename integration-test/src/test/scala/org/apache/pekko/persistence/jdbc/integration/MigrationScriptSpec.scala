@@ -18,7 +18,6 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import java.sql.Statement
-
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.pekko
 import pekko.Done
@@ -26,6 +25,8 @@ import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.StateSpecBase
 import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SqlServer }
 import slick.jdbc.JdbcBackend.Database
+
+import scala.util.Using
 
 abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) extends StateSpecBase(config, schemaType) {
 
@@ -57,15 +58,62 @@ abstract class MigrationScriptSpec(config: Config, schemaType: SchemaType) exten
 }
 
 class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
-      ConfigFactory.load("sqlserver-application.conf"), SqlServer) {
+      ConfigFactory.load("sqlserver-application.conf"),
+      SqlServer
+    ) {
   "SQL Server nvarchar migration script" must {
     "apply without errors" in {
-      val script = getClass.getResource("/schema/sqlserver/sqlserver-nvarchar-migration.sql").getPath
-      val sql = scala.io.Source.fromFile(script).mkString
+      val scriptPath = getClass.getResource("/schema/sqlserver/sqlserver-nvarchar-migration.sql").getPath
+      val sql = Using(scala.io.Source.fromFile(scriptPath))(_.mkString).get
       val parts = sql.split("(?<=END;)")
+
       parts.length should be > 1
-      applyScriptWithSlick(parts(0), db) // need to add procedure as a whole
+
+      applyScriptWithSlick(parts.head, db)
       parts.tail.foreach(part => applyScriptWithSlick(part, db))
+    }
+  }
+}
+
+class MariaDBMigrationScriptSpec extends MigrationScriptSpec(
+      ConfigFactory.load("mariadb-application.conf"),
+      SqlServer
+    ) {
+  "MariaDB migration script" must {
+    "apply the schema and the migration without errors" in {
+      val schemaPath = getClass.getResource("/schema/mariadb/mariadb-create-schema.sql").getPath
+      val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
+      applyScriptWithSlick(schema, db)
+
+      val migrationPath = getClass.getResource("/schema/mariadb/mariadb-durable-state-migration.sql").getPath
+      val migration = Using(scala.io.Source.fromFile(migrationPath))(_.mkString).get
+      applyScriptWithSlick(migration, db)
+    }
+  }
+}
+
+class MySQLMigrationScriptSpec extends MigrationScriptSpec(
+      ConfigFactory.load("mysql-application.conf"),
+      SqlServer
+    ) {
+  "MySQL migration script" must {
+    "apply the schema and the migration without errors" in {
+      val schemaPath = getClass.getResource("/schema/mysql/mysql-create-schema-legacy.sql").getPath
+      val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
+
+      // Each statement executed as standalone
+      schema.split(";")
+        .map(_.trim)
+        .filter(_.nonEmpty)
+        .foreach(statement => applyScriptWithSlick(statement, db))
+
+      val migrationPath = getClass.getResource("/schema/mysql/mysql-durable-state-migration.sql").getPath
+      val migration = Using(scala.io.Source.fromFile(migrationPath))(_.mkString).get
+
+      migration.split(";")
+        .map(_.trim)
+        .filter(_.nonEmpty)
+        .foreach(statement => applyScriptWithSlick(statement, db))
     }
   }
 }

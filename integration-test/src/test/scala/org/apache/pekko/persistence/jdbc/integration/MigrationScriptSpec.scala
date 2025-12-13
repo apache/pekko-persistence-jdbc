@@ -63,7 +63,8 @@ class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
     ) {
   "SQL Server nvarchar migration script" must {
     "apply without errors" in {
-      val scriptPath = getClass.getResource("/schema/sqlserver/migration-1.3.0/sqlserver-nvarchar-migration.sql").getPath
+      val scriptPath =
+        getClass.getResource("/schema/sqlserver/migration-1.3.0/sqlserver-nvarchar-migration.sql").getPath
       val sql = Using(scala.io.Source.fromFile(scriptPath))(_.mkString).get
       val parts = sql.split("(?<=END;)")
 
@@ -85,7 +86,8 @@ class MariaDBMigrationScriptSpec extends MigrationScriptSpec(
       val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
       applyScriptWithSlick(schema, db)
 
-      val migrationPath = getClass.getResource("/schema/mariadb/migration-1.3.0/mariadb-durable-state-migration.sql").getPath
+      val migrationPath =
+        getClass.getResource("/schema/mariadb/migration-1.3.0/mariadb-durable-state-migration.sql").getPath
       val migration = Using(scala.io.Source.fromFile(migrationPath))(_.mkString).get
       applyScriptWithSlick(migration, db)
     }
@@ -107,7 +109,8 @@ class MySQLMigrationScriptSpec extends MigrationScriptSpec(
         .filter(_.nonEmpty)
         .foreach(statement => applyScriptWithSlick(statement, db))
 
-      val migrationPath = getClass.getResource("/schema/mysql/migration-1.3.0/mysql-durable-state-migration.sql").getPath
+      val migrationPath =
+        getClass.getResource("/schema/mysql/migration-1.3.0/mysql-durable-state-migration.sql").getPath
       val migration = Using(scala.io.Source.fromFile(migrationPath))(_.mkString).get
 
       migration.split(";")

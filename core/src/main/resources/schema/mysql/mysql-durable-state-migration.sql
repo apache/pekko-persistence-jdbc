@@ -19,6 +19,9 @@ CREATE TABLE IF NOT EXISTS durable_state
     state_timestamp       BIGINT       NOT NULL,
     PRIMARY KEY (persistence_id)
 );
+
+-- older MySQL versions do not support `IF NOT EXISTS` for indexes
+-- feel free to modify this part if your MySQL version supports it
 CREATE INDEX state_tag_idx on durable_state (tag);
 CREATE INDEX state_global_offset_idx on durable_state (global_offset);
 

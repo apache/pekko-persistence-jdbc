@@ -28,7 +28,7 @@ END;
 EXEC DropPrimaryKey 'event_journal';
 
 ALTER TABLE event_journal ALTER COLUMN
-  "persistence_id" NVARCHAR(255);
+  "persistence_id" NVARCHAR(255) NOT NULL;
 
 ALTER TABLE event_journal
   ADD CONSTRAINT PK_event_journal PRIMARY KEY ("persistence_id", "sequence_number");

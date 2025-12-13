@@ -98,7 +98,7 @@ class MySQLMigrationScriptSpec extends MigrationScriptSpec(
     ) {
   "MySQL migration script" must {
     "apply the schema and the migration without errors" in {
-      val schemaPath = getClass.getResource("/schema/mysql/mysql-create-schema.sql").getPath
+      val schemaPath = getClass.getResource("/schema/mysql/mysql-create-schema-legacy.sql").getPath
       val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
 
       // Each statement executed as standalone

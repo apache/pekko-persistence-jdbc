@@ -6,4 +6,4 @@
 
 # Migrating to 1.2.x
 
-It is recommended that you read the section about DB Schema Changes in the [1.2.0 Release Notes](release-notes/releases-1.2.md).
+It is recommended that you read the section about DB Schema Changes in the @ref[1.2.0 Release Notes](release-notes/releases-1.2.md).

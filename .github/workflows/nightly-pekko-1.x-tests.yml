@@ -1,4 +1,4 @@
-name: Nightly Testing with Pekko 1.3
+name: Nightly Testing with Pekko 1.x
 
 permissions: {}
 
@@ -39,7 +39,7 @@ jobs:
         uses: coursier/cache-action@bebeeb0e6f48ebad66d3783946588ecf43114433 # v7.0.0
 
       - name: Run tests with Scala ${{ matrix.scala-version }} and Java ${{ matrix.java-version }}
-        run: sbt -Dpekko.build.pekko.version=1.3.x "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
+        run: sbt -Dpekko.build.pekko.version=1.x "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
 
       - name: Print logs on failure
         if: ${{ failure() }}

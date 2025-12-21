@@ -27,7 +27,7 @@ object Dependencies {
     "org.postgresql" % "postgresql" % "42.7.8",
     "com.h2database" % "h2" % "2.4.240",
     "com.mysql" % "mysql-connector-j" % "9.5.0",
-    "org.mariadb.jdbc" % "mariadb-java-client" % "3.5.6",
+    "org.mariadb.jdbc" % "mariadb-java-client" % "3.5.7",
     "com.microsoft.sqlserver" % "mssql-jdbc" % "13.2.1.jre11",
     "com.oracle.database.jdbc" % "ojdbc8" % "23.26.0.0.0")
 

@@ -64,10 +64,9 @@ abstract class LimitWindowingStreamTest(configFile: String)
             val end = i * eventsPerBatch
             val start = end - (eventsPerBatch - 1)
             log.info(s"batch $i - events from $start to $end")
-            val atomicWrites =
-              (start to end).map { j =>
-                AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid = writerUuid)))
-              }
+            val atomicWrites = (start to end).map { j =>
+              AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid = writerUuid)))
+            }
             dao.asyncWriteMessages(atomicWrites).map(_ => i)
           }
           .runWith(Sink.last)

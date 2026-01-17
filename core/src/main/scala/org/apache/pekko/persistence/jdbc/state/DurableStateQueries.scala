@@ -20,13 +20,7 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.jdbc.db.MariaDBProfile
 
 import slick.jdbc.{
-  H2Profile,
-  JdbcProfile,
-  MySQLProfile,
-  OracleProfile,
-  PostgresProfile,
-  SQLServerProfile,
-  SetParameter
+  H2Profile, JdbcProfile, MySQLProfile, OracleProfile, PostgresProfile, SQLServerProfile, SetParameter
 }
 
 /**

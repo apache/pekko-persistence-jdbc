@@ -10,12 +10,7 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  JournalSequenceActorTest,
-  MariaDBCleaner,
-  MysqlCleaner,
-  OracleCleaner,
-  PostgresCleaner,
-  SqlServerCleaner
+  JournalSequenceActorTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
 }
 
 class PostgresJournalSequenceActorTest

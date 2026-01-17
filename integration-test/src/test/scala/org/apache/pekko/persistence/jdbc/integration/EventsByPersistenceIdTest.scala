@@ -10,12 +10,7 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  EventsByPersistenceIdTest,
-  MariaDBCleaner,
-  MysqlCleaner,
-  OracleCleaner,
-  PostgresCleaner,
-  SqlServerCleaner
+  EventsByPersistenceIdTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
 }
 
 class PostgresScalaEventsByPersistenceIdTest

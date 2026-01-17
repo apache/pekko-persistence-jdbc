@@ -69,7 +69,8 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
   private def canForceInsert: Boolean = profile.capabilities.contains(JdbcCapabilities.forceInsert)
 
   if (canForceInsert && !newDao) {
-    it should s"recover ${if (isOracle) "one hundred thousand" else "one million"} events quickly if no ids are missing" in {
+    it should
+    s"recover ${if (isOracle) "one hundred thousand" else "one million"} events quickly if no ids are missing" in {
       withActorSystem { implicit system: ActorSystem =>
         withDatabase { db =>
           val elements = if (isOracle) 100000 else 1000000
@@ -100,7 +101,8 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
 
   if (!isOracle && canForceInsert && !newDao) {
     // Note this test case cannot be executed for oracle, because forceInsertAll is not supported in the oracle driver.
-    it should "recover after the specified max number if tries if the first event has a very high sequence number and lots of large gaps exist" in {
+    it should
+    "recover after the specified max number if tries if the first event has a very high sequence number and lots of large gaps exist" in {
       withActorSystem { implicit system: ActorSystem =>
         withDatabase { db =>
           val numElements = 1000

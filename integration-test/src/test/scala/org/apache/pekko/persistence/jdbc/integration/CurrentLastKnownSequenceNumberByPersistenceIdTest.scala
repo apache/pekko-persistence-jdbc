@@ -10,11 +10,7 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  CurrentLastSequenceNumberByPersistenceIdTest,
-  MariaDBCleaner,
-  MysqlCleaner,
-  OracleCleaner,
-  PostgresCleaner,
+  CurrentLastSequenceNumberByPersistenceIdTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner,
   SqlServerCleaner
 }
 

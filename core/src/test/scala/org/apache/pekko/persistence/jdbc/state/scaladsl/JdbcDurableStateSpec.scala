@@ -257,7 +257,8 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         chgs.map(_.offset.value).max shouldBe 9
     }
 
-    "find all states by tags with offsets sorted and proper max and min offsets when starting offset is specified" in withActorSystem {
+    "find all states by tags with offsets sorted and proper max and min offsets when starting offset is specified" in
+    withActorSystem {
       implicit system =>
         val stateStoreString =
           new JdbcDurableStateStore[String](db, schemaTypeToProfile(schemaType), durableStateConfig, serialization)
@@ -389,7 +390,8 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
     }
 
-    "fetch proper values of offsets from beginning for a larger dataset with changes() and phased upserts" in withActorSystem {
+    "fetch proper values of offsets from beginning for a larger dataset with changes() and phased upserts" in
+    withActorSystem {
       implicit system =>
         val stateStoreString =
           new JdbcDurableStateStore[String](db, schemaTypeToProfile(schemaType), durableStateConfig, serialization)

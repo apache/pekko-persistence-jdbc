@@ -241,8 +241,7 @@ import pekko.annotation.InternalApi
               if (revDiff <= 1) {
                 (revChg, maxOffset, cacheMiss)
               } else {
-                val pidOffsets =
-                  (e.offset until elem.offset).tail // e.offset and elem.offset are known to not be missing
+                val pidOffsets = (e.offset until elem.offset).tail // e.offset and elem.offset are known to not be missing
                 val missingCount = math.min(pidOffsets.count(missingElems.contains), revDiff - 1)
                 (revChg + missingCount, maxOffset, cacheMiss)
               }

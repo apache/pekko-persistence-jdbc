@@ -10,12 +10,7 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  JournalDaoStreamMessagesMemoryTest,
-  MariaDBCleaner,
-  MysqlCleaner,
-  OracleCleaner,
-  PostgresCleaner,
-  SqlServerCleaner
+  JournalDaoStreamMessagesMemoryTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
 }
 
 class PostgresJournalDaoStreamMessagesMemoryTest

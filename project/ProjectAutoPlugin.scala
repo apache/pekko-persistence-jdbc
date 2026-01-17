@@ -50,12 +50,13 @@ object ProjectAutoPlugin extends AutoPlugin {
       "-language:higherKinds",
       "-language:implicitConversions",
       "-release:17"),
-    Compile / scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, _)) =>
-        disciplineScalacOptions
-      case _ =>
-        Nil
-    }).toSeq,
+    Compile / scalacOptions ++=
+      (CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, _)) =>
+          disciplineScalacOptions
+        case _ =>
+          Nil
+      }).toSeq,
     scalacOptions += "-Ydelambdafy:method",
     Compile / javacOptions ++= Seq(
       "-encoding",

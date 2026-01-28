@@ -10,7 +10,12 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  CurrentEventsByTagTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
+  CurrentEventsByTagTest,
+  MariaDBCleaner,
+  MysqlCleaner,
+  OracleCleaner,
+  PostgresCleaner,
+  SqlServerCleaner
 }
 
 // Note: these tests use the shared-db configs, the test for all (so not only current) events use the regular db config

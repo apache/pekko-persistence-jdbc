@@ -21,7 +21,11 @@ package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.journal.dao.LimitWindowingStreamTest
 import org.apache.pekko.persistence.jdbc.query.{
-  MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
+  MariaDBCleaner,
+  MysqlCleaner,
+  OracleCleaner,
+  PostgresCleaner,
+  SqlServerCleaner
 }
 
 class PostgresLimitWindowingStreamTest

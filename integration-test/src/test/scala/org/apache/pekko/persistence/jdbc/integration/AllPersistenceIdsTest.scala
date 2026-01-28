@@ -10,7 +10,12 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  AllPersistenceIdsTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
+  AllPersistenceIdsTest,
+  MariaDBCleaner,
+  MysqlCleaner,
+  OracleCleaner,
+  PostgresCleaner,
+  SqlServerCleaner
 }
 
 class PostgresScalaAllPersistenceIdsTest extends AllPersistenceIdsTest("postgres-application.conf") with PostgresCleaner

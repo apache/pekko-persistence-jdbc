@@ -20,7 +20,8 @@ package org.apache.pekko.persistence.jdbc.integration
 import com.typesafe.config.ConfigFactory
 import org.apache.pekko.persistence.jdbc.db.MariaDBProfile
 import org.apache.pekko.persistence.jdbc.state.scaladsl.{
-  DurableStateStorePluginSpec, DurableStateStoreSchemaPluginSpec
+  DurableStateStorePluginSpec,
+  DurableStateStoreSchemaPluginSpec
 }
 
 class MariaDBDurableStateStorePluginSpec

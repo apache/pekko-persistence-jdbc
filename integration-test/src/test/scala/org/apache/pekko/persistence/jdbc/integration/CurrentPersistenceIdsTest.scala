@@ -10,7 +10,12 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  CurrentPersistenceIdsTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
+  CurrentPersistenceIdsTest,
+  MariaDBCleaner,
+  MysqlCleaner,
+  OracleCleaner,
+  PostgresCleaner,
+  SqlServerCleaner
 }
 
 // Note: these tests use the shared-db configs, the test for all persistence ids use the regular db config

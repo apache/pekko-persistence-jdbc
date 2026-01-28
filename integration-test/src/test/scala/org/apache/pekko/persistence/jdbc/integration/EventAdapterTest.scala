@@ -10,7 +10,12 @@
 package org.apache.pekko.persistence.jdbc.integration
 
 import org.apache.pekko.persistence.jdbc.query.{
-  EventAdapterTest, MariaDBCleaner, MysqlCleaner, OracleCleaner, PostgresCleaner, SqlServerCleaner
+  EventAdapterTest,
+  MariaDBCleaner,
+  MysqlCleaner,
+  OracleCleaner,
+  PostgresCleaner,
+  SqlServerCleaner
 }
 
 class PostgresScalaEventAdapterTest extends EventAdapterTest("postgres-application.conf") with PostgresCleaner

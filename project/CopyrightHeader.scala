@@ -35,7 +35,7 @@ trait CopyrightHeader extends AutoPlugin {
     }
 
   override def projectSettings: Seq[Def.Setting[_]] =
-    Def.settings(headerMappingSettings, additional) ++ Defaults.itSettings
+    Def.settings(headerMappingSettings, additional)
 
   def additional: Seq[Def.Setting[_]] =
     Def.settings(Compile / compile := {

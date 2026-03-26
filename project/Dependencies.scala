@@ -21,7 +21,7 @@ object Dependencies {
 
   val SlickVersion = "3.6.1"
   val SlickDocVersion = SlickVersion
-  val ScalaTestVersion = "3.2.19"
+  val ScalaTestVersion = "3.2.20"
 
   val JdbcDrivers = Seq(
     "org.postgresql" % "postgresql" % "42.7.10",

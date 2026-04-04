@@ -14,7 +14,7 @@
 package org.apache.pekko.persistence
 
 //#durable-state-store-flags
-trait DurableStateStoreCapabilityFlags extends CapabilityFlags {
+trait DurableStateStoreCapabilityFlags {
 
   /**
    * When `true` enables tests which check if the durable state store properly rejects

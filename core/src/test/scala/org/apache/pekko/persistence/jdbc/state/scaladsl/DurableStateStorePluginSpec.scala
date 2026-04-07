@@ -131,7 +131,6 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
         store.maxStateStoreOffset().futureValue shouldBe 400
       }
     }
-
   }
 
 }

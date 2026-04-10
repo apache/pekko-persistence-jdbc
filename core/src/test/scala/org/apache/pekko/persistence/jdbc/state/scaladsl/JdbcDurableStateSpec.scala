@@ -49,6 +49,13 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         v shouldBe pekko.Done
       }
     }
+    "add a valid state with empty tag successfully" in {
+      whenReady {
+        stateStoreString.upsertObject("p123-empty-tag", 1, "a valid string", "")
+      } { v =>
+        v shouldBe pekko.Done
+      }
+    }
     "support composite upsert-fetch-repeat loop" in {
       whenReady {
         for {

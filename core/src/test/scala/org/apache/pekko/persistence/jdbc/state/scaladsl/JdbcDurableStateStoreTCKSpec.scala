@@ -26,6 +26,10 @@ abstract class JdbcDurableStateStoreTCKSpec(config: Config, schemaType: SchemaTy
 
   override protected def supportsDeleteWithRevisionCheck: CapabilityFlag = CapabilityFlag.on()
 
+  override protected def supportsUpsertWithRevisionCheck: CapabilityFlag = CapabilityFlag.on()
+
+  override protected def supportsSoftDelete: CapabilityFlag = CapabilityFlag.on()
+
   lazy val db = {
     val cfg = config.getConfig("jdbc-durable-state-store")
     if (cfg.hasPath("slick.profile")) {

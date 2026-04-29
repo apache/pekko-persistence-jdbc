@@ -24,7 +24,7 @@ object Dependencies {
   val ScalaTestVersion = "3.2.20"
 
   val JdbcDrivers = Seq(
-    "org.postgresql" % "postgresql" % "42.7.10",
+    "org.postgresql" % "postgresql" % "42.7.11",
     "com.h2database" % "h2" % "2.4.240",
     "com.mysql" % "mysql-connector-j" % "9.7.0",
     "org.mariadb.jdbc" % "mariadb-java-client" % "3.5.8",

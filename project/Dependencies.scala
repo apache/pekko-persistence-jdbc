@@ -38,7 +38,7 @@ object Dependencies {
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Test)
 
   val Migration: Seq[ModuleID] = Seq(
-    "com.typesafe" % "config" % "1.4.6",
+    "com.typesafe" % "config" % "1.4.7",
     "ch.qos.logback" % "logback-classic" % LogbackVersion,
     "org.scalatest" %% "scalatest" % ScalaTestVersion % Test) ++ JdbcDrivers.map(_ % Provided)
 }

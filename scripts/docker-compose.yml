@@ -19,6 +19,7 @@ services:
     environment:
       - "TZ=Europe/Amsterdam"
       - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_DATABASE=pekko_persistence_jdbc"
     ports:
       - "3306:3306" # credentials (root:root)
 

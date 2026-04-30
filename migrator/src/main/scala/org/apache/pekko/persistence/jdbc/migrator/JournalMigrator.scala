@@ -147,7 +147,12 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
     for {
       id <- newJournalQueries.JournalTable
         .returning(newJournalQueries.JournalTable.map(_.ordering)) += journalSerializedRow
-      tagInserts = tags.map(tag => TagRow(id, tag))
+      tagInserts = tags.map(tag =>
+        TagRow(
+          Some(id),
+          Some(journalSerializedRow.persistenceId),
+          Some(journalSerializedRow.sequenceNumber),
+          tag))
       _ <- newJournalQueries.TagTable ++= tagInserts
     } yield ()
   }

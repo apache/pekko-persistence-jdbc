@@ -196,9 +196,8 @@ abstract class CurrentEventsByTagTest(config: String) extends QueryTestSpec(conf
         // send a batch of 3 * 200
         val batch1 = sendMessagesWithTag(tag, 200)
         // Try to persist a large batch of events per actor. Some of these may be returned, but not all!
-        // Reduced as we can no longer do a batch insert due to the insert returning the ordering
-        // so trying to persist 1000s in a batch is slower
-        val batch2 = sendMessagesWithTag(tag, 2000)
+        // Keep this below the test timeout: in legacy-tag-key mode writes still depend on returning generated orderings.
+        val batch2 = sendMessagesWithTag(tag, 3000)
 
         // wait for acknowledgement of the first batch only
         batch1.futureValue

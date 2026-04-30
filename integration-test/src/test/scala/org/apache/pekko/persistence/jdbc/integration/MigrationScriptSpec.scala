@@ -23,7 +23,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.state.scaladsl.StateSpecBase
-import pekko.persistence.jdbc.testkit.internal.{ SchemaType, SqlServer }
+import pekko.persistence.jdbc.testkit.internal.{ MariaDB, MySQL, SchemaType, SqlServer }
 import slick.jdbc.JdbcBackend.Database
 
 import scala.util.Using
@@ -61,8 +61,28 @@ class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
       ConfigFactory.load("sqlserver-application.conf"),
       SqlServer
     ) {
+
+  private def recreateEventTagBeforeTagMigration(): Unit =
+    withStatement(db) { stmt =>
+      stmt.executeUpdate("DROP TABLE IF EXISTS \"event_tag\"")
+      stmt.executeUpdate("""
+          CREATE TABLE "event_tag"
+          (
+              "event_id" BIGINT NOT NULL,
+              "tag" NVARCHAR(255) NOT NULL,
+              PRIMARY KEY ("event_id", "tag"),
+              CONSTRAINT "fk_event_journal"
+                  FOREIGN KEY ("event_id")
+                      REFERENCES "dbo"."event_journal" ("ordering")
+                      ON DELETE CASCADE
+          )
+        """)
+    }
+
   "SQL Server nvarchar migration script" must {
     "apply without errors" in {
+      recreateEventTagBeforeTagMigration()
+
       val scriptPath =
         getClass.getResource("/schema/sqlserver/migration-1.2.0/sqlserver-nvarchar-migration.sql").getPath
       val sql = Using(scala.io.Source.fromFile(scriptPath))(_.mkString).get
@@ -78,10 +98,12 @@ class SqlServerMigrationScriptSpec extends MigrationScriptSpec(
 
 class MariaDBMigrationScriptSpec extends MigrationScriptSpec(
       ConfigFactory.load("mariadb-application.conf"),
-      SqlServer
+      MariaDB
     ) {
   "MariaDB migration script" must {
     "apply the schema and the migration without errors" in {
+      drop(MariaDB)
+
       val schemaPath = getClass.getResource("/schema/mariadb/mariadb-create-schema.sql").getPath
       val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
       applyScriptWithSlick(schema, db)
@@ -96,10 +118,13 @@ class MariaDBMigrationScriptSpec extends MigrationScriptSpec(
 
 class MySQLMigrationScriptSpec extends MigrationScriptSpec(
       ConfigFactory.load("mysql-application.conf"),
-      SqlServer
+      MySQL
     ) {
   "MySQL migration script" must {
     "apply the schema and the migration without errors" in {
+      drop(MySQL)
+      applyScriptWithSlick("DROP TABLE IF EXISTS journal", db)
+
       val schemaPath = getClass.getResource("/schema/mysql/mysql-create-schema-legacy.sql").getPath
       val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
 

@@ -17,14 +17,17 @@ CREATE TABLE event_journal(
 
 CREATE UNIQUE INDEX event_journal_ordering_idx ON event_journal(ordering);
 
-CREATE TABLE event_tag (
-    "event_id" BIGINT NOT NULL,
-    "tag" NVARCHAR(255) NOT NULL
-    PRIMARY KEY ("event_id","tag")
+CREATE TABLE event_tag
+(
+    "event_id"        BIGINT,
+    "persistence_id"  NVARCHAR(255),
+    "sequence_number" NUMERIC(10, 0),
+    "tag"             NVARCHAR(255) NOT NULL
+    PRIMARY KEY ("persistence_id", "sequence_number","tag"),
     constraint "fk_event_journal"
-        foreign key("event_id")
-        references "dbo"."event_journal"("ordering")
-        on delete CASCADE
+        foreign key ("persistence_id", "sequence_number")
+            references "dbo"."event_journal" ("persistence_id", "sequence_number")
+            on delete CASCADE
 );
 
 CREATE TABLE "snapshot" (

@@ -177,7 +177,8 @@ abstract class CurrentEventsByTagTest(config: String) extends QueryTestSpec(conf
     }
   }
 
-  it should "complete without any gaps in case events are being persisted when the query is executed" in withActorSystem {
+  it should "complete without any gaps in case events are being persisted when the query is executed" in
+  withActorSystem {
     implicit system =>
       pendingIfOracleWithLegacy()
 

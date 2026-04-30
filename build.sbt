@@ -43,10 +43,11 @@ lazy val core = project
     name := "pekko-persistence-jdbc",
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
     // See: https://github.com/slick/slick/issues/2933
-    libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, _)) => Seq("org.scala-lang" % "scala-reflect" % scalaVersion.value)
-      case _            => Nil
-    }),
+    libraryDependencies ++=
+      (CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, _)) => Seq("org.scala-lang" % "scala-reflect" % scalaVersion.value)
+        case _            => Nil
+      }),
     libraryDependencies ++= Dependencies.Libraries,
     mimaReportSignatureProblems := true,
     mimaPreviousArtifacts := Set(
@@ -105,8 +106,10 @@ lazy val docs = project
       // Pekko
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/${PekkoCoreDependency.default.link}/%s",
       "scaladoc.base_url" -> "https://pekko.apache.org/api/pekko-persistence-jdbc/current/",
-      "scaladoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${PekkoCoreDependency.default.link}/",
-      "javadoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${PekkoCoreDependency.default.link}/",
+      "scaladoc.org.apache.pekko.base_url" ->
+      s"https://pekko.apache.org/api/pekko/${PekkoCoreDependency.default.link}/",
+      "javadoc.org.apache.pekko.base_url" ->
+      s"https://pekko.apache.org/japi/pekko/${PekkoCoreDependency.default.link}/",
       "javadoc.org.apache.pekko.link_style" -> "direct",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",

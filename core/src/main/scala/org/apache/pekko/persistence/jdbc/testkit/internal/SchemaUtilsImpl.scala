@@ -202,7 +202,8 @@ private[jdbc] object SchemaUtilsImpl {
   @InternalApi
   private[jdbc] def fromClasspathAsString(fileName: String): String = {
     val is = getClass.getClassLoader.getResourceAsStream(fileName)
-    io.Source.fromInputStream(is).mkString
+    try io.Source.fromInputStream(is).mkString
+    finally is.close()
   }
 
   private def loadSlickDatabase(configKey: String)(implicit actorSystem: ClassicActorSystemProvider) = {

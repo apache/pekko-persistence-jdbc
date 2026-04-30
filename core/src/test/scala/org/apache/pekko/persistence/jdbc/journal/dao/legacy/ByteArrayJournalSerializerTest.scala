@@ -35,7 +35,8 @@ class ByteArrayJournalSerializerTest extends SharedActorSystemTestSpec() {
     (result.head should be).a(Symbol("failure"))
   }
 
-  it should "serialize non-serializable and serializable messages and indicate whether or not the serialization succeeded" in {
+  it should
+  "serialize non-serializable and serializable messages and indicate whether or not the serialization succeeded" in {
     class Test
     val serializer = new ByteArrayJournalSerializer(serialization, ",")
     val result = serializer.serialize(List(AtomicWrite(PersistentRepr(new Test)), AtomicWrite(PersistentRepr("foo"))))

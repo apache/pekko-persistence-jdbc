@@ -21,7 +21,8 @@ import pekko.persistence.jdbc.SimpleSpec
 import pekko.persistence.jdbc.db.SlickExtension
 
 class JNDIConfigTest extends SimpleSpec {
-  "JNDI config" should "read the config and throw NoInitialContextException in case the JNDI resource is not available" in {
+  "JNDI config" should
+  "read the config and throw NoInitialContextException in case the JNDI resource is not available" in {
     withActorSystem("jndi-application.conf") { system =>
       val jdbcJournalConfig = system.settings.config.getConfig("jdbc-journal")
       val slickExtension = SlickExtension(system)
@@ -33,7 +34,8 @@ class JNDIConfigTest extends SimpleSpec {
     }
   }
 
-  "JNDI config for shared databases" should "read the config and throw NoInitialContextException in case the JNDI resource is not available" in {
+  "JNDI config for shared databases" should
+  "read the config and throw NoInitialContextException in case the JNDI resource is not available" in {
     withActorSystem("jndi-shared-db-application.conf") { system =>
       val jdbcJournalConfig = system.settings.config.getConfig("jdbc-journal")
       val slickExtension = SlickExtension(system)

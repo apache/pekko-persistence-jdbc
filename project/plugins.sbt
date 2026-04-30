@@ -9,18 +9,18 @@
 
 // compliance
 addSbtPlugin("com.github.sbt" % "sbt-header" % "5.11.0")
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.4")
-addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.9.0")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.0")
+addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.5")
+addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.12.0")
 
 // release
 addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.1.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.32")
-addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.4.5")
+addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.4.7")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.13")
 
 // docs
-addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.0")
+addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
 addSbtPlugin("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.1")
 addSbtPlugin("com.github.sbt" % "sbt-site-paradox" % "1.7.0")
 addSbtPlugin("com.lightbend.paradox" % "sbt-paradox-theme" % "0.10.7")

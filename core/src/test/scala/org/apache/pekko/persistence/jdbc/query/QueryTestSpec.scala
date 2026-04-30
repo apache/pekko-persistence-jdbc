@@ -307,8 +307,10 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
   }
 
   def pendingIfOracleWithLegacy(): Unit = {
-    if (profile == slick.jdbc.OracleProfile && readJournalConfig.pluginConfig.dao == classOf[
-        pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
+    if (profile == slick.jdbc.OracleProfile &&
+      readJournalConfig.pluginConfig.dao ==
+        classOf[
+          pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao].getName)
       pending // TODO https://github.com/akka/akka-persistence-jdbc/issues/673
   }
 

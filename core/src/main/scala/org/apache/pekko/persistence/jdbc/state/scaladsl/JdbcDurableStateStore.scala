@@ -101,7 +101,24 @@ class JdbcDurableStateStore[A](
     Future
       .fromTry(row)
       .flatMap { r =>
-        val action = if (revision == 1) insertDurableState(r) else updateDurableState(r)
+        val action = if (revision == 1) insertDurableState(r)
+        else {
+          // Try UPDATE first (entity exists at revision - 1). If 0 rows are affected, the
+          // entity may have been deleted (no row at all) rather than having a stale revision.
+          // In that case fall back to INSERT so that re-creation after deletion works.
+          for {
+            s <- queries.getSequenceNextValueExpr()
+            u <- queries.updateDbWithDurableState(r, s.head)
+            result <-
+              if (u > 0) DBIO.successful(u)
+              else {
+                queries.selectFromDbByPersistenceId(persistenceId).exists.result.flatMap { exists =>
+                  if (!exists) queries.insertDbWithDurableState(r, s.head)
+                  else DBIO.successful(0) // entity exists with wrong revision -> propagate 0 to throw below
+                }
+              }
+          } yield result
+        }
         db.run(action)
       }
       .map { rowsAffected =>

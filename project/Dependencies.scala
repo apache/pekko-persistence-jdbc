@@ -29,7 +29,7 @@ object Dependencies {
     "com.mysql" % "mysql-connector-j" % "9.7.0",
     "org.mariadb.jdbc" % "mariadb-java-client" % "3.5.8",
     "com.microsoft.sqlserver" % "mssql-jdbc" % "13.4.0.jre11",
-    "com.oracle.database.jdbc" % "ojdbc8" % "23.26.1.0.0")
+    "com.oracle.database.jdbc" % "ojdbc8" % "23.26.2.0.0")
 
   val Libraries: Seq[ModuleID] = Seq(
     "com.typesafe.slick" %% "slick" % SlickVersion,

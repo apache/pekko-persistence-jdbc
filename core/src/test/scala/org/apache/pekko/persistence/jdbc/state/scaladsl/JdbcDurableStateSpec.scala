@@ -128,7 +128,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
       }
     }
-    "fail to delete old object revision" in {
+    "fail to delete with old object revision" in {
       val f = for {
         n <- stateStoreString.upsertObject("p987", 1, "a valid string", "t123")
         _ = n shouldBe pekko.Done
@@ -144,7 +144,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
       } else {
         whenReady(f.failed) { e =>
-          e.getClass.getName shouldEqual DurableStateExceptionSupport.DeleteRevisionExceptionClass
+          e.getClass shouldEqual classOf[IllegalStateException]
           e.getMessage should include("Failed to delete object with persistenceId [p987] and revision [1]")
         }
       }

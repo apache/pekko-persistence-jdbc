@@ -101,7 +101,24 @@ class JdbcDurableStateStore[A](
     Future
       .fromTry(row)
       .flatMap { r =>
-        val action = if (revision == 1) insertDurableState(r) else updateDurableState(r)
+        val action = if (revision == 1) insertDurableState(r)
+        else {
+          // Try UPDATE first (entity exists at revision - 1). If 0 rows are affected, the
+          // entity may have been deleted (no row at all) rather than having a stale revision.
+          // In that case fall back to INSERT so that re-creation after deletion works.
+          for {
+            s <- queries.getSequenceNextValueExpr()
+            u <- queries.updateDbWithDurableState(r, s.head)
+            result <-
+              if (u > 0) DBIO.successful(u)
+              else {
+                queries.selectFromDbByPersistenceId(persistenceId).exists.result.flatMap { exists =>
+                  if (!exists) queries.insertDbWithDurableState(r, s.head)
+                  else DBIO.successful(0) // entity exists with wrong revision -> propagate 0 to throw below
+                }
+              }
+          } yield result
+        }
         db.run(action)
       }
       .map { rowsAffected =>
@@ -118,16 +135,12 @@ class JdbcDurableStateStore[A](
   override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
     db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
       if (count != 1) {
-        // if you run this code with Pekko 1.0.x, no exception will be thrown here
-        // this matches the behavior of pekko-connectors-jdbc 1.0.x
-        // if you run this code with Pekko 1.1.x, a DeleteRevisionException will be thrown here
         val msg = if (count == 0) {
           s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]"
         } else {
           s"Delete object succeeded for persistenceId [$persistenceId] and revision [$revision] but more than one row was affected ($count rows)"
         }
-        DurableStateExceptionSupport.createDeleteRevisionExceptionIfSupported(msg)
-          .foreach(throw _)
+        throw new IllegalStateException(msg)
       }
       Done
     }(ExecutionContext.parasitic)

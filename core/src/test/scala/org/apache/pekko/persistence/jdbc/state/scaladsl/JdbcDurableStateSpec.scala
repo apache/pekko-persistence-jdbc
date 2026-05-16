@@ -121,7 +121,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
       }
     }
-    "fail to delete old object revision" in {
+    "fail to delete with old object revision" in {
       val f = for {
         n <- stateStoreString.upsertObject("p987", 1, "a valid string", "t123")
         _ = n shouldBe pekko.Done
@@ -137,7 +137,7 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
         }
       } else {
         whenReady(f.failed) { e =>
-          e.getClass.getName shouldEqual DurableStateExceptionSupport.DeleteRevisionExceptionClass
+          e.getClass shouldEqual classOf[IllegalStateException]
           e.getMessage should include("Failed to delete object with persistenceId [p987] and revision [1]")
         }
       }
@@ -152,7 +152,9 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
           _ = g.value shouldBe Some("a valid string")
           u <- stateStoreString.upsertObject("p9876", 2, "updated valid string", "t123")
           _ = u shouldBe pekko.Done
-          d <- stateStoreString.deleteObject("p9876", 2)
+          // revision 3 = current stored revision (2) + 1, following the same tombstone-revision
+          // convention used by upsertObject and the pekko-persistence TCK
+          d <- stateStoreString.deleteObject("p9876", 3)
           _ = d shouldBe pekko.Done
           h <- stateStoreString.getObject("p9876")
 
@@ -160,6 +162,26 @@ abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) exte
       } { v =>
         // current behavior is that deleting the latest revision means getObject returns None (we don't preserve older revisions)
         v.value shouldBe None
+      }
+    }
+    "upsert again after deletion" in {
+      whenReady {
+        for {
+          n <- stateStoreString.upsertObject("p11111", 1, "original string", "t123")
+          _ = n shouldBe pekko.Done
+          // tombstone revision = current stored revision (1) + 1 = 2
+          d <- stateStoreString.deleteObject("p11111", 2)
+          _ = d shouldBe pekko.Done
+          g <- stateStoreString.getObject("p11111")
+          _ = g.value shouldBe None
+          // re-insert: revision = tombstone revision (2) + 1 = 3
+          u <- stateStoreString.upsertObject("p11111", 3, "recreated string", "t123")
+          _ = u shouldBe pekko.Done
+          h <- stateStoreString.getObject("p11111")
+        } yield h
+      } { v =>
+        v.value shouldBe Some("recreated string")
+        v.revision shouldBe 3L
       }
     }
   }

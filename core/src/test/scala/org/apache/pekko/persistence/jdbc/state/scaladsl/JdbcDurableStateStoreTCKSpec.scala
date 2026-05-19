@@ -16,7 +16,6 @@ import pekko.persistence.jdbc.config.SlickConfiguration
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.SchemaType
 import pekko.persistence.jdbc.util.DropCreate
-import pekko.persistence.state.DurableStateStoreSpec
 import org.scalatest.BeforeAndAfterAll
 
 abstract class JdbcDurableStateStoreTCKSpec(config: Config, schemaType: SchemaType)

@@ -28,6 +28,8 @@ abstract class JdbcDurableStateStoreTCKSpec(config: Config, schemaType: SchemaTy
 
   override protected def supportsUpsertWithRevisionCheck: CapabilityFlag = CapabilityFlag.on()
 
+  override protected def supportsSerialization: CapabilityFlag = CapabilityFlag.on()
+
   override protected def supportsSoftDelete: CapabilityFlag = CapabilityFlag.on()
 
   lazy val db = {

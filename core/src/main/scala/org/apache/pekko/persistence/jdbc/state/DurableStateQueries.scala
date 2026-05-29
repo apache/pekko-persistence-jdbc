@@ -115,13 +115,15 @@ import slick.jdbc.{
   }
 
   /**
-   * Deletes a particular revision of an object based on its persistenceId.
-   * This revision may no longer exist and if so, no delete will occur.
+   * Deletes the row for a given persistenceId whose revision equals `revision - 1`.
+   * Following the same "next-revision" convention as `upsertObject`, the caller passes
+   * the tombstone revision (= current stored revision + 1), so we delete the row
+   * where `storedRevision = passedRevision - 1`.
    *
    * @since 1.1.0
    */
   private[jdbc] def deleteBasedOnPersistenceIdAndRevision(persistenceId: String, revision: Long) = {
-    selectFromDbByPersistenceId(persistenceId).filter(_.revision === revision).delete
+    selectFromDbByPersistenceId(persistenceId).filter(_.revision === revision - 1L).delete
   }
 
   def deleteAllFromDb() = {

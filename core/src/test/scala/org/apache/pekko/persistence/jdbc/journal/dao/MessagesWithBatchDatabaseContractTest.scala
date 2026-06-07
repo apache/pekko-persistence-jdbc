@@ -151,7 +151,8 @@ abstract class MessagesWithBatchDatabaseContractTest(configFile: String) extends
     import profile.api._
     val unknownSerializerId = 999999
     val corruptRow = JournalTables.JournalPekkoSerializationRow(Long.MinValue, deleted = false, persistenceId,
-      sequenceNr, writer = "", writeTimestamp = 0L, adapterManifest = "", eventPayload = Array.fill(8)('x'.toByte),
+      sequenceNr, writer = UUID.randomUUID().toString, writeTimestamp = 0L, adapterManifest = "",
+      eventPayload = Array.fill(8)('x'.toByte),
       eventSerId = unknownSerializerId, eventSerManifest = "", metaPayload = None, metaSerId = None,
       metaSerManifest = None)
     db.run(journalQueries.JournalTable += corruptRow).futureValue

@@ -73,6 +73,7 @@ abstract class LimitWindowingStreamTest(configFile: String)
 
       lastInsert.futureValue(Timeout(totalMessages.seconds))
       val readMessagesDao = dao.asInstanceOf[BaseJournalDaoWithReadMessages]
+      // Asserts batch/message counts only. Windows are intentionally batchSize+1 wide (see BaseJournalDaoWithReadMessages.windowedQuery).
       val messagesSrc =
         readMessagesDao.internalBatchStream(persistenceId, 0, totalMessages, batchSize = fetchSize, None)
 

@@ -54,6 +54,8 @@ object ProjectAutoPlugin extends AutoPlugin {
       (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, _)) =>
           disciplineScalacOptions
+        case Some((3, _)) =>
+          Set("-Yfuture-lazy-vals")
         case _ =>
           Nil
       }).toSeq,

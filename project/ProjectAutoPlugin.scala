@@ -46,20 +46,25 @@ object ProjectAutoPlugin extends AutoPlugin {
       "-encoding",
       "UTF-8",
       "-unchecked",
-      "-Xlog-reflective-calls",
       "-language:higherKinds",
       "-language:implicitConversions",
       "-release:17"),
     Compile / scalacOptions ++=
       (CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, _)) =>
-          disciplineScalacOptions
+          disciplineScalacOptions ++ Set("-Xlog-reflective-calls")
         case Some((3, _)) =>
-          Set("-Yfuture-lazy-vals")
+          Set(
+            "-Yfuture-lazy-vals",
+            "-Wconf:msg=Implicit parameters should be provided with a `using` clause:s",
+            "-Wconf:msg=is deprecated for wildcard arguments of types:s",
+            "-Wconf:msg=The trailing ` _` for eta-expansion is unnecessary:s",
+            "-Wconf:msg=with as a type operator has been deprecated:s",
+            "-Wconf:msg=Unreachable case except for null:s",
+            "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s")
         case _ =>
           Nil
       }).toSeq,
-    scalacOptions += "-Ydelambdafy:method",
     Compile / javacOptions ++= Seq(
       "-encoding",
       "UTF-8",

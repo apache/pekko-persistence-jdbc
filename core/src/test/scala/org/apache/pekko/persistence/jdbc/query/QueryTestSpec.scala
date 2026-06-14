@@ -347,7 +347,7 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
 
   def withDao(f: JournalDao => Unit)(implicit system: ActorSystem, ec: ExecutionContext, mat: Materializer): Unit = {
     val fqcn: String = journalConfig.pluginConfig.dao
-    val args: immutable.Seq[(Class[_], AnyRef)] = immutable.Seq(
+    val args: immutable.Seq[(Class[?], AnyRef)] = immutable.Seq(
       (classOf[Database], db), (classOf[JdbcProfile], profile), (classOf[JournalConfig], journalConfig),
       (classOf[Serialization], SerializationExtension(system)), (classOf[ExecutionContext], ec),
       (classOf[Materializer], mat))

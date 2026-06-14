@@ -38,7 +38,7 @@ import pekko.pattern.pipe
 import pekko.persistence.jdbc.util.PluginVersionChecker
 
 object JdbcAsyncWriteJournal {
-  private case class WriteFinished(pid: String, f: Future[_])
+  private case class WriteFinished(pid: String, f: Future[?])
 
   /**
    * Extra Plugin API: May be used to issue in-place updates for events.
@@ -85,7 +85,7 @@ class JdbcAsyncWriteJournal(config: Config) extends AsyncWriteJournal {
 
   // readHighestSequence must be performed after pending write for a persistenceId
   // when the persistent actor is restarted.
-  private val writeInProgress: JMap[String, Future[_]] = new JHMap
+  private val writeInProgress: JMap[String, Future[?]] = new JHMap
 
   override def asyncWriteMessages(messages: Seq[AtomicWrite]): Future[Seq[Try[Unit]]] = {
     // add timestamp to all payloads in all AtomicWrite messages

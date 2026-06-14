@@ -29,7 +29,7 @@ class MyPayloadSerializer extends Serializer {
     case _               => throw new Exception("Unknown object for serialization")
   }
 
-  def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef = manifest match {
+  def fromBinary(bytes: Array[Byte], manifest: Option[Class[?]]): AnyRef = manifest match {
     case Some(MyPayloadClass) => MyPayload(s"${new String(bytes, "UTF-8")}")
     case Some(c)              => throw new Exception(s"unexpected manifest $c")
     case None                 => throw new Exception("no manifest")

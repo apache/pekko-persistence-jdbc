@@ -35,7 +35,7 @@ object ProjectAutoPlugin extends AutoPlugin {
 
   override val trigger: PluginTrigger = allRequirements
 
-  override val projectSettings: Seq[Setting[_]] = Seq(
+  override val projectSettings: Seq[Setting[?]] = Seq(
     crossVersion := CrossVersion.binary,
     crossScalaVersions := Dependencies.ScalaVersions,
     scalaVersion := Dependencies.Scala213,

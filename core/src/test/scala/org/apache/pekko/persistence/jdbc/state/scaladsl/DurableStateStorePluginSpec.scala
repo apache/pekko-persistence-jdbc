@@ -44,7 +44,7 @@ abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)
         .get(system)
         .durableStateStoreFor[JdbcDurableStateStore[String]](JdbcDurableStateStore.Identifier)
 
-      store shouldBe a[JdbcDurableStateStore[_]]
+      store shouldBe a[JdbcDurableStateStore[?]]
       store.system.settings.config shouldBe system.settings.config
       store.profile shouldBe profile
     }
@@ -114,7 +114,7 @@ abstract class DurableStateStoreSchemaPluginSpec(val config: Config, profile: Jd
         .get(system)
         .durableStateStoreFor[JdbcDurableStateStore[String]](JdbcDurableStateStore.Identifier)
 
-      store shouldBe a[JdbcDurableStateStore[_]]
+      store shouldBe a[JdbcDurableStateStore[?]]
       store.system.settings.config shouldBe system.settings.config
       store.profile shouldBe profile
     }

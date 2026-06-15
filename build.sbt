@@ -21,6 +21,8 @@ val mimaCompareVersion = "1.0.0"
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
+ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
+
 lazy val `pekko-persistence-jdbc` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
@@ -127,9 +129,5 @@ Global / onLoad := (Global / onLoad).value.andThen { s =>
   s
 }
 
-TaskKey[Unit]("verifyCodeFmt") := {
-  javafmtCheckAll.all(ScopeFilter(inAnyProject)).result.value.toEither.left.foreach { _ =>
-    throw new MessageOnlyException(
-      "Unformatted Java code found. Please run 'javafmtAll' and commit the reformatted code")
-  }
-}
+addCommandAlias("checkCodeStyle", "scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll; +headerCheckAll")
+addCommandAlias("applyCodeStyle", "+headerCreateAll; scalafmtAll; scalafmtSbt; javafmtAll")

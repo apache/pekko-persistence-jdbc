@@ -7,3 +7,4 @@ Release notes for Apache Pekko Persistence JDBC 1.3.0. See [GitHub Milestone](ht
 ### Bug Fix
 
 * Fix incorrect implementation of Durable State deleteObject(id, revision) ([PR505](https://github.com/apache/pekko-persistence-jdbc/pull/505))
+* Emit all messages across sequence number gaps in messagesWithBatch) ([PR517](https://github.com/apache/pekko-persistence-jdbc/pull/517))

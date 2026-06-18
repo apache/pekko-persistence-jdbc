@@ -55,13 +55,12 @@ object ProjectAutoPlugin extends AutoPlugin {
           disciplineScalacOptions ++ Set("-Xlog-reflective-calls")
         case Some((3, _)) =>
           Set(
-            "-Yfuture-lazy-vals",
             "-Wconf:msg=Implicit parameters should be provided with a `using` clause:s",
             "-Wconf:msg=is deprecated for wildcard arguments of types:s",
             "-Wconf:msg=The trailing ` _` for eta-expansion is unnecessary:s",
             "-Wconf:msg=with as a type operator has been deprecated:s",
-            "-Wconf:msg=Unreachable case except for null:s",
-            "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s")
+            "-Wconf:msg=Unreachable case except for null:s") ++
+          (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 < 9)) Seq("-Yfuture-lazy-vals", "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s") else Seq.empty)
         case _ =>
           Nil
       }).toSeq,

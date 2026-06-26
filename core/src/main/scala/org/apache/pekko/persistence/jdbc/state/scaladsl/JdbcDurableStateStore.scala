@@ -244,15 +244,6 @@ class JdbcDurableStateStore[A](
           row.stateTimestamp))
   }
 
-  private def updateDurableState(row: DurableStateTables.DurableStateRow) = {
-    import queries._
-
-    for {
-      s <- getSequenceNextValueExpr()
-      u <- updateDbWithDurableState(row, s.head)
-    } yield u
-  }
-
   private def insertDurableState(row: DurableStateTables.DurableStateRow) = {
     import queries._
 

@@ -14,11 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.util
 
+import scala.annotation.nowarn
 import scala.collection.immutable._
 import scala.util.{ Failure, Success, Try }
 
 object TrySeq {
   def sequence[A](seq: Seq[Try[A]]): Try[Seq[A]] = {
+    @nowarn("msg=match may not be exhaustive")
     def recurse(remaining: Seq[Try[A]], processed: Seq[A]): Try[Seq[A]] =
       remaining match {
         case Seq()                 => Success(processed)

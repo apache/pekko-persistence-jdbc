@@ -67,7 +67,7 @@ trait BaseByteArrayJournalDao
   }
 
   /**
-   * @see [[pekko.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)]]
+   * @see `org.apache.pekko.persistence.journal.AsyncWriteJournal.asyncWriteMessages(messages)`
    */
   def asyncWriteMessages(messages: Seq[AtomicWrite]): Future[Seq[Try[Unit]]] = {
     val serializedTries: Seq[Try[Seq[JournalRow]]] = serializer.serialize(messages)

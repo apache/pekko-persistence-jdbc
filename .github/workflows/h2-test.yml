@@ -19,8 +19,10 @@ jobs:
         include:
           - { java-version: 17, scala-version: 2.13, sbt-opts: '' }
           - { java-version: 17, scala-version: 3.3,  sbt-opts: '' }
+          - { java-version: 17, scala-version: 3.8,  sbt-opts: '' }
           - { java-version: 21, scala-version: 2.13, sbt-opts: '' }
           - { java-version: 21, scala-version: 3.3,  sbt-opts: '' }
+          - { java-version: 21, scala-version: 3.8,  sbt-opts: '' }
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0

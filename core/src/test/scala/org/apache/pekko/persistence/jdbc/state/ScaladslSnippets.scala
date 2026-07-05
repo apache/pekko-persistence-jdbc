@@ -9,6 +9,7 @@
 
 package org.apache.pekko.persistence.jdbc.state
 
+import scala.annotation.nowarn
 import scala.concurrent.{ ExecutionContext, Future }
 import org.apache.pekko
 import pekko.actor.ActorSystem
@@ -27,6 +28,7 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     // #create
   }
 
+  @nowarn("msg=is never used")
   def durableStatePlugin(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -104,6 +106,7 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     // #delete-object
   }
 
+  @nowarn("msg=is never used")
   def currentChanges(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -124,6 +127,7 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     // #current-changes
   }
 
+  @nowarn("msg=is never used")
   def changes(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 

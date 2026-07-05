@@ -19,11 +19,13 @@ import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConf
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+import scala.annotation.nowarn
 import scala.concurrent.duration._
 
 class PekkoPersistenceConfigTest extends AnyFlatSpec with Matchers {
   private val referenceConfig: Config = ConfigFactory.load("reference")
 
+  @nowarn("msg=possible missing interpolator")
   val config: Config = ConfigFactory
     .parseString("""
           |pekko-persistence-jdbc.slick.db {

@@ -40,6 +40,7 @@ object EventAdapterTest {
     override def fromJournal(event: Any, manifest: String): EventSeq =
       event match {
         case e: EventAdapted => EventSeq.single(e.restored)
+        case _               => EventSeq.single(event)
       }
   }
 

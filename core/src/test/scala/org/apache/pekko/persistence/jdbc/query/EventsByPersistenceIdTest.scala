@@ -152,6 +152,7 @@ abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(c
         val env3 = tp.expectNext(ExpectNextTimeout)
         val ordering3 = env3.offset match {
           case Sequence(value) => value
+          case other           => fail(s"Expected Sequence offset, got $other")
         }
 
         actor2 ! withTags(4, "ordering")

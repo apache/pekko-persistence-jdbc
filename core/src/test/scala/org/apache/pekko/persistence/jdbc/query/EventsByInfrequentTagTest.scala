@@ -40,7 +40,7 @@ abstract class EventsByInfrequentTagTest(config: String) extends QueryTestSpec(c
       pendingIfOracleWithLegacy()
 
       val journalOps = new ScalaJdbcReadJournalOperations(system)
-      withTestActors(replyToMessages = true) { (actor1, actor2, actor3) =>
+      withTestActors(replyToMessages = true) { (actor1, _, _) =>
         val often = "often"
         val notOften = "not-often"
         withClue("Persisting multiple tagged events") {
@@ -57,8 +57,8 @@ abstract class EventsByInfrequentTagTest(config: String) extends QueryTestSpec(c
           }
           journalOps.withEventsByTag()(often, NoOffset) { tp =>
             tp.request(Int.MaxValue)
-            (0 until 100).foreach { i =>
-              tp.expectNextPF { case EventEnvelope(Sequence(i), _, _, _) => }
+            (0 until 100).foreach { _ =>
+              tp.expectNextPF { case EventEnvelope(Sequence(_), _, _, _) => }
             }
             tp.cancel()
             tp.expectNoMessage(NoMsgTime)

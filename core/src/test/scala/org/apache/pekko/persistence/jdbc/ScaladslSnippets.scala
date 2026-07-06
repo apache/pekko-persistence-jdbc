@@ -23,9 +23,9 @@ import pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 import scala.annotation.nowarn
 import scala.concurrent.Future
 
+@nowarn("msg=is never used")
 object ScaladslSnippets {
 
-  @nowarn("msg=is never used")
   def create(): Unit = {
     // #create
 
@@ -34,7 +34,6 @@ object ScaladslSnippets {
     // #create
   }
 
-  @nowarn("msg=is never used")
   def readJournal(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -46,7 +45,6 @@ object ScaladslSnippets {
     // #read-journal
   }
 
-  @nowarn("msg=is never used")
   def persistenceIds(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -63,7 +61,6 @@ object ScaladslSnippets {
     // #persistence-ids
   }
 
-  @nowarn("msg=is never used")
   def eventsByPersistenceId(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -83,7 +80,6 @@ object ScaladslSnippets {
     // #events-by-persistence-id
   }
 
-  @nowarn("msg=is never used")
   def eventsByTag(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
     // #events-by-tag

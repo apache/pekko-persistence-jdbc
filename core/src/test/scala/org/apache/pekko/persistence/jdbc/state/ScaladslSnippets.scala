@@ -17,6 +17,7 @@ import pekko.Done
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 
+@nowarn("msg=is never used")
 object ScaladslSnippets extends ScalaFutures with Matchers {
 
   def create(): Unit = {
@@ -28,7 +29,6 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     // #create
   }
 
-  @nowarn("msg=is never used")
   def durableStatePlugin(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -106,7 +106,6 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     // #delete-object
   }
 
-  @nowarn("msg=is never used")
   def currentChanges(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 
@@ -127,7 +126,6 @@ object ScaladslSnippets extends ScalaFutures with Matchers {
     // #current-changes
   }
 
-  @nowarn("msg=is never used")
   def changes(): Unit = {
     implicit val system: ActorSystem = ActorSystem()
 

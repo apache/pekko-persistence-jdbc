@@ -326,7 +326,7 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
    * The stream is not completed when it reaches the end of the currently stored events,
    * but it continues to push new events when new events are persisted.
    * Corresponding query that is completed when it reaches the end of the currently
-   * stored events is provided by [[CurrentEventsByTagQuery#currentEventsByTag]].
+   * stored events is provided by [[org.apache.pekko.persistence.query.scaladsl.CurrentEventsByTagQuery#currentEventsByTag]].
    */
   override def eventsByTag(tag: String, offset: Offset): Source[EventEnvelope, NotUsed] =
     eventsByTag(tag, offset.value)

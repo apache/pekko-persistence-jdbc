@@ -343,7 +343,7 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
     Future.sequence(refs.map(_ ? "state")).futureValue
   }
 
-  def withTags(payload: Any, tags: String*) = Tagged(payload, Set(tags: _*))
+  def withTags(payload: Any, tags: String*) = Tagged(payload, tags.toSet)
 
   def withDao(f: JournalDao => Unit)(implicit system: ActorSystem, ec: ExecutionContext, mat: Materializer): Unit = {
     val fqcn: String = journalConfig.pluginConfig.dao

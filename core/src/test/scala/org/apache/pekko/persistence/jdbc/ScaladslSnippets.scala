@@ -20,8 +20,10 @@ import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
 
+import scala.annotation.nowarn
 import scala.concurrent.Future
 
+@nowarn("msg=is never used")
 object ScaladslSnippets {
 
   def create(): Unit = {

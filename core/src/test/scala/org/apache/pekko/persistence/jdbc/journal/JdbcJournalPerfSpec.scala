@@ -68,7 +68,7 @@ abstract class JdbcJournalPerfSpec(config: Config, schemaType: SchemaType)
 
   def actorCount = 100
 
-  private val commands = Vector(1 to eventsCount: _*)
+  private val commands = (1 to eventsCount).toVector
 
   "A PersistentActor's performance" must {
     s"measure: persist()-ing $eventsCount events for $actorCount actors" in {

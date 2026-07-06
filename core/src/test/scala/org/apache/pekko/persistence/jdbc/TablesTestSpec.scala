@@ -19,9 +19,12 @@ import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConf
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
+import scala.annotation.nowarn
+
 abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
   def toColumnName[A](tableName: String)(columnName: String): String = s"$tableName.$columnName"
 
+  @nowarn("msg=possible missing interpolator")
   val config = ConfigFactory
     .parseString("""
       |pekko-persistence-jdbc.slick.db {

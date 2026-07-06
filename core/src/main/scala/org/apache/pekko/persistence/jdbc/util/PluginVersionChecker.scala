@@ -14,17 +14,19 @@
 
 package org.apache.pekko.persistence.jdbc.util
 
+import java.lang.invoke.MethodHandles
+
 import org.apache.pekko.annotation.InternalApi
 
 @InternalApi
 private[jdbc] object PluginVersionChecker {
   def check(): Unit =
     try {
-      Class.forName("org.apache.pekko.persistence.jdbc.util.DefaultSlickDatabaseProvider")
+      MethodHandles.lookup().findClass("org.apache.pekko.persistence.jdbc.util.DefaultSlickDatabaseProvider")
       throw new RuntimeException(
         "Old version of Apache Pekko Persistence JDBC found on the classpath. Remove `com.github.dnvriend:pekko-persistence-jdbc` from the classpath..")
     } catch {
-      case _: ClassNotFoundException =>
+      case _: ClassNotFoundException | _: IllegalAccessException =>
       // All good! That's intentional.
       // It's good if we don't have pekko.persistence.jdbc.util.DefaultSlickDatabaseProvider around
     }

@@ -35,7 +35,6 @@ import scala.collection.immutable._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 import pekko.pattern.pipe
-import pekko.persistence.jdbc.util.PluginVersionChecker
 
 object JdbcAsyncWriteJournal {
   private case class WriteFinished(pid: String, f: Future[?])
@@ -56,8 +55,6 @@ class JdbcAsyncWriteJournal(config: Config) extends AsyncWriteJournal {
   implicit val system: ActorSystem = context.system
   implicit val mat: Materializer = SystemMaterializer(system).materializer
   val journalConfig = new JournalConfig(config)
-
-  PluginVersionChecker.check()
 
   val slickDb: SlickDatabase = SlickExtension(system).database(config)
   def db: Database = slickDb.database

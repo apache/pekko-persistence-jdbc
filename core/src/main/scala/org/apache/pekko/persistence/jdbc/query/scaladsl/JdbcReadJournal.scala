@@ -23,7 +23,6 @@ import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, Max
 import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.journal.dao.FlowControl
 import pekko.persistence.jdbc.query.dao.ReadJournalDao
-import pekko.persistence.jdbc.util.PluginVersionChecker
 import pekko.persistence.query.scaladsl._
 import pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
 import pekko.persistence.{ Persistence, PersistentRepr }
@@ -53,8 +52,6 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
     with CurrentEventsByTagQuery
     with EventsByTagQuery
     with CurrentLastSequenceNumberByPersistenceIdQuery {
-
-  PluginVersionChecker.check()
 
   implicit val ec: ExecutionContext = system.dispatcher
   implicit val mat: Materializer = SystemMaterializer(system).materializer

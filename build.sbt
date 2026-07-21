@@ -124,11 +124,15 @@ lazy val docs = project
     apidocRootPackage := "org.apache.pekko")
   .settings(themeSettings)
 
-Global / onLoad := (Global / onLoad).value.andThen { s =>
-  val v = version.value
-  if (dynverGitDescribeOutput.value.hasNoTags)
-    sLog.value.warn(s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v")
-  s
+Global / onLoad := {
+  sLog.value.info(
+    s"Building Pekko HTTP ${version.value} against Pekko ${PekkoCoreDependency.version} on Scala ${scalaVersion.value}")
+  (Global / onLoad).value.andThen { s =>
+    val v = version.value
+    if (dynverGitDescribeOutput.value.hasNoTags)
+      sLog.value.warn(s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v")
+    s
+  }
 }
 
 addCommandAlias("checkCodeStyle", "scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll; +headerCheckAll")

@@ -1,11 +1,12 @@
-name: Nightly Testing with Pekko 1.x
+name: Nightly Testing with Pekko (Main Branch)
 
 permissions: {}
 
 on:
   schedule:
-    - cron: "0 4 * * 0"
+    - cron: "0 4 * * *"
   workflow_dispatch:
+  pull_request:
 
 jobs:
   test:
@@ -15,31 +16,29 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { java-version: 8,  scala-version: 2.12, sbt-opts: '' }
-          - { java-version: 8,  scala-version: 2.13, sbt-opts: '' }
-          - { java-version: 8,  scala-version: 3.3,  sbt-opts: '' }
+          - { java-version: 17,  scala-version: 2.13, sbt-opts: '' }
+          - { java-version: 17,  scala-version: 3.3,  sbt-opts: '' }
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
           fetch-tags: true
-          ref: 1.3.x
 
       - name: Setup JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5.5.0
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
 
       - name: Install sbt
-        uses: sbt/setup-sbt@6444f4c8111de4b9059c3975def104b03cfaa5f0 # v1.5.2
+        uses: sbt/setup-sbt@66fb4376e81982c7d92a4074170846fff88e2e30 # v1.5.0
 
       - name: Cache Coursier cache
         uses: coursier/cache-action@95e5b1029b6b86e7bac033ee44a0697d8a527d2d # v8.1.1
 
       - name: Run tests with Scala ${{ matrix.scala-version }} and Java ${{ matrix.java-version }}
-        run: sbt -Dpekko.build.pekko.version=1.x "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
+        run: sbt -Dpekko.build.pekko.version=main "++${{ matrix.scala-version }} test" ${{ matrix.sbt-opts }}
 
       - name: Print logs on failure
         if: ${{ failure() }}

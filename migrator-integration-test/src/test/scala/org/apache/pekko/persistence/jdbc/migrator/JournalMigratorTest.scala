@@ -42,9 +42,9 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     } // legacy persistence
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
+        countJournal().futureValue shouldBe 0 // before migration
+        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
         eventually {
-          countJournal().futureValue shouldBe 0 // before migration
-          JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 9 // after migration
         }
         withTestActors() { (actorB1, actorB2, actorB3) =>
@@ -78,20 +78,20 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     } // legacy persistence
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
+        countJournal().futureValue shouldBe 0 // before migration
+        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
         eventually {
-          countJournal().futureValue shouldBe 0 // before migration
-          JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 3000 // after migration
-          val allEvents: Seq[Seq[AccountEvent]] = events().futureValue
-          allEvents.size shouldBe 3
-          val seq1: Seq[Int] = allEvents.head.map(_.amount)
-          val seq2: Seq[Int] = allEvents(1).map(_.amount)
-          val seq3: Seq[Int] = allEvents(2).map(_.amount)
-          val expectedResult: Seq[Int] = 0 to 999
-          seq1 shouldBe expectedResult
-          seq2 shouldBe expectedResult
-          seq3 shouldBe expectedResult
         }
+        val allEvents: Seq[Seq[AccountEvent]] = events().futureValue
+        allEvents.size shouldBe 3
+        val seq1: Seq[Int] = allEvents.head.map(_.amount)
+        val seq2: Seq[Int] = allEvents(1).map(_.amount)
+        val seq3: Seq[Int] = allEvents(2).map(_.amount)
+        val expectedResult: Seq[Int] = 0 to 999
+        seq1 shouldBe expectedResult
+        seq2 shouldBe expectedResult
+        seq3 shouldBe expectedResult
       }
     } // new persistence
   }
@@ -116,18 +116,18 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     } // legacy persistence
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
+        countJournal().futureValue shouldBe 0 // before migration
+        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
         eventually {
-          countJournal().futureValue shouldBe 0 // before migration
-          JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 3000 // after migration
-          val evenEvents: Seq[AccountEvent] = eventsByTag(MigratorSpec.Even).futureValue
-          evenEvents.size shouldBe 1500
-          evenEvents.forall(e => e.amount % 2 == 0) shouldBe true
-
-          val oddEvents: Seq[AccountEvent] = eventsByTag(MigratorSpec.Odd).futureValue
-          oddEvents.size shouldBe 1500
-          oddEvents.forall(e => e.amount % 2 == 1) shouldBe true
         }
+        val evenEvents: Seq[AccountEvent] = eventsByTag(MigratorSpec.Even).futureValue
+        evenEvents.size shouldBe 1500
+        evenEvents.forall(e => e.amount % 2 == 0) shouldBe true
+
+        val oddEvents: Seq[AccountEvent] = eventsByTag(MigratorSpec.Odd).futureValue
+        oddEvents.size shouldBe 1500
+        oddEvents.forall(e => e.amount % 2 == 1) shouldBe true
       }
     } // new persistence
   }

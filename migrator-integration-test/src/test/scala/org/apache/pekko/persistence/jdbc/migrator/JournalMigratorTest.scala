@@ -43,8 +43,8 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
-        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
         eventually {
+          JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 9 // after migration
         }
         withTestActors() { (actorB1, actorB2, actorB3) =>
@@ -79,8 +79,8 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
-        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
         eventually {
+          JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 3000 // after migration
         }
         val allEvents: Seq[Seq[AccountEvent]] = events().futureValue
@@ -117,8 +117,8 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
-        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
         eventually {
+          JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
           countJournal().futureValue shouldBe 3000 // after migration
         }
         val evenEvents: Seq[AccountEvent] = eventsByTag(MigratorSpec.Even).futureValue

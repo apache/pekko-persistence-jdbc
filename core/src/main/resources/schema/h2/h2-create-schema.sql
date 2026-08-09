@@ -29,6 +29,8 @@ CREATE TABLE IF NOT EXISTS PUBLIC."event_tag" (
       ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS "event_tag_idx" on PUBLIC."event_tag" ("tag");
+
 CREATE TABLE IF NOT EXISTS PUBLIC."snapshot" (
     "persistence_id" VARCHAR(255) NOT NULL,
     "sequence_number" BIGINT NOT NULL,

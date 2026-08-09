@@ -120,6 +120,7 @@ trait JournalTables {
     val journalEvent =
       foreignKey(s"fk_${journalTableCfg.tableName}", (persistenceId, sequenceNumber), JournalTable)(e =>
         (Rep.Some(e.persistenceId), Rep.Some(e.sequenceNumber)))
+    val tagIdx = index(s"${tagTableCfg.tableName}_idx", tag)
   }
 
   lazy val TagTable = new TableQuery(tag => new EventTags(tag))

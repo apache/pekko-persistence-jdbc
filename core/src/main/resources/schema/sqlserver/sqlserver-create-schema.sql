@@ -30,6 +30,8 @@ CREATE TABLE event_tag
             on delete CASCADE
 );
 
+CREATE INDEX event_tag_idx on event_tag (tag);
+
 CREATE TABLE "snapshot" (
     "persistence_id" NVARCHAR(255) NOT NULL,
     "sequence_number" NUMERIC(10,0) NOT NULL,

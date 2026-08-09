@@ -69,6 +69,7 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
     val stateTimestamp: Rep[Long] = column[Long](durableStateTableCfg.columnNames.stateTimestamp)
 
     val globalOffsetIdx = index(s"${tableName}_globalOffset_idx", globalOffset, unique = true)
+    val tagIdx = index(s"${tableName}_tag_idx", tag)
   }
   lazy val durableStateTable = new TableQuery(new DurableState(_))
 }

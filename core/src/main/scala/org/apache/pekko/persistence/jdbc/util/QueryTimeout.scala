@@ -17,7 +17,7 @@
 
 package org.apache.pekko.persistence.jdbc.util
 
-import java.util.concurrent.{ Executors, ThreadFactory, TimeoutException, TimeUnit }
+import java.util.concurrent.{ Executors, ThreadFactory, TimeUnit, TimeoutException }
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.concurrent.duration.FiniteDuration
 
@@ -26,13 +26,14 @@ import scala.concurrent.duration.FiniteDuration
  */
 object QueryTimeout {
 
-  private val scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory {
-    override def newThread(r: Runnable): Thread = {
-      val t = new Thread(r, "pekko-persistence-jdbc-query-timeout")
-      t.setDaemon(true)
-      t
-    }
-  })
+  private val scheduler = Executors.newScheduledThreadPool(1,
+    new ThreadFactory {
+      override def newThread(r: Runnable): Thread = {
+        val t = new Thread(r, "pekko-persistence-jdbc-query-timeout")
+        t.setDaemon(true)
+        t
+      }
+    })
 
   /**
    * Wraps a Future with a timeout. If the timeout duration is zero or negative, the original Future is returned

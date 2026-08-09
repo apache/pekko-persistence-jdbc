@@ -23,6 +23,7 @@ import pekko.persistence.jdbc.journal.dao.legacy.{ ByteArrayJournalSerializer, J
 import pekko.persistence.jdbc.query.dao.ReadJournalDao
 import pekko.persistence.jdbc.query.dao.legacy.TagFilterFlow.perfectlyMatchTag
 import pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Flow, Source }
@@ -42,6 +43,8 @@ trait BaseByteArrayReadJournalDao extends ReadJournalDao with BaseJournalDaoWith
 
   import profile.api._
 
+  private def queryTimeout = readJournalConfig.queryTimeout
+
   override def allPersistenceIdsSource(max: Long): Source[String, NotUsed] =
     Source.fromPublisher(db.stream(queries.allPersistenceIdsDistinct(correctMaxForH2Driver(max)).result))
 
@@ -60,7 +63,7 @@ trait BaseByteArrayReadJournalDao extends ReadJournalDao with BaseJournalDaoWith
   }
 
   override def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]] =
-    db.run(queries.lastPersistenceIdSequenceNumberQuery(persistenceId).result)
+    QueryTimeout.withTimeout(db.run(queries.lastPersistenceIdSequenceNumberQuery(persistenceId).result), queryTimeout)
 
   override def messages(
       persistenceId: String,
@@ -82,7 +85,7 @@ trait BaseByteArrayReadJournalDao extends ReadJournalDao with BaseJournalDaoWith
     Source.fromPublisher(db.stream(queries.journalSequenceQuery((offset, limit)).result))
 
   override def maxJournalSequence(): Future[Long] = {
-    db.run(queries.maxJournalSequenceQuery.result)
+    QueryTimeout.withTimeout(db.run(queries.maxJournalSequenceQuery.result), queryTimeout)
   }
 }
 

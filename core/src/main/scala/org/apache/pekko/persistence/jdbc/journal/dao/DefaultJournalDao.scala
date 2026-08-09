@@ -19,6 +19,7 @@ import pekko.NotUsed
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
 import pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.persistence.journal.Tagged
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.serialization.Serialization
@@ -48,10 +49,13 @@ class DefaultJournalDao(
 
   import profile.api._
 
+  private val queryTimeout = journalConfig.queryTimeout
+
   override def baseDaoConfig: BaseDaoConfig = journalConfig.daoConfig
 
   override def writeJournalRows(xs: immutable.Seq[(JournalPekkoSerializationRow, Set[String])]): Future[Unit] = {
-    db.run(queries.writeJournalRows(xs).transactionally).map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      db.run(queries.writeJournalRows(xs).transactionally).map(_ => ())(ExecutionContext.parasitic), queryTimeout)
   }
 
   val queries =
@@ -67,13 +71,15 @@ class DefaultJournalDao(
       _ <- queries.markSeqNrJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
     } yield ()
 
-    db.run(actions.transactionally)
+    QueryTimeout.withTimeout(db.run(actions.transactionally), queryTimeout)
   }
 
   override def highestSequenceNr(persistenceId: String, fromSequenceNr: Long): Future[Long] = {
-    for {
-      maybeHighestSeqNo <- db.run(queries.highestSequenceNrForPersistenceId(persistenceId).result)
-    } yield maybeHighestSeqNo.getOrElse(0L)
+    QueryTimeout.withTimeout(
+      for {
+        maybeHighestSeqNo <- db.run(queries.highestSequenceNrForPersistenceId(persistenceId).result)
+      } yield maybeHighestSeqNo.getOrElse(0L),
+      queryTimeout)
   }
 
   override def asyncWriteMessages(messages: immutable.Seq[AtomicWrite]): Future[immutable.Seq[Try[Unit]]] = {

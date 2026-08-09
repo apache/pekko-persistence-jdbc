@@ -18,6 +18,7 @@ import slick.jdbc.{ JdbcBackend, JdbcProfile }
 import org.apache.pekko
 import pekko.persistence.SnapshotMetadata
 import pekko.persistence.jdbc.config.SnapshotConfig
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import SnapshotTables._
@@ -34,6 +35,7 @@ class DefaultSnapshotDao(
     extends SnapshotDao {
   import profile.api._
   val queries = new SnapshotQueries(profile, snapshotConfig.snapshotTableConfiguration)
+  private val queryTimeout = snapshotConfig.queryTimeout
 
   private def toSnapshotData(row: SnapshotRow): Try[(SnapshotMetadata, Any)] = {
     val snapshot = serialization.deserialize(row.snapshotPayload, row.snapshotSerId, row.snapshotSerManifest)
@@ -76,61 +78,82 @@ class DefaultSnapshotDao(
     rows.headOption.map(row => toSnapshotData(row).get) // throw is from a future map
 
   override def latestSnapshot(persistenceId: String): Future[Option[(SnapshotMetadata, Any)]] =
-    db.run(queries.selectLatestByPersistenceId(persistenceId).result).flatMap { rows =>
-      rows.headOption match {
-        case Some(row) => Future.fromTry(toSnapshotData(row)).map(Option(_))
-        case None      => Future.successful(None)
-      }
-    }
+    QueryTimeout.withTimeout(
+      db.run(queries.selectLatestByPersistenceId(persistenceId).result).flatMap { rows =>
+        rows.headOption match {
+          case Some(row) => Future.fromTry(toSnapshotData(row)).map(Option(_))
+          case None      => Future.successful(None)
+        }
+      },
+      queryTimeout)
 
   override def snapshotForMaxTimestamp(
       persistenceId: String,
       maxTimestamp: Long): Future[Option[(SnapshotMetadata, Any)]] =
-    db.run(queries.selectOneByPersistenceIdAndMaxTimestamp((persistenceId, maxTimestamp)).result).map(zeroOrOneSnapshot)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectOneByPersistenceIdAndMaxTimestamp((persistenceId, maxTimestamp)).result).map(
+        zeroOrOneSnapshot),
+      queryTimeout)
 
   override def snapshotForMaxSequenceNr(
       persistenceId: String,
       maxSequenceNr: Long): Future[Option[(SnapshotMetadata, Any)]] =
-    db.run(queries.selectOneByPersistenceIdAndMaxSequenceNr((persistenceId, maxSequenceNr)).result)
-      .map(zeroOrOneSnapshot)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectOneByPersistenceIdAndMaxSequenceNr((persistenceId, maxSequenceNr)).result)
+        .map(zeroOrOneSnapshot),
+      queryTimeout)
 
   override def snapshotForMaxSequenceNrAndMaxTimestamp(
       persistenceId: String,
       maxSequenceNr: Long,
       maxTimestamp: Long): Future[Option[(SnapshotMetadata, Any)]] =
-    db.run(
-      queries
-        .selectOneByPersistenceIdAndMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
-        .result)
-      .map(zeroOrOneSnapshot(_))
+    QueryTimeout.withTimeout(
+      db.run(
+        queries
+          .selectOneByPersistenceIdAndMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
+          .result)
+        .map(zeroOrOneSnapshot(_)),
+      queryTimeout)
 
   override def save(snapshotMetadata: SnapshotMetadata, snapshot: Any): Future[Unit] = {
     val eventualSnapshotRow = Future.fromTry(serializeSnapshot(snapshotMetadata, snapshot))
-    eventualSnapshotRow.map(queries.insertOrUpdate).flatMap(db.run).map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      eventualSnapshotRow.map(queries.insertOrUpdate).flatMap(db.run).map(_ => ())(ExecutionContext.parasitic),
+      queryTimeout)
   }
 
   override def delete(persistenceId: String, sequenceNr: Long): Future[Unit] =
-    db.run(queries.selectByPersistenceIdAndSequenceNr((persistenceId, sequenceNr)).delete)
-      .map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectByPersistenceIdAndSequenceNr((persistenceId, sequenceNr)).delete)
+        .map(_ => ())(ExecutionContext.parasitic),
+      queryTimeout)
 
   override def deleteAllSnapshots(persistenceId: String): Future[Unit] =
-    db.run(queries.selectAll(persistenceId).delete).map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectAll(persistenceId).delete).map(_ => ())(ExecutionContext.parasitic),
+      queryTimeout)
 
   override def deleteUpToMaxSequenceNr(persistenceId: String, maxSequenceNr: Long): Future[Unit] =
-    db.run(queries.selectByPersistenceIdUpToMaxSequenceNr((persistenceId, maxSequenceNr)).delete)
-      .map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectByPersistenceIdUpToMaxSequenceNr((persistenceId, maxSequenceNr)).delete)
+        .map(_ => ())(ExecutionContext.parasitic),
+      queryTimeout)
 
   override def deleteUpToMaxTimestamp(persistenceId: String, maxTimestamp: Long): Future[Unit] =
-    db.run(queries.selectByPersistenceIdUpToMaxTimestamp((persistenceId, maxTimestamp)).delete)
-      .map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectByPersistenceIdUpToMaxTimestamp((persistenceId, maxTimestamp)).delete)
+        .map(_ => ())(ExecutionContext.parasitic),
+      queryTimeout)
 
   override def deleteUpToMaxSequenceNrAndMaxTimestamp(
       persistenceId: String,
       maxSequenceNr: Long,
       maxTimestamp: Long): Future[Unit] =
-    db.run(
-      queries
-        .selectByPersistenceIdUpToMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
-        .delete)
-      .map(_ => ())(ExecutionContext.parasitic)
+    QueryTimeout.withTimeout(
+      db.run(
+        queries
+          .selectByPersistenceIdUpToMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
+          .delete)
+        .map(_ => ())(ExecutionContext.parasitic),
+      queryTimeout)
 }

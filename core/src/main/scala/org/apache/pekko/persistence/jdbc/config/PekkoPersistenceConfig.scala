@@ -165,6 +165,7 @@ class JournalConfig(config: Config) {
   val pluginConfig = new JournalPluginConfig(config)
   val daoConfig = new BaseDaoConfig(config)
   val useSharedDb: Option[String] = config.asStringOption(ConfigKeys.useSharedDb)
+  val queryTimeout: FiniteDuration = config.asFiniteDuration("query-timeout")
   override def toString: String = s"JournalConfig($journalTableConfiguration,$pluginConfig,$useSharedDb)"
 }
 
@@ -173,6 +174,7 @@ class SnapshotConfig(config: Config) {
   val snapshotTableConfiguration = new SnapshotTableConfiguration(config)
   val pluginConfig = new SnapshotPluginConfig(config)
   val useSharedDb: Option[String] = config.asStringOption(ConfigKeys.useSharedDb)
+  val queryTimeout: FiniteDuration = config.asFiniteDuration("query-timeout")
   override def toString: String = s"SnapshotConfig($snapshotTableConfiguration,$pluginConfig,$useSharedDb)"
 }
 
@@ -201,6 +203,7 @@ class ReadJournalConfig(config: Config) {
   val refreshInterval: FiniteDuration = config.asFiniteDuration("refresh-interval")
   val maxBufferSize: Int = config.getInt("max-buffer-size")
   val eventsByTagBufferSizesPerQuery: Long = config.getLong("events-by-tag-buffer-sizes-per-query")
+  val queryTimeout: FiniteDuration = config.asFiniteDuration("query-timeout")
   require(eventsByTagBufferSizesPerQuery >= 0, "events-by-tag-buffer-sizes-per-query must not be negative")
   val addShutdownHook: Boolean = config.getBoolean("add-shutdown-hook")
 
@@ -230,6 +233,7 @@ class DurableStateTableConfiguration(config: Config) {
   val useExplicitSelectForGlobalOffset: Boolean = cfg.getBoolean("useExplicitSelectForGlobalOffset")
   val refreshInterval: FiniteDuration = config.asFiniteDuration("refreshInterval")
   val batchSize: Int = config.getInt("batchSize")
+  val queryTimeout: FiniteDuration = config.asFiniteDuration("query-timeout")
   val schemaName: Option[String] = cfg.asStringOption("schemaName")
   val columnNames: DurableStateTableColumnNames = new DurableStateTableColumnNames(config)
   val stateSequenceConfig: DurableStateSequenceRetrievalConfig = DurableStateSequenceRetrievalConfig(config)

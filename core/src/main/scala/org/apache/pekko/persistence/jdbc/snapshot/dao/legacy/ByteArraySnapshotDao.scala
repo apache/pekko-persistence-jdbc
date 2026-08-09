@@ -19,6 +19,7 @@ import pekko.persistence.SnapshotMetadata
 import pekko.persistence.jdbc.config.SnapshotConfig
 import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
 import pekko.persistence.jdbc.snapshot.dao.SnapshotDao
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
@@ -35,6 +36,7 @@ class ByteArraySnapshotDao(
   import profile.api._
 
   val queries = new SnapshotQueries(profile, snapshotConfig.legacySnapshotTableConfiguration)
+  private val queryTimeout = snapshotConfig.queryTimeout
 
   val serializer = new ByteArraySnapshotSerializer(serialization)
 
@@ -45,68 +47,88 @@ class ByteArraySnapshotDao(
     }
 
   override def latestSnapshot(persistenceId: String): Future[Option[(SnapshotMetadata, Any)]] =
-    for {
-      rows <- db.run(queries.selectLatestByPersistenceId(persistenceId).result)
-    } yield rows.headOption.map(toSnapshotData)
+    QueryTimeout.withTimeout(
+      for {
+        rows <- db.run(queries.selectLatestByPersistenceId(persistenceId).result)
+      } yield rows.headOption.map(toSnapshotData),
+      queryTimeout)
 
   override def snapshotForMaxTimestamp(
       persistenceId: String,
       maxTimestamp: Long): Future[Option[(SnapshotMetadata, Any)]] =
-    for {
-      rows <- db.run(queries.selectOneByPersistenceIdAndMaxTimestamp((persistenceId, maxTimestamp)).result)
-    } yield rows.headOption.map(toSnapshotData)
+    QueryTimeout.withTimeout(
+      for {
+        rows <- db.run(queries.selectOneByPersistenceIdAndMaxTimestamp((persistenceId, maxTimestamp)).result)
+      } yield rows.headOption.map(toSnapshotData),
+      queryTimeout)
 
   override def snapshotForMaxSequenceNr(
       persistenceId: String,
       maxSequenceNr: Long): Future[Option[(SnapshotMetadata, Any)]] =
-    for {
-      rows <- db.run(queries.selectOneByPersistenceIdAndMaxSequenceNr((persistenceId, maxSequenceNr)).result)
-    } yield rows.headOption.map(toSnapshotData)
+    QueryTimeout.withTimeout(
+      for {
+        rows <- db.run(queries.selectOneByPersistenceIdAndMaxSequenceNr((persistenceId, maxSequenceNr)).result)
+      } yield rows.headOption.map(toSnapshotData),
+      queryTimeout)
 
   override def snapshotForMaxSequenceNrAndMaxTimestamp(
       persistenceId: String,
       maxSequenceNr: Long,
       maxTimestamp: Long): Future[Option[(SnapshotMetadata, Any)]] =
-    for {
-      rows <- db.run(
-        queries
-          .selectOneByPersistenceIdAndMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
-          .result)
-    } yield rows.headOption.map(toSnapshotData)
+    QueryTimeout.withTimeout(
+      for {
+        rows <- db.run(
+          queries
+            .selectOneByPersistenceIdAndMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
+            .result)
+      } yield rows.headOption.map(toSnapshotData),
+      queryTimeout)
 
   override def save(snapshotMetadata: SnapshotMetadata, snapshot: Any): Future[Unit] = {
     val eventualSnapshotRow = Future.fromTry(serializer.serialize(snapshotMetadata, snapshot))
-    eventualSnapshotRow.map(queries.insertOrUpdate).flatMap(db.run).map(_ => ())
+    QueryTimeout.withTimeout(
+      eventualSnapshotRow.map(queries.insertOrUpdate).flatMap(db.run).map(_ => ()),
+      queryTimeout)
   }
 
   override def delete(persistenceId: String, sequenceNr: Long): Future[Unit] =
-    for {
-      _ <- db.run(queries.selectByPersistenceIdAndSequenceNr((persistenceId, sequenceNr)).delete)
-    } yield ()
+    QueryTimeout.withTimeout(
+      for {
+        _ <- db.run(queries.selectByPersistenceIdAndSequenceNr((persistenceId, sequenceNr)).delete)
+      } yield (),
+      queryTimeout)
 
   override def deleteAllSnapshots(persistenceId: String): Future[Unit] =
-    for {
-      _ <- db.run(queries.selectAll(persistenceId).delete)
-    } yield ()
+    QueryTimeout.withTimeout(
+      for {
+        _ <- db.run(queries.selectAll(persistenceId).delete)
+      } yield (),
+      queryTimeout)
 
   override def deleteUpToMaxSequenceNr(persistenceId: String, maxSequenceNr: Long): Future[Unit] =
-    for {
-      _ <- db.run(queries.selectByPersistenceIdUpToMaxSequenceNr((persistenceId, maxSequenceNr)).delete)
-    } yield ()
+    QueryTimeout.withTimeout(
+      for {
+        _ <- db.run(queries.selectByPersistenceIdUpToMaxSequenceNr((persistenceId, maxSequenceNr)).delete)
+      } yield (),
+      queryTimeout)
 
   override def deleteUpToMaxTimestamp(persistenceId: String, maxTimestamp: Long): Future[Unit] =
-    for {
-      _ <- db.run(queries.selectByPersistenceIdUpToMaxTimestamp((persistenceId, maxTimestamp)).delete)
-    } yield ()
+    QueryTimeout.withTimeout(
+      for {
+        _ <- db.run(queries.selectByPersistenceIdUpToMaxTimestamp((persistenceId, maxTimestamp)).delete)
+      } yield (),
+      queryTimeout)
 
   override def deleteUpToMaxSequenceNrAndMaxTimestamp(
       persistenceId: String,
       maxSequenceNr: Long,
       maxTimestamp: Long): Future[Unit] =
-    for {
-      _ <- db.run(
-        queries
-          .selectByPersistenceIdUpToMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
-          .delete)
-    } yield ()
+    QueryTimeout.withTimeout(
+      for {
+        _ <- db.run(
+          queries
+            .selectByPersistenceIdUpToMaxSequenceNrAndMaxTimestamp((persistenceId, maxSequenceNr, maxTimestamp))
+            .delete)
+      } yield (),
+      queryTimeout)
 }

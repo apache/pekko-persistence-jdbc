@@ -18,6 +18,7 @@ import org.apache.pekko
 import pekko.persistence.jdbc.config.{ BaseDaoConfig, JournalConfig }
 import pekko.persistence.jdbc.journal.dao.{ BaseDao, BaseJournalDaoWithReadMessages, H2Compat, JournalDaoWithUpdates }
 import pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
@@ -60,10 +61,12 @@ trait BaseByteArrayJournalDao
 
   import profile.api._
 
+  private val queryTimeout = journalConfig.queryTimeout
+
   val logger = LoggerFactory.getLogger(this.getClass)
 
   def writeJournalRows(xs: Seq[JournalRow]): Future[Unit] = { // Write atomically without auto-commit
-    db.run(queries.writeJournalRows(xs).transactionally).map(_ => ())
+    QueryTimeout.withTimeout(db.run(queries.writeJournalRows(xs).transactionally).map(_ => ()), queryTimeout)
   }
 
   /**
@@ -94,7 +97,7 @@ trait BaseByteArrayJournalDao
       _ <- queries.markSeqNrJournalMessagesAsDeleted(persistenceId, highestSequenceNr)
     } yield ()
 
-    db.run(actions.transactionally)
+    QueryTimeout.withTimeout(db.run(actions.transactionally), queryTimeout)
   }
 
   def update(persistenceId: String, sequenceNr: Long, payload: AnyRef): Future[Done] = {
@@ -106,13 +109,16 @@ trait BaseByteArrayJournalDao
           s"Failed to serialize ${write.getClass} for update of [$persistenceId] @ [$sequenceNr]",
           cause)
     }
-    db.run(queries.update(persistenceId, sequenceNr, serializedRow.message).map(_ => Done))
+    QueryTimeout.withTimeout(db.run(queries.update(persistenceId, sequenceNr, serializedRow.message).map(_ => Done)),
+      queryTimeout)
   }
 
   override def highestSequenceNr(persistenceId: String, fromSequenceNr: Long): Future[Long] =
-    for {
-      maybeHighestSeqNo <- db.run(queries.highestSequenceNrForPersistenceId(persistenceId).result)
-    } yield maybeHighestSeqNo.getOrElse(0L)
+    QueryTimeout.withTimeout(
+      for {
+        maybeHighestSeqNo <- db.run(queries.highestSequenceNrForPersistenceId(persistenceId).result)
+      } yield maybeHighestSeqNo.getOrElse(0L),
+      queryTimeout)
 
   override def messages(
       persistenceId: String,

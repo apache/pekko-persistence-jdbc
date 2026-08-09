@@ -28,6 +28,7 @@ import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.state.DurableStateQueries
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.persistence.jdbc.journal.dao.FlowControl
 import pekko.persistence.jdbc.state.{ scaladsl => jdbcStateScalaDsl }
 import pekko.persistence.query.{ DurableStateChange, Offset, UpdatedDurableState }
@@ -61,6 +62,8 @@ class JdbcDurableStateStore[A](
   implicit val ec: ExecutionContext = system.dispatcher
   implicit val mat: Materializer = SystemMaterializer(system).materializer
 
+  private val queryTimeout = durableStateConfig.queryTimeout
+
   final lazy val queries = new DurableStateQueries(profile, durableStateConfig)
 
   // Started lazily to prevent the actor for querying the db if no changesByTag queries are used
@@ -70,17 +73,19 @@ class JdbcDurableStateStore[A](
     s"pekko-persistence-jdbc-durable-state-sequence-actor")
 
   override def getObject(persistenceId: String): Future[stateScalaDsl.GetObjectResult[A]] = {
-    db.run(queries.selectFromDbByPersistenceId(persistenceId).result).map { rows =>
-      rows.headOption match {
-        case Some(row) =>
-          stateScalaDsl.GetObjectResult(
-            PekkoSerialization.fromDurableStateRow(serialization)(row).toOption.asInstanceOf[Option[A]],
-            row.revision)
+    QueryTimeout.withTimeout(
+      db.run(queries.selectFromDbByPersistenceId(persistenceId).result).map { rows =>
+        rows.headOption match {
+          case Some(row) =>
+            stateScalaDsl.GetObjectResult(
+              PekkoSerialization.fromDurableStateRow(serialization)(row).toOption.asInstanceOf[Option[A]],
+              row.revision)
 
-        case None =>
-          stateScalaDsl.GetObjectResult(None, 0)
-      }
-    }
+          case None =>
+            stateScalaDsl.GetObjectResult(None, 0)
+        }
+      },
+      queryTimeout)
   }
 
   override def upsertObject(persistenceId: String, revision: Long, value: A, tag: String): Future[Done] = {
@@ -119,7 +124,7 @@ class JdbcDurableStateStore[A](
               }
           } yield result
         }
-        db.run(action)
+        QueryTimeout.withTimeout(db.run(action), queryTimeout)
       }
       .map { rowsAffected =>
         if (rowsAffected == 0)
@@ -130,20 +135,22 @@ class JdbcDurableStateStore[A](
   }
 
   override def deleteObject(persistenceId: String): Future[Done] =
-    db.run(queries.deleteFromDb(persistenceId).map(_ => Done))
+    QueryTimeout.withTimeout(db.run(queries.deleteFromDb(persistenceId).map(_ => Done)), queryTimeout)
 
   override def deleteObject(persistenceId: String, revision: Long): Future[Done] =
-    db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
-      if (count != 1) {
-        val msg = if (count == 0) {
-          s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]"
-        } else {
-          s"Delete object succeeded for persistenceId [$persistenceId] and revision [$revision] but more than one row was affected ($count rows)"
+    QueryTimeout.withTimeout(
+      db.run(queries.deleteBasedOnPersistenceIdAndRevision(persistenceId, revision)).map { count =>
+        if (count != 1) {
+          val msg = if (count == 0) {
+            s"Failed to delete object with persistenceId [$persistenceId] and revision [$revision]"
+          } else {
+            s"Delete object succeeded for persistenceId [$persistenceId] and revision [$revision] but more than one row was affected ($count rows)"
+          }
+          throw new IllegalStateException(msg)
         }
-        throw new IllegalStateException(msg)
-      }
-      Done
-    }(ExecutionContext.parasitic)
+        Done
+      }(ExecutionContext.parasitic),
+      queryTimeout)
 
   override def currentChanges(tag: String, offset: Offset): Source[DurableStateChange[A], NotUsed] = {
     Source
@@ -227,7 +234,7 @@ class JdbcDurableStateStore[A](
   }
 
   private[jdbc] def maxStateStoreOffset(): Future[Long] =
-    db.run(queries.maxOffsetQuery.result)
+    QueryTimeout.withTimeout(db.run(queries.maxOffsetQuery.result), queryTimeout)
 
   private[jdbc] def stateStoreStateInfo(offset: Long, limit: Long): Source[(String, Long, Long), NotUsed] =
     Source.fromPublisher(db.stream(queries.stateStoreStateQuery((offset, limit)).result))
@@ -253,5 +260,5 @@ class JdbcDurableStateStore[A](
     } yield u
   }
 
-  def deleteAllFromDb() = db.run(queries.deleteAllFromDb())
+  def deleteAllFromDb() = QueryTimeout.withTimeout(db.run(queries.deleteAllFromDb()), queryTimeout)
 }

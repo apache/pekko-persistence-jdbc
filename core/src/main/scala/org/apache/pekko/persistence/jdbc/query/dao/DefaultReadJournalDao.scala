@@ -20,6 +20,7 @@ import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.config.ReadJournalConfig
 import pekko.persistence.jdbc.journal.dao.{ BaseJournalDaoWithReadMessages, H2Compat }
+import pekko.persistence.jdbc.util.QueryTimeout
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Source
@@ -40,6 +41,7 @@ class DefaultReadJournalDao(
   import profile.api._
 
   val queries = new ReadJournalQueries(profile, readJournalConfig)
+  private val queryTimeout = readJournalConfig.queryTimeout
 
   override def allPersistenceIdsSource(max: Long): Source[String, NotUsed] =
     Source.fromPublisher(db.stream(queries.allPersistenceIdsDistinct(correctMaxForH2Driver(max)).result))
@@ -61,10 +63,10 @@ class DefaultReadJournalDao(
     Source.fromPublisher(db.stream(queries.journalSequenceQuery((offset, limit)).result))
 
   override def lastPersistenceIdSequenceNumber(persistenceId: String): Future[Option[Long]] =
-    db.run(queries.lastPersistenceIdSequenceNumberQuery(persistenceId).result)
+    QueryTimeout.withTimeout(db.run(queries.lastPersistenceIdSequenceNumberQuery(persistenceId).result), queryTimeout)
 
   override def maxJournalSequence(): Future[Long] =
-    db.run(queries.maxJournalSequenceQuery.result)
+    QueryTimeout.withTimeout(db.run(queries.maxJournalSequenceQuery.result), queryTimeout)
 
   override def messages(
       persistenceId: String,

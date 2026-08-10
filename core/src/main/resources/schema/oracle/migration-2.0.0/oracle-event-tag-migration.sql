@@ -1,3 +1,7 @@
+-- SPDX-License-Identifier: Apache-2.0
+
+-- see https://github.com/apache/pekko-persistence-jdbc/pull/386
+
 -- **************** first step ****************
 -- add new column
 ALTER TABLE EVENT_TAG

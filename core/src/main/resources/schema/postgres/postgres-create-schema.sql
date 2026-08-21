@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS public.event_tag(
       ON DELETE CASCADE
 );
 
+CREATE INDEX CONCURRENTLY event_tag_idx on public.event_tag(tag);
+
 CREATE TABLE IF NOT EXISTS public.snapshot (
   persistence_id VARCHAR(255) NOT NULL,
   sequence_number BIGINT NOT NULL,

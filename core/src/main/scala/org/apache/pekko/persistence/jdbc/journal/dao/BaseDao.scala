@@ -15,6 +15,7 @@
 package org.apache.pekko.persistence.jdbc.journal.dao
 
 import org.apache.pekko
+import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.BaseDaoConfig
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.{ BoundedSourceQueue, Materializer, QueueOfferResult }
@@ -58,5 +59,16 @@ abstract class BaseDao[T] {
         Future.failed(new Exception("Failed to enqueue journal row batch write, the queue was closed"))
     }
   }
+
+  /**
+   * INTERNAL API
+   *
+   * Completes the queue that batches the journal row writes, which terminates the stream that was materialized for
+   * this dao once the batches that were already enqueued have been written. A dao (and with it a new stream) is
+   * created every time the plugin actor starts, so a stream that is never completed stays materialized until the
+   * actor system shuts down.
+   */
+  @InternalApi
+  private[jdbc] def completeWriteQueue(): Unit = writeQueue.complete()
 
 }

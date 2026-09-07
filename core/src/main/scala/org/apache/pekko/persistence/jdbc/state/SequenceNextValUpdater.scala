@@ -39,11 +39,14 @@ import slick.sql.SqlStreamingAction
 
   // H2 dependent (based on https://www.h2database.com/html/systemtables.html)
   def getSequenceNextValueExpr() = {
+    // H2 stores unquoted identifiers upper case unless the database is created with DATABASE_TO_UPPER=false,
+    // so the configured schema name is compared case insensitively
+    val schemaName = durableStateTableCfg.schemaName.getOrElse("PUBLIC")
     sql"""SELECT COLUMN_DEFAULT
           FROM INFORMATION_SCHEMA.COLUMNS
           WHERE TABLE_NAME = '#${durableStateTableCfg.tableName}'
             AND COLUMN_NAME = '#${durableStateTableCfg.columnNames.globalOffset}'
-            AND TABLE_SCHEMA = 'PUBLIC'""".as[String]
+            AND UPPER(TABLE_SCHEMA) = UPPER('#$schemaName')""".as[String]
   }
 }
 

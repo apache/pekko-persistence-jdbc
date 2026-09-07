@@ -18,7 +18,7 @@ import org.apache.pekko
 import pekko.persistence.jdbc.config.SnapshotTableConfiguration
 import pekko.persistence.jdbc.snapshot.dao.SnapshotTables.SnapshotRow
 import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.isOracleDriver
-import pekko.persistence.jdbc.util.InputStreamOps.InputStreamImplicits
+import pekko.persistence.jdbc.util.BlobOps
 
 object SnapshotTables {
   case class SnapshotRow(
@@ -81,7 +81,7 @@ trait SnapshotTables {
     import javax.sql.rowset.serial.SerialBlob
 
     private val columnType =
-      MappedColumnType.base[Array[Byte], Blob](bytes => new SerialBlob(bytes), blob => blob.getBinaryStream.toArray)
+      MappedColumnType.base[Array[Byte], Blob](bytes => new SerialBlob(bytes), blob => BlobOps.toArray(blob))
 
     override val snapshotPayload: Rep[Array[Byte]] =
       column[Array[Byte]](snapshotTableCfg.columnNames.snapshotPayload)(columnType)

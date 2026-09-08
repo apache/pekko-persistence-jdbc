@@ -20,7 +20,7 @@ import pekko.actor.ActorSystem
 import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.PekkoSerialization
 import pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
-import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
 import pekko.persistence.jdbc.journal.dao.JournalQueries
 import pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer
 import pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
@@ -39,7 +39,7 @@ import scala.util.{ Failure, Success }
  *
  * @param system the actor system
  */
-final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSystem) {
+final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSystem) extends AutoCloseable {
   implicit val ec: ExecutionContextExecutor = system.dispatcher
 
   import profile.api._
@@ -53,8 +53,9 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
     system.settings.config.getConfig(JournalMigrator.ReadJournalConfig))
 
   // the journal database
-  private val journalDB: JdbcBackend.Database =
-    SlickExtension(system).database(system.settings.config.getConfig(JournalMigrator.ReadJournalConfig)).database
+  private val journalSlickDb: SlickDatabase =
+    SlickExtension(system).database(system.settings.config.getConfig(JournalMigrator.ReadJournalConfig))
+  private[jdbc] val journalDB: JdbcBackend.Database = journalSlickDb.database
 
   // get an instance of the new journal queries
   private val newJournalQueries: JournalQueries =
@@ -156,6 +157,13 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
       _ <- newJournalQueries.TagTable ++= tagInserts
     } yield ()
   }
+
+  /**
+   * Closes the database that was opened for this migrator. It is a no-op when the database is shared (configured with
+   * `use-shared-db`), since that one is owned by the actor system.
+   */
+  override def close(): Unit =
+    if (journalSlickDb.allowShutdown) journalDB.close()
 }
 
 case object JournalMigrator {

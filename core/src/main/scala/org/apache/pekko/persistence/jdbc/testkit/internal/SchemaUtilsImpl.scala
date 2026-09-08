@@ -53,8 +53,9 @@ private[jdbc] object SchemaUtilsImpl {
         slickProfileToSchemaType(slickDb.profile),
         legacy(configKey, actorSystem.classicSystem.settings.config))
 
+    val database = closeOnTermination(slickDb)
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
-    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, slickDb.database))(blockingEC)
+    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, database))(blockingEC)
   }
 
   /**
@@ -70,8 +71,9 @@ private[jdbc] object SchemaUtilsImpl {
         slickProfileToSchemaType(slickDb.profile),
         legacy(configKey, actorSystem.classicSystem.settings.config))
 
+    val database = closeOnTermination(slickDb)
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
-    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, slickDb.database))(blockingEC)
+    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, database))(blockingEC)
   }
 
   /**
@@ -81,8 +83,9 @@ private[jdbc] object SchemaUtilsImpl {
   private[jdbc] def applyScript(script: String, separator: String, configKey: String, logger: Logger)(
       implicit actorSystem: ClassicActorSystemProvider): Future[Done] = {
 
+    val database = closeOnTermination(loadSlickDatabase(configKey))
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
-    Future(applyScriptWithSlick(script, separator, logger, loadSlickDatabase(configKey).database))(blockingEC)
+    Future(applyScriptWithSlick(script, separator, logger, database))(blockingEC)
   }
 
   /**
@@ -209,6 +212,21 @@ private[jdbc] object SchemaUtilsImpl {
   private def loadSlickDatabase(configKey: String)(implicit actorSystem: ClassicActorSystemProvider) = {
     val journalConfig = actorSystem.classicSystem.settings.config.getConfig(configKey)
     SlickExtension(actorSystem).database(journalConfig)
+  }
+
+  /**
+   * Arranges for the database of `slickDb` to be closed when the actor system terminates, when the caller owns that
+   * database. A database that is created for this call only (the default when `use-shared-db` is not configured)
+   * would otherwise leak its connection pool, since nothing else holds on to it. The database is kept open until the
+   * actor system terminates because closing it right after the script has been applied would, for an H2 in-memory
+   * database, drop the schema that was just created.
+   */
+  private def closeOnTermination(slickDb: SlickDatabase)(
+      implicit actorSystem: ClassicActorSystemProvider): Database = {
+    if (slickDb.allowShutdown) {
+      actorSystem.classicSystem.registerOnTermination(slickDb.database.close())
+    }
+    slickDb.database
   }
 
 }

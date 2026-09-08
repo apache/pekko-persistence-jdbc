@@ -40,9 +40,10 @@ abstract class SnapshotMigratorTest(configName: String) extends MigratorSpec(con
     } // legacy persistence
     withActorSystem { implicit systemNew =>
       withReadJournal { implicit readJournal =>
+        countJournal().futureValue shouldBe 0 // before migration
+        // migrate exactly once: a retry would race with a migration that is still in flight
+        SnapshotMigrator(SlickDatabase.profile(config, "slick")).migrateAll().futureValue shouldBe Done
         eventually {
-          countJournal().futureValue shouldBe 0 // before migration
-          SnapshotMigrator(SlickDatabase.profile(config, "slick")).migrateAll().futureValue shouldBe Done
           countJournal().futureValue shouldBe 0 // after migration
         }
         withTestActors() { (actorB1, actorB2, actorB3) =>

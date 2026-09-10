@@ -29,7 +29,7 @@ object Dependencies {
     "com.h2database" % "h2" % "2.5.250",
     "com.mysql" % "mysql-connector-j" % "26.7.0",
     "org.mariadb.jdbc" % "mariadb-java-client" % "3.5.10",
-    "com.microsoft.sqlserver" % "mssql-jdbc" % "13.4.0.jre11",
+    "com.microsoft.sqlserver" % "mssql-jdbc" % "13.6.0.jre11",
     "com.oracle.database.jdbc" % "ojdbc11" % "23.26.2.0.0")
 
   val Libraries: Seq[ModuleID] = Seq(

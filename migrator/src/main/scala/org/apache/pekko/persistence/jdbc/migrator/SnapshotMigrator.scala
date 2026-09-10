@@ -79,7 +79,7 @@ case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) 
         // let us fetch the latest snapshot for each persistenceId
         snapshotDB.run(queries.selectLatestByPersistenceId(persistenceId).result).map { rows =>
           rows.headOption.map(toSnapshotData).map { case (metadata, value) =>
-            log.debug(s"migrating snapshot for ${metadata.toString}")
+            log.debug("migrating snapshot for {}", metadata)
             defaultSnapshotDao.save(metadata, value)
           }
         }
@@ -94,7 +94,7 @@ case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) 
     .fromPublisher(snapshotDB.stream(queries.SnapshotTable.result))
     .mapAsync(NoParallelism) { record =>
       val (metadata, value) = toSnapshotData(record)
-      log.debug(s"migrating snapshot for ${metadata.toString}")
+      log.debug("migrating snapshot for {}", metadata)
       defaultSnapshotDao.save(metadata, value)
     }
     .run()

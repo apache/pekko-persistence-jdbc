@@ -142,12 +142,12 @@ private[jdbc] object SchemaUtilsImpl {
       for {
         line <- lines if line.nonEmpty
       } yield {
-        logger.debug(s"applying DDL: $line")
+        logger.debug("applying DDL: {}", line)
 
         try stmt.executeUpdate(line)
         catch {
           case t: java.sql.SQLException =>
-            logger.debug(s"Exception while applying SQL script", t)
+            logger.debug("Exception while applying SQL script", t)
         }
       }
     }

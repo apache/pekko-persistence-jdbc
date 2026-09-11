@@ -21,7 +21,7 @@ import pekko.Done
 import pekko.actor.{ ActorSystem, ExtendedActorSystem }
 import pekko.persistence.jdbc.config.JournalConfig
 import pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal.{ InPlaceUpdateEvent, WriteFinished }
-import pekko.persistence.jdbc.journal.dao.{ JournalDao, JournalDaoWithUpdates }
+import pekko.persistence.jdbc.journal.dao.{ BaseDao, JournalDao, JournalDaoWithUpdates }
 import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
 import pekko.persistence.journal.AsyncWriteJournal
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
@@ -129,6 +129,11 @@ class JdbcAsyncWriteJournal(config: Config) extends AsyncWriteJournal {
       .map(_ => ())
 
   override def postStop(): Unit = {
+    journalDao match {
+      // the write queue keeps a stream materialized, a new dao is created every time this actor starts
+      case baseDao: BaseDao[?] => baseDao.completeWriteQueue()
+      case _                   =>
+    }
     if (slickDb.allowShutdown) {
       // Since a (new) db is created when this actor (re)starts, we must close it when the actor stops
       db.close()

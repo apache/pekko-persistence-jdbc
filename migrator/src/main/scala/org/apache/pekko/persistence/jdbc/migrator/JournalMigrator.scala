@@ -93,7 +93,10 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
       val stmt: DBIO[Unit] = records
         // get all the sql statements for this record as an option
         .map { case (newRepr, newTags) =>
-          log.debug(s"migrating event for PersistenceID: ${newRepr.persistenceId} with tags ${newTags.mkString(",")}")
+          if (log.isDebugEnabled()) {
+            log.debug("migrating event for PersistenceID: {} with tags {}", newRepr.persistenceId,
+              newTags.mkString(","))
+          }
           writeJournalRowsStatements(newRepr, newTags)
         }
         // reduce to 1 statement

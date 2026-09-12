@@ -52,7 +52,7 @@ class TestProbeDurableStateStoreQuery(
   override def stateStoreStateInfo(offset: Long, limit: Long): Source[(String, Long, Long), NotUsed] = {
     val f = probe.ref
       .ask(TestProbeDurableStateStoreQuery.StateInfoSequence(offset, limit))
-      .mapTo[scala.collection.immutable.Seq[DurableStateSequenceActor.VisitedElement]]
+      .mapTo[Seq[DurableStateSequenceActor.VisitedElement]]
 
     Source.future(f).mapConcat(e => e.map(x => (x.pid, x.offset, x.revision)))
   }

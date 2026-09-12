@@ -27,7 +27,6 @@ import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.slf4j.LoggerFactory
 
-import scala.collection.immutable
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
@@ -84,7 +83,7 @@ abstract class JournalDaoStreamMessagesMemoryTest(configFile: String)
             val start = end - (eventsPerBatch - 1)
             log.info(s"batch $i - events from $start to $end")
             val atomicWrites = (start to end).map { j =>
-              AtomicWrite(immutable.Seq(PersistentRepr(payload, j, persistenceId, writerUuid = writerUuid)))
+              AtomicWrite(Seq(PersistentRepr(payload, j, persistenceId, writerUuid = writerUuid)))
             }
             dao.asyncWriteMessages(atomicWrites).map(_ => i)
           }

@@ -27,7 +27,6 @@ import pekko.stream.{ Materializer, SystemMaterializer }
 
 import java.io.NotSerializableException
 import java.util.UUID
-import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -136,7 +135,7 @@ abstract class MessagesWithBatchDatabaseContractTest(configFile: String) extends
     val writerUuid = UUID.randomUUID().toString
     val payload = Array.fill(8)('a'.toByte)
     val writes = (1 to count).map { sequenceNr =>
-      AtomicWrite(immutable.Seq(PersistentRepr(payload, sequenceNr, persistenceId, writerUuid = writerUuid)))
+      AtomicWrite(Seq(PersistentRepr(payload, sequenceNr, persistenceId, writerUuid = writerUuid)))
     }
     dao.asyncWriteMessages(writes).futureValue
   }

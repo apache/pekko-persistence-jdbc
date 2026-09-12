@@ -38,7 +38,6 @@ import com.typesafe.config.ConfigValue
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 
-import scala.collection.immutable
 import scala.concurrent.duration.{ FiniteDuration, _ }
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success }
@@ -347,7 +346,7 @@ abstract class QueryTestSpec(config: String, configOverrides: Map[String, Config
 
   def withDao(f: JournalDao => Unit)(implicit system: ActorSystem, ec: ExecutionContext, mat: Materializer): Unit = {
     val fqcn: String = journalConfig.pluginConfig.dao
-    val args: immutable.Seq[(Class[?], AnyRef)] = immutable.Seq(
+    val args: Seq[(Class[?], AnyRef)] = Seq(
       (classOf[Database], db), (classOf[JdbcProfile], profile), (classOf[JournalConfig], journalConfig),
       (classOf[Serialization], SerializationExtension(system)), (classOf[ExecutionContext], ec),
       (classOf[Materializer], mat))

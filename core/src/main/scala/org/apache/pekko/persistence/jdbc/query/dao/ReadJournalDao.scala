@@ -20,7 +20,6 @@ import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.journal.dao.JournalDaoWithReadMessages
 import pekko.stream.scaladsl.Source
 
-import scala.collection.immutable.Set
 import scala.concurrent.Future
 import scala.util.Try
 

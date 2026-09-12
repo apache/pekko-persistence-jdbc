@@ -20,7 +20,6 @@ import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer
 import pekko.serialization.Serialization
 
-import scala.collection.immutable._
 import scala.util.Try
 
 class ByteArrayJournalSerializer(serialization: Serialization, separator: String)

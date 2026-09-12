@@ -19,7 +19,6 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
-import scala.collection.immutable.Seq
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._

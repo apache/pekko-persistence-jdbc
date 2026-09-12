@@ -29,7 +29,6 @@ import pekko.stream.scaladsl.{ Flow, Source }
 import slick.jdbc.JdbcBackend._
 import slick.jdbc.{ GetResult, JdbcProfile }
 
-import scala.collection.immutable._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 

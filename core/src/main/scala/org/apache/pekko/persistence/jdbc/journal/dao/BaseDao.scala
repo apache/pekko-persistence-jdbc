@@ -20,7 +20,6 @@ import pekko.persistence.jdbc.config.BaseDaoConfig
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.{ BoundedSourceQueue, Materializer, QueueOfferResult }
 
-import scala.collection.immutable.{ Seq, Vector }
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 
 // Shared with the legacy DAO

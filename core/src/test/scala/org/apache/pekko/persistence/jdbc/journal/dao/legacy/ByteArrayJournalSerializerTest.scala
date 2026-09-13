@@ -17,8 +17,6 @@ package journal.dao.legacy
 
 import org.apache.pekko.persistence.{ AtomicWrite, PersistentRepr }
 
-import scala.collection.immutable._
-
 class ByteArrayJournalSerializerTest extends SharedActorSystemTestSpec() {
   it should "serialize a serializable message and indicate whether or not the serialization succeeded" in {
     val serializer = new ByteArrayJournalSerializer(serialization, ",")

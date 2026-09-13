@@ -19,7 +19,6 @@ package org.apache.pekko.persistence.jdbc.journal
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters._
 

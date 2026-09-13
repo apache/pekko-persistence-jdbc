@@ -20,7 +20,6 @@ import pekko.persistence.jdbc.util.TrySeq
 import pekko.persistence.journal.Tagged
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.stream.scaladsl.Flow
-import scala.collection.immutable._
 
 import scala.util.Try
 

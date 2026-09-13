@@ -27,8 +27,6 @@ import pekko.stream.scaladsl.Source
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 
-import scala.collection.immutable
-import scala.collection.immutable.{ Nil, Seq }
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
@@ -50,7 +48,7 @@ class DefaultJournalDao(
 
   override def baseDaoConfig: BaseDaoConfig = journalConfig.daoConfig
 
-  override def writeJournalRows(xs: immutable.Seq[(JournalPekkoSerializationRow, Set[String])]): Future[Unit] = {
+  override def writeJournalRows(xs: Seq[(JournalPekkoSerializationRow, Set[String])]): Future[Unit] = {
     db.run(queries.writeJournalRows(xs).transactionally).map(_ => ())(ExecutionContext.parasitic)
   }
 
@@ -76,7 +74,7 @@ class DefaultJournalDao(
     } yield maybeHighestSeqNo.getOrElse(0L)
   }
 
-  override def asyncWriteMessages(messages: immutable.Seq[AtomicWrite]): Future[immutable.Seq[Try[Unit]]] = {
+  override def asyncWriteMessages(messages: Seq[AtomicWrite]): Future[Seq[Try[Unit]]] = {
 
     def serializeAtomicWrite(aw: AtomicWrite): Try[Seq[(JournalPekkoSerializationRow, Set[String])]] = {
       Try(aw.payload.map(serialize))

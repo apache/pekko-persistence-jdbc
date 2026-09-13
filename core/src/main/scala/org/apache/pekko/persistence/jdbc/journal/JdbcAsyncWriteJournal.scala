@@ -31,7 +31,6 @@ import com.typesafe.config.Config
 import slick.jdbc.JdbcProfile
 import slick.jdbc.JdbcBackend._
 
-import scala.collection.immutable._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 import pekko.pattern.pipe

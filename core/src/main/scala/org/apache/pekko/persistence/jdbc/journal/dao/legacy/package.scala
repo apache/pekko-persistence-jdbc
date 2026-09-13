@@ -15,7 +15,6 @@
 package org.apache.pekko.persistence.jdbc.journal.dao
 
 import scala.annotation.nowarn
-import scala.collection.immutable.Set
 
 package object legacy {
   @nowarn("msg=it is not recommended to define classes/objects inside of package objects")

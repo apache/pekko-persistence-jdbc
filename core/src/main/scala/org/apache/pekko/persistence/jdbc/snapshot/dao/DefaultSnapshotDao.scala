@@ -16,7 +16,7 @@ package org.apache.pekko.persistence.jdbc.snapshot.dao
 
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
 import org.apache.pekko
-import pekko.persistence.SnapshotMetadata
+import pekko.persistence.{ SnapshotMetadata, SnapshotSelectionCriteria }
 import pekko.persistence.jdbc.config.SnapshotConfig
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
@@ -74,6 +74,26 @@ class DefaultSnapshotDao(
 
   private def zeroOrOneSnapshot(rows: Seq[SnapshotRow]): Option[(SnapshotMetadata, Any)] =
     rows.headOption.map(row => toSnapshotData(row).get) // throw is from a future map
+
+  override def snapshotForCriteria(
+      persistenceId: String,
+      criteria: SnapshotSelectionCriteria): Future[Option[(SnapshotMetadata, Any)]] =
+    if (criteria.minSequenceNr == 0L && criteria.minTimestamp == 0L)
+      super.snapshotForCriteria(persistenceId, criteria)
+    else
+      db.run(queries.selectOneByCriteria(
+        (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
+          criteria.minTimestamp)).result)
+        .map(zeroOrOneSnapshot)
+
+  override def deleteByCriteria(persistenceId: String, criteria: SnapshotSelectionCriteria): Future[Unit] =
+    if (criteria.minSequenceNr == 0L && criteria.minTimestamp == 0L)
+      super.deleteByCriteria(persistenceId, criteria)
+    else
+      db.run(queries.selectByCriteria(
+        (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
+          criteria.minTimestamp)).delete)
+        .map(_ => ())(ExecutionContext.parasitic)
 
   override def latestSnapshot(persistenceId: String): Future[Option[(SnapshotMetadata, Any)]] =
     db.run(queries.selectLatestByPersistenceId(persistenceId).result).flatMap { rows =>

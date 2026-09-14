@@ -36,6 +36,26 @@ class SnapshotQueries(val profile: JdbcProfile, override val snapshotTableCfg: S
     _selectAll(persistenceId).take(1)
   val selectLatestByPersistenceId = Compiled(_selectLatestByPersistenceId _)
 
+  private def _selectByCriteria(
+      persistenceId: Rep[String],
+      maxSequenceNr: Rep[Long],
+      maxTimestamp: Rep[Long],
+      minSequenceNr: Rep[Long],
+      minTimestamp: Rep[Long]) =
+    _selectAll(persistenceId).filter(row =>
+      row.sequenceNumber <= maxSequenceNr && row.sequenceNumber >= minSequenceNr &&
+      row.created <= maxTimestamp && row.created >= minTimestamp)
+  val selectByCriteria = Compiled(_selectByCriteria _)
+
+  private def _selectOneByCriteria(
+      persistenceId: Rep[String],
+      maxSequenceNr: Rep[Long],
+      maxTimestamp: Rep[Long],
+      minSequenceNr: Rep[Long],
+      minTimestamp: Rep[Long]) =
+    _selectByCriteria(persistenceId, maxSequenceNr, maxTimestamp, minSequenceNr, minTimestamp).take(1)
+  val selectOneByCriteria = Compiled(_selectOneByCriteria _)
+
   private def _selectByPersistenceIdAndSequenceNr(persistenceId: Rep[String], sequenceNr: Rep[Long]) =
     _selectAll(persistenceId).filter(_.sequenceNumber === sequenceNr)
   val selectByPersistenceIdAndSequenceNr = Compiled(_selectByPersistenceIdAndSequenceNr _)

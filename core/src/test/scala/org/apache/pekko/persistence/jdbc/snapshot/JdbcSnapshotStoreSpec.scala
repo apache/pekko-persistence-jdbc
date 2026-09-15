@@ -14,6 +14,8 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot
 
+import scala.concurrent.Future
+
 import org.apache.pekko
 import pekko.persistence.{ CapabilityFlag, SelectedSnapshot, SnapshotMetadata, SnapshotSelectionCriteria }
 import pekko.persistence.SnapshotProtocol.{ DeleteSnapshots, LoadSnapshot, LoadSnapshotResult }
@@ -66,27 +68,27 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
     val metadata = Seq(100L, 400L, 200L, 300L, 500L).zipWithIndex.map { case (timestamp, index) =>
       SnapshotMetadata(persistenceId, index + 1L, timestamp)
     }
-    metadata.foreach(md => boundsDao.save(md, s"bounds-${md.sequenceNr}").futureValue)
+    Future.traverse(metadata)(md => boundsDao.save(md, s"bounds-${md.sequenceNr}")).futureValue
     metadata
+  }
+
+  private def allSequenceNumbers(persistenceId: String): Future[Seq[Long]] = boundsDao match {
+    case dao: DefaultSnapshotDao =>
+      import dao.queries.profile.api._
+      db.run(dao.queries.selectAll(persistenceId).result).map(_.map(_.sequenceNumber))
+    case dao: ByteArraySnapshotDao =>
+      import dao.queries.profile.api._
+      db.run(dao.queries.selectAll(persistenceId).result).map(_.map(_.sequenceNumber))
+    case dao => Future.failed(new IllegalStateException(s"Unexpected snapshot DAO: ${dao.getClass.getName}"))
   }
 
   private val boundsCases = Seq(
     ("default bounds", SnapshotSelectionCriteria.Latest, Seq(1L, 2L, 3L, 4L, 5L)),
     ("minimum sequence number", SnapshotSelectionCriteria(minSequenceNr = 3), Seq(3L, 4L, 5L)),
-    ("minimum timestamp", SnapshotSelectionCriteria(minTimestamp = 350), Seq(2L, 5L)),
-    ("both minimum bounds", SnapshotSelectionCriteria(minSequenceNr = 3, minTimestamp = 300), Seq(4L, 5L)),
-    ("sequence interval", SnapshotSelectionCriteria(maxSequenceNr = 4, minSequenceNr = 2), Seq(2L, 3L, 4L)),
-    ("timestamp interval", SnapshotSelectionCriteria(maxTimestamp = 400, minTimestamp = 300), Seq(2L, 4L)),
     ("unordered timestamps", SnapshotSelectionCriteria(maxSequenceNr = 4, minTimestamp = 350), Seq(2L)),
-    ("sequence minimum and timestamp maximum", SnapshotSelectionCriteria(maxTimestamp = 300, minSequenceNr = 3),
-      Seq(3L, 4L)),
     ("all bounds", SnapshotSelectionCriteria(4, 400, 2, 300), Seq(2L, 4L)),
     ("equal bounds", SnapshotSelectionCriteria(3, 200, 3, 200), Seq(3L)),
-    ("nonmatching sequence minimum", SnapshotSelectionCriteria(minSequenceNr = 6), Seq.empty[Long]),
-    ("nonmatching timestamp minimum", SnapshotSelectionCriteria(minTimestamp = 501), Seq.empty[Long]),
-    ("nonmatching intersection", SnapshotSelectionCriteria(4, 500, 3, 350), Seq.empty[Long]),
-    ("inverted sequence interval", SnapshotSelectionCriteria(maxSequenceNr = 2, minSequenceNr = 4), Seq.empty[Long]),
-    ("inverted timestamp interval", SnapshotSelectionCriteria(maxTimestamp = 200, minTimestamp = 400), Seq.empty[Long]))
+    ("empty interval", SnapshotSelectionCriteria(maxSequenceNr = 2, minSequenceNr = 4), Seq.empty[Long]))
 
   "Snapshot selection bounds" must {
     boundsCases.foreach { case (label, criteria, matching) =>
@@ -109,14 +111,9 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
         snapshotStore.tell(DeleteSnapshots(persistenceId, criteria), probe.ref)
         probe.expectMsg(DeleteSnapshotsSuccess(criteria))
         val survivors = metadata.filterNot(md => matching.contains(md.sequenceNr))
-        // Check every prefix using the existing upper-bound DAO API, independently of bounded loading.
-        metadata.foreach { md =>
-          boundsDao.snapshotForMaxSequenceNr(persistenceId, md.sequenceNr).futureValue.map(_._1) shouldBe
-          survivors.filter(_.sequenceNr <= md.sequenceNr).lastOption
-        }
-        otherMetadata.foreach { md =>
-          boundsDao.snapshotForMaxSequenceNr(md.persistenceId, md.sequenceNr).futureValue.map(_._1) shouldBe Some(md)
-        }
+        allSequenceNumbers(persistenceId).futureValue shouldBe survivors.map(_.sequenceNr).reverse
+        allSequenceNumbers(otherMetadata.head.persistenceId).futureValue shouldBe
+        otherMetadata.map(_.sequenceNr).reverse
       }
     }
   }

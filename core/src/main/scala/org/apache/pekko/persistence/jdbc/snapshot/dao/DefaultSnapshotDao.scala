@@ -78,22 +78,16 @@ class DefaultSnapshotDao(
   override def snapshotForCriteria(
       persistenceId: String,
       criteria: SnapshotSelectionCriteria): Future[Option[(SnapshotMetadata, Any)]] =
-    if (criteria.minSequenceNr == 0L && criteria.minTimestamp == 0L)
-      super.snapshotForCriteria(persistenceId, criteria)
-    else
-      db.run(queries.selectOneByCriteria(
-        (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
-          criteria.minTimestamp)).result)
-        .map(zeroOrOneSnapshot)
+    db.run(queries.selectOneByCriteria(
+      (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
+        criteria.minTimestamp)).result)
+      .map(zeroOrOneSnapshot)
 
   override def deleteByCriteria(persistenceId: String, criteria: SnapshotSelectionCriteria): Future[Unit] =
-    if (criteria.minSequenceNr == 0L && criteria.minTimestamp == 0L)
-      super.deleteByCriteria(persistenceId, criteria)
-    else
-      db.run(queries.selectByCriteria(
-        (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
-          criteria.minTimestamp)).delete)
-        .map(_ => ())(ExecutionContext.parasitic)
+    db.run(queries.selectByCriteria(
+      (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
+        criteria.minTimestamp)).delete)
+      .map(_ => ())(ExecutionContext.parasitic)
 
   override def latestSnapshot(persistenceId: String): Future[Option[(SnapshotMetadata, Any)]] =
     db.run(queries.selectLatestByPersistenceId(persistenceId).result).flatMap { rows =>

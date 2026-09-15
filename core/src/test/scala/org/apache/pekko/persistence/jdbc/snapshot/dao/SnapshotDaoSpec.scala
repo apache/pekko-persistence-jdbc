@@ -67,31 +67,27 @@ class SnapshotDaoSpec extends AnyWordSpec with Matchers with ScalaFutures {
       (SnapshotSelectionCriteria(maxSequenceNr = 3), "sequence", Seq(3L)),
       (SnapshotSelectionCriteria(3, 200), "both", Seq(3L, 200L)))
 
-    upperBounds.foreach { case (criteria, method, arguments) =>
+    upperBounds.foreach { case (upper, method, arguments) =>
       s"preserve the existing $method load and delete methods" in {
         val dao = new CustomSnapshotDao
-        dao.snapshotForCriteria("custom", criteria).futureValue shouldBe dao.snapshot
-        dao.calls shouldBe Vector((method, "custom", arguments))
-        dao.deleteByCriteria("custom", criteria).futureValue shouldBe (())
-        dao.calls shouldBe Vector.fill(2)((method, "custom", arguments))
+        Seq(upper, upper.copy(minSequenceNr = 1L, minTimestamp = 1L)).foreach { criteria =>
+          dao.snapshotForCriteria("custom", criteria).futureValue shouldBe dao.snapshot
+          dao.deleteByCriteria("custom", criteria).futureValue shouldBe (())
+        }
+        dao.calls shouldBe Vector.fill(4)((method, "custom", arguments))
       }
     }
 
-    val lowerBounds = Seq(
-      SnapshotSelectionCriteria(minSequenceNr = 1),
-      SnapshotSelectionCriteria(minTimestamp = 1),
-      SnapshotSelectionCriteria(minSequenceNr = 1, minTimestamp = 1),
-      SnapshotSelectionCriteria(3, 200, 2, 100),
-      SnapshotSelectionCriteria(minSequenceNr = -1),
-      SnapshotSelectionCriteria(minTimestamp = -1))
+    "filter an upper-bound result that does not satisfy a lower bound" in {
+      val dao = new CustomSnapshotDao
+      val criteria = SnapshotSelectionCriteria(minSequenceNr = 4L, minTimestamp = 201L)
+      dao.snapshotForCriteria("custom", criteria).futureValue shouldBe None
+      dao.calls shouldBe Vector(("latest", "custom", Seq.empty))
 
-    lowerBounds.foreach { criteria =>
-      s"fail without calling upper-bound methods for $criteria" in {
-        val dao = new CustomSnapshotDao
-        dao.snapshotForCriteria("custom", criteria).failed.futureValue shouldBe a[UnsupportedOperationException]
-        dao.deleteByCriteria("custom", criteria).failed.futureValue shouldBe a[UnsupportedOperationException]
-        dao.calls shouldBe empty
-      }
+      dao.deleteByCriteria("custom", criteria).futureValue shouldBe (())
+      dao.calls shouldBe Vector(
+        ("latest", "custom", Seq.empty),
+        ("latest", "custom", Seq.empty))
     }
   }
 }

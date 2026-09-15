@@ -22,44 +22,40 @@ trait SnapshotDao {
 
   /**
    * Load the snapshot with the highest sequence number matching all inclusive criteria bounds.
-   * The default preserves upper-bound-only queries. Custom DAOs must override this method to
-   * support nonzero minimum bounds; otherwise the returned future fails explicitly.
+   * The default delegates to the existing upper-bound methods for custom DAO compatibility,
+   * ignoring minimum bounds. Custom DAOs must override this method to apply all four bounds,
+   * as the built-in DAOs do; otherwise a snapshot below a minimum bound may be returned.
    */
   def snapshotForCriteria(
       persistenceId: String,
       criteria: SnapshotSelectionCriteria): Future[Option[(SnapshotMetadata, Any)]] =
     criteria match {
-      case SnapshotSelectionCriteria(Long.MaxValue, Long.MaxValue, 0L, 0L) =>
+      case SnapshotSelectionCriteria(Long.MaxValue, Long.MaxValue, _, _) =>
         latestSnapshot(persistenceId)
-      case SnapshotSelectionCriteria(Long.MaxValue, maxTimestamp, 0L, 0L) =>
+      case SnapshotSelectionCriteria(Long.MaxValue, maxTimestamp, _, _) =>
         snapshotForMaxTimestamp(persistenceId, maxTimestamp)
-      case SnapshotSelectionCriteria(maxSequenceNr, Long.MaxValue, 0L, 0L) =>
+      case SnapshotSelectionCriteria(maxSequenceNr, Long.MaxValue, _, _) =>
         snapshotForMaxSequenceNr(persistenceId, maxSequenceNr)
-      case SnapshotSelectionCriteria(maxSequenceNr, maxTimestamp, 0L, 0L) =>
+      case SnapshotSelectionCriteria(maxSequenceNr, maxTimestamp, _, _) =>
         snapshotForMaxSequenceNrAndMaxTimestamp(persistenceId, maxSequenceNr, maxTimestamp)
-      case _ =>
-        Future.failed(new UnsupportedOperationException(
-          "SnapshotDao must override snapshotForCriteria to support nonzero minimum bounds"))
     }
 
   /**
    * Delete only snapshots matching all inclusive criteria bounds for this persistence ID.
-   * The default preserves upper-bound-only deletes and fails for nonzero minimum bounds.
-   * Custom DAOs must override this method to support bounded deletion without widening its range.
+   * The default delegates to the existing upper-bound methods for custom DAO compatibility,
+   * ignoring minimum bounds. Custom DAOs must override this method to apply all four bounds,
+   * as the built-in DAOs do; otherwise snapshots below a minimum bound may also be deleted.
    */
   def deleteByCriteria(persistenceId: String, criteria: SnapshotSelectionCriteria): Future[Unit] =
     criteria match {
-      case SnapshotSelectionCriteria(Long.MaxValue, Long.MaxValue, 0L, 0L) =>
+      case SnapshotSelectionCriteria(Long.MaxValue, Long.MaxValue, _, _) =>
         deleteAllSnapshots(persistenceId)
-      case SnapshotSelectionCriteria(Long.MaxValue, maxTimestamp, 0L, 0L) =>
+      case SnapshotSelectionCriteria(Long.MaxValue, maxTimestamp, _, _) =>
         deleteUpToMaxTimestamp(persistenceId, maxTimestamp)
-      case SnapshotSelectionCriteria(maxSequenceNr, Long.MaxValue, 0L, 0L) =>
+      case SnapshotSelectionCriteria(maxSequenceNr, Long.MaxValue, _, _) =>
         deleteUpToMaxSequenceNr(persistenceId, maxSequenceNr)
-      case SnapshotSelectionCriteria(maxSequenceNr, maxTimestamp, 0L, 0L) =>
+      case SnapshotSelectionCriteria(maxSequenceNr, maxTimestamp, _, _) =>
         deleteUpToMaxSequenceNrAndMaxTimestamp(persistenceId, maxSequenceNr, maxTimestamp)
-      case _ =>
-        Future.failed(new UnsupportedOperationException(
-          "SnapshotDao must override deleteByCriteria to support nonzero minimum bounds"))
     }
 
   def deleteAllSnapshots(persistenceId: String): Future[Unit]

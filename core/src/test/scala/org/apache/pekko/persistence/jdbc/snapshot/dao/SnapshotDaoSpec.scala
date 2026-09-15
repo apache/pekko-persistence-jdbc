@@ -77,20 +77,18 @@ class SnapshotDaoSpec extends AnyWordSpec with Matchers with ScalaFutures {
       }
     }
 
-    val lowerBounds = Seq(
-      SnapshotSelectionCriteria(minSequenceNr = 1),
-      SnapshotSelectionCriteria(minTimestamp = 1),
-      SnapshotSelectionCriteria(minSequenceNr = 1, minTimestamp = 1),
-      SnapshotSelectionCriteria(3, 200, 2, 100),
-      SnapshotSelectionCriteria(minSequenceNr = -1),
-      SnapshotSelectionCriteria(minTimestamp = -1))
+    val lowerBounds = Seq((1L, 0L), (0L, 1L), (1L, 1L), (4L, 300L), (-1L, 0L), (0L, -1L))
 
-    lowerBounds.foreach { criteria =>
-      s"fail without calling upper-bound methods for $criteria" in {
-        val dao = new CustomSnapshotDao
-        dao.snapshotForCriteria("custom", criteria).failed.futureValue shouldBe a[UnsupportedOperationException]
-        dao.deleteByCriteria("custom", criteria).failed.futureValue shouldBe a[UnsupportedOperationException]
-        dao.calls shouldBe empty
+    upperBounds.foreach { case (upper, method, arguments) =>
+      lowerBounds.foreach { case (minSequenceNr, minTimestamp) =>
+        val criteria = upper.copy(minSequenceNr = minSequenceNr, minTimestamp = minTimestamp)
+        s"preserve legacy $method behavior for $criteria" in {
+          val dao = new CustomSnapshotDao
+          dao.snapshotForCriteria("custom", criteria).futureValue shouldBe dao.snapshot
+          dao.calls shouldBe Vector((method, "custom", arguments))
+          dao.deleteByCriteria("custom", criteria).futureValue shouldBe (())
+          dao.calls shouldBe Vector.fill(2)((method, "custom", arguments))
+        }
       }
     }
   }

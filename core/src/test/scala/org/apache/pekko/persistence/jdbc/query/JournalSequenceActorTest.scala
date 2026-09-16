@@ -54,7 +54,8 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
       deleted = false,
       persistenceId = "id",
       sequenceNumber = sequenceNumber,
-      writer = "",
+      // Oracle stores an empty string as NULL and the writer column is NOT NULL
+      writer = "writer",
       writeTimestamp = 0L,
       adapterManifest = "",
       eventPayload = Array(0.toByte),

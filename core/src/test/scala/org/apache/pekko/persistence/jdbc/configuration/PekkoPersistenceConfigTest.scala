@@ -19,205 +19,56 @@ import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConf
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.annotation.nowarn
 import scala.concurrent.duration._
 
 class PekkoPersistenceConfigTest extends AnyFlatSpec with Matchers {
   private val referenceConfig: Config = ConfigFactory.load("reference")
 
-  @nowarn("msg=possible missing interpolator")
   val config: Config = ConfigFactory
     .parseString("""
-          |pekko-persistence-jdbc.slick.db {
-          |  host = <not used>
-          |  port = <not used>
-          |  name = <not used>
-          |}
-          |
           |jdbc-journal {
-          |  class = "org.apache.pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal"
-          |
           |  tables {
-          |    journal {
-          |      tableName = "journal"
-          |      schemaName = ""
+          |    event_journal {
+          |      tableName = "custom_event_journal"
+          |      schemaName = "custom"
           |      columnNames {
-          |        ordering = "ordering"
-          |        persistenceId = "persistence_id"
-          |        sequenceNumber = "sequence_number"
-          |        deleted = "deleted"
-          |        tags = "tags"
-          |        message = "message"
+          |        ordering = "custom_ordering"
+          |        persistenceId = "custom_persistence_id"
           |      }
           |    }
-          |  }
-          |
-          |  tagSeparator = ","
-          |
-          |  dao = "org.apache.pekko.persistence.jdbc.dao.bytea.journal.ByteArrayJournalDao"
-          |
-          |  slick {
-          |    profile = "slick.jdbc.PostgresProfile$"
-          |    db {
-          |      host = "localhost"
-          |      host = ${?POSTGRES_HOST}
-          |      port = "5432"
-          |      port = ${?POSTGRES_PORT}
-          |      name = "docker"
-          |
-          |      url = "jdbc:postgresql://"${pekko-persistence-jdbc.slick.db.host}":"${pekko-persistence-jdbc.slick.db.port}"/"${pekko-persistence-jdbc.slick.db.name}
-          |      user = "docker"
-          |      password = "docker"
-          |      driver = "org.postgresql.Driver$"
-          |
-          |      // hikariCP settings; see: https://github.com/brettwooldridge/HikariCP
-          |
-          |      // read: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
-          |      // slick will use an async executor with a fixed size queue of 10.000 objects
-          |      // The async executor is a connection pool for asynchronous execution of blocking I/O actions.
-          |      // This is used for the asynchronous query execution API on top of blocking back-ends like JDBC.
-          |      queueSize = 10000 // number of objects that can be queued by the async executor
-          |
-          |      connectionTimeout = 30000 // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException will be thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
-          |      validationTimeout = 5000 // This property controls the maximum amount of time that a connection will be tested for aliveness. This value must be less than the connectionTimeout. The lowest accepted validation timeout is 1000ms (1 second). Default: 5000
-          |      idleTimeout = 600000 // 10 minutes: This property controls the maximum amount of time that a connection is allowed to sit idle in the pool. Whether a connection is retired as idle or not is subject to a maximum variation of +30 seconds, and average variation of +15 seconds. A connection will never be retired as idle before this timeout. A value of 0 means that idle connections are never removed from the pool. Default: 600000 (10 minutes)
-          |      maxLifetime = 1800000 // 30 minutes: This property controls the maximum lifetime of a connection in the pool. When a connection reaches this timeout it will be retired from the pool, subject to a maximum variation of +30 seconds. An in-use connection will never be retired, only when it is closed will it then be removed. We strongly recommend setting this value, and it should be at least 30 seconds less than any database-level connection timeout. A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the idleTimeout setting. Default: 1800000 (30 minutes)
-          |      leakDetectionThreshold = 0 // This property controls the amount of time that a connection can be out of the pool before a message is logged indicating a possible connection leak. A value of 0 means leak detection is disabled. Lowest acceptable value for enabling leak detection is 2000 (2 secs). Default: 0
-          |
-          |      initializationFailFast = true // This property controls whether the pool will "fail fast" if the pool cannot be seeded with initial connections successfully. If you want your application to start even when the database is down/unavailable, set this property to false. Default: true
-          |
-          |      keepAliveConnection = on // ensures that the database does not get dropped while we are using it
-          |
-          |      numThreads = 4 // number of cores
-          |      maxConnections = 4  // same as numThreads
-          |      minConnections = 4  // same as numThreads
+          |    event_tag {
+          |      tableName = "custom_event_tag"
+          |      legacy-tag-key = false
           |    }
           |  }
+          |
+          |  dao = "com.example.CustomJournalDao"
           |}
           |
-          |# the pekko-persistence-snapshot-store in use
           |jdbc-snapshot-store {
-          |  class = "org.apache.pekko.persistence.jdbc.snapshot.JdbcSnapshotStore"
-          |
           |  tables {
           |    snapshot {
-          |      tableName = "snapshot"
-          |      schemaName = ""
+          |      tableName = "custom_snapshot"
+          |      schemaName = "custom"
           |      columnNames {
-          |        persistenceId = "persistence_id"
-          |        sequenceNumber = "sequence_number"
-          |        created = "created"
-          |        snapshot = "snapshot"
+          |        snapshotPayload = "custom_snapshot_payload"
           |      }
           |    }
           |  }
           |
-          |  dao = "org.apache.pekko.persistence.jdbc.dao.bytea.snapshot.ByteArraySnapshotDao"
-          |
-          |  slick {
-          |    profile = "slick.jdbc.MySQLProfile$"
-          |    db {
-          |      host = "localhost"
-          |      host = ${?POSTGRES_HOST}
-          |      port = "5432"
-          |      port = ${?POSTGRES_PORT}
-          |      name = "docker"
-          |
-          |      url = "jdbc:postgresql://"${pekko-persistence-jdbc.slick.db.host}":"${pekko-persistence-jdbc.slick.db.port}"/"${pekko-persistence-jdbc.slick.db.name}
-          |      user = "docker"
-          |      password = "docker"
-          |      driver = "org.postgresql.Driver"
-          |
-          |      // hikariCP settings; see: https://github.com/brettwooldridge/HikariCP
-          |
-          |      // read: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
-          |      // slick will use an async executor with a fixed size queue of 10.000 objects
-          |      // The async executor is a connection pool for asynchronous execution of blocking I/O actions.
-          |      // This is used for the asynchronous query execution API on top of blocking back-ends like JDBC.
-          |      queueSize = 10000 // number of objects that can be queued by the async executor
-          |
-          |      connectionTimeout = 30000 // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException will be thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
-          |      validationTimeout = 5000 // This property controls the maximum amount of time that a connection will be tested for aliveness. This value must be less than the connectionTimeout. The lowest accepted validation timeout is 1000ms (1 second). Default: 5000
-          |      idleTimeout = 600000 // 10 minutes: This property controls the maximum amount of time that a connection is allowed to sit idle in the pool. Whether a connection is retired as idle or not is subject to a maximum variation of +30 seconds, and average variation of +15 seconds. A connection will never be retired as idle before this timeout. A value of 0 means that idle connections are never removed from the pool. Default: 600000 (10 minutes)
-          |      maxLifetime = 1800000 // 30 minutes: This property controls the maximum lifetime of a connection in the pool. When a connection reaches this timeout it will be retired from the pool, subject to a maximum variation of +30 seconds. An in-use connection will never be retired, only when it is closed will it then be removed. We strongly recommend setting this value, and it should be at least 30 seconds less than any database-level connection timeout. A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the idleTimeout setting. Default: 1800000 (30 minutes)
-          |      leakDetectionThreshold = 0 // This property controls the amount of time that a connection can be out of the pool before a message is logged indicating a possible connection leak. A value of 0 means leak detection is disabled. Lowest acceptable value for enabling leak detection is 2000 (2 secs). Default: 0
-          |
-          |      initializationFailFast = true // This property controls whether the pool will "fail fast" if the pool cannot be seeded with initial connections successfully. If you want your application to start even when the database is down/unavailable, set this property to false. Default: true
-          |
-          |      keepAliveConnection = on // ensures that the database does not get dropped while we are using it
-          |
-          |      numThreads = 4 // number of cores
-          |      maxConnections = 4  // same as numThreads
-          |      minConnections = 4  // same as numThreads
-          |    }
-          |  }
+          |  dao = "com.example.CustomSnapshotDao"
           |}
           |
-          |# the pekko-persistence-query provider in use
           |jdbc-read-journal {
-          |  class = "org.apache.pekko.persistence.jdbc.query.JdbcReadJournalProvider"
-          |
-          |  # New events are retrieved (polled) with this interval.
           |  refresh-interval = "300ms"
-          |
-          |  # How many events to fetch in one query (replay) and keep buffered until they
-          |  # are delivered downstreams.
           |  max-buffer-size = "10"
           |
-          |  dao = "org.apache.pekko.persistence.jdbc.dao.bytea.readjournal.ByteArrayReadJournalDao"
+          |  dao = "com.example.CustomReadJournalDao"
           |
           |  tables {
-          |    journal {
-          |      tableName = "journal"
-          |      schemaName = ""
-          |      columnNames {
-          |        ordering = "ordering"
-          |        persistenceId = "persistence_id"
-          |        sequenceNumber = "sequence_number"
-          |        created = "created"
-          |        tags = "tags"
-          |        message = "message"
-          |      }
-          |    }
-          |  }
-          |
-          |  tagSeparator = ","
-          |
-          |  slick {
-          |    profile = "slick.jdbc.OracleProfile$"
-          |    db {
-          |      host = "localhost"
-          |      host = ${?POSTGRES_HOST}
-          |      port = "5432"
-          |      port = ${?POSTGRES_PORT}
-          |      name = "docker"
-          |
-          |      url = "jdbc:postgresql://"${pekko-persistence-jdbc.slick.db.host}":"${pekko-persistence-jdbc.slick.db.port}"/"${pekko-persistence-jdbc.slick.db.name}
-          |      user = "docker"
-          |      password = "docker"
-          |      driver = "org.postgresql.Driver"
-          |
-          |      // hikariCP settings; see: https://github.com/brettwooldridge/HikariCP
-          |
-          |      // read: https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
-          |      // slick will use an async executor with a fixed size queue of 10.000 objects
-          |      // The async executor is a connection pool for asynchronous execution of blocking I/O actions.
-          |      // This is used for the asynchronous query execution API on top of blocking back-ends like JDBC.
-          |      queueSize = 10000 // number of objects that can be queued by the async executor
-          |
-          |      connectionTimeout = 30000 // This property controls the maximum number of milliseconds that a client (that's you) will wait for a connection from the pool. If this time is exceeded without a connection becoming available, a SQLException will be thrown. 1000ms is the minimum value. Default: 30000 (30 seconds)
-          |      validationTimeout = 5000 // This property controls the maximum amount of time that a connection will be tested for aliveness. This value must be less than the connectionTimeout. The lowest accepted validation timeout is 1000ms (1 second). Default: 5000
-          |      idleTimeout = 600000 // 10 minutes: This property controls the maximum amount of time that a connection is allowed to sit idle in the pool. Whether a connection is retired as idle or not is subject to a maximum variation of +30 seconds, and average variation of +15 seconds. A connection will never be retired as idle before this timeout. A value of 0 means that idle connections are never removed from the pool. Default: 600000 (10 minutes)
-          |      maxLifetime = 1800000 // 30 minutes: This property controls the maximum lifetime of a connection in the pool. When a connection reaches this timeout it will be retired from the pool, subject to a maximum variation of +30 seconds. An in-use connection will never be retired, only when it is closed will it then be removed. We strongly recommend setting this value, and it should be at least 30 seconds less than any database-level connection timeout. A value of 0 indicates no maximum lifetime (infinite lifetime), subject of course to the idleTimeout setting. Default: 1800000 (30 minutes)
-          |      leakDetectionThreshold = 0 // This property controls the amount of time that a connection can be out of the pool before a message is logged indicating a possible connection leak. A value of 0 means leak detection is disabled. Lowest acceptable value for enabling leak detection is 2000 (2 secs). Default: 0
-          |
-          |      initializationFailFast = true // This property controls whether the pool will "fail fast" if the pool cannot be seeded with initial connections successfully. If you want your application to start even when the database is down/unavailable, set this property to false. Default: true
-          |
-          |      keepAliveConnection = on // ensures that the database does not get dropped while we are using it
-          |
-          |      numThreads = 4 // number of cores
-          |      maxConnections = 4  // same as numThreads
-          |      minConnections = 4  // same as numThreads
+          |    event_journal {
+          |      tableName = "custom_event_journal"
+          |      schemaName = "custom"
           |    }
           |  }
           |}
@@ -232,17 +83,20 @@ class PekkoPersistenceConfigTest extends AnyFlatSpec with Matchers {
     slickConfiguration.jndiDbName shouldBe None
 
     cfg.pluginConfig.dao shouldBe "org.apache.pekko.persistence.jdbc.journal.dao.DefaultJournalDao"
-    cfg.pluginConfig.tagSeparator shouldBe ","
 
-    cfg.journalTableConfiguration.tableName shouldBe "journal"
-    cfg.journalTableConfiguration.schemaName shouldBe None
+    cfg.eventJournalTableConfiguration.tableName shouldBe "event_journal"
+    cfg.eventJournalTableConfiguration.schemaName shouldBe None
 
-    cfg.journalTableConfiguration.columnNames.ordering shouldBe "ordering"
-    cfg.journalTableConfiguration.columnNames.created shouldBe "created"
-    cfg.journalTableConfiguration.columnNames.message shouldBe "message"
-    cfg.journalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
-    cfg.journalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
-    cfg.journalTableConfiguration.columnNames.tags shouldBe "tags"
+    cfg.eventJournalTableConfiguration.columnNames.ordering shouldBe "ordering"
+    cfg.eventJournalTableConfiguration.columnNames.deleted shouldBe "deleted"
+    cfg.eventJournalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
+    cfg.eventJournalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
+    cfg.eventJournalTableConfiguration.columnNames.eventPayload shouldBe "event_payload"
+
+    cfg.eventTagTableConfiguration.tableName shouldBe "event_tag"
+    cfg.eventTagTableConfiguration.schemaName shouldBe None
+    cfg.eventTagTableConfiguration.legacyTagKey shouldBe true
+    cfg.eventTagTableConfiguration.columnNames.tag shouldBe "tag"
   }
 
   it should "parse SnapshotConfig" in {
@@ -253,13 +107,14 @@ class PekkoPersistenceConfigTest extends AnyFlatSpec with Matchers {
 
     cfg.pluginConfig.dao shouldBe "org.apache.pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao"
 
-    cfg.legacySnapshotTableConfiguration.tableName shouldBe "snapshot"
-    cfg.legacySnapshotTableConfiguration.schemaName shouldBe None
+    cfg.snapshotTableConfiguration.tableName shouldBe "snapshot"
+    cfg.snapshotTableConfiguration.schemaName shouldBe None
 
-    cfg.legacySnapshotTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
-    cfg.legacySnapshotTableConfiguration.columnNames.created shouldBe "created"
-    cfg.legacySnapshotTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
-    cfg.legacySnapshotTableConfiguration.columnNames.snapshot shouldBe "snapshot"
+    cfg.snapshotTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
+    cfg.snapshotTableConfiguration.columnNames.created shouldBe "created"
+    cfg.snapshotTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
+    cfg.snapshotTableConfiguration.columnNames.snapshotPayload shouldBe "snapshot_payload"
+    cfg.snapshotTableConfiguration.columnNames.metaPayload shouldBe "meta_payload"
   }
 
   it should "parse ReadJournalConfig" in {
@@ -269,76 +124,61 @@ class PekkoPersistenceConfigTest extends AnyFlatSpec with Matchers {
     slickConfiguration.jndiDbName shouldBe None
 
     cfg.pluginConfig.dao shouldBe "org.apache.pekko.persistence.jdbc.query.dao.DefaultReadJournalDao"
-    cfg.pluginConfig.tagSeparator shouldBe ","
     cfg.refreshInterval shouldBe 1.second
     cfg.maxBufferSize shouldBe 500
 
-    cfg.journalTableConfiguration.tableName shouldBe "journal"
-    cfg.journalTableConfiguration.schemaName shouldBe None
+    cfg.eventJournalTableConfiguration.tableName shouldBe "event_journal"
+    cfg.eventJournalTableConfiguration.schemaName shouldBe None
+    cfg.eventJournalTableConfiguration.columnNames.ordering shouldBe "ordering"
+    cfg.eventJournalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
+    cfg.eventJournalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
 
-    cfg.journalTableConfiguration.columnNames.ordering shouldBe "ordering"
-    cfg.journalTableConfiguration.columnNames.created shouldBe "created"
-    cfg.journalTableConfiguration.columnNames.message shouldBe "message"
-    cfg.journalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
-    cfg.journalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
-    cfg.journalTableConfiguration.columnNames.tags shouldBe "tags"
+    cfg.eventTagTableConfiguration.tableName shouldBe "event_tag"
   }
 
   "full config" should "parse JournalConfig" in {
     val cfg = new JournalConfig(config.getConfig("jdbc-journal"))
-    val slickConfiguration = new SlickConfiguration(config.getConfig("jdbc-journal.slick"))
-    slickConfiguration.jndiName shouldBe None
-    slickConfiguration.jndiDbName shouldBe None
 
-    cfg.pluginConfig.dao shouldBe "org.apache.pekko.persistence.jdbc.dao.bytea.journal.ByteArrayJournalDao"
-    cfg.pluginConfig.tagSeparator shouldBe ","
+    cfg.pluginConfig.dao shouldBe "com.example.CustomJournalDao"
 
-    cfg.journalTableConfiguration.tableName shouldBe "journal"
-    cfg.journalTableConfiguration.schemaName shouldBe None
+    cfg.eventJournalTableConfiguration.tableName shouldBe "custom_event_journal"
+    cfg.eventJournalTableConfiguration.schemaName shouldBe Some("custom")
 
-    cfg.journalTableConfiguration.columnNames.ordering shouldBe "ordering"
-    cfg.journalTableConfiguration.columnNames.created shouldBe "created"
-    cfg.journalTableConfiguration.columnNames.message shouldBe "message"
-    cfg.journalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
-    cfg.journalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
-    cfg.journalTableConfiguration.columnNames.tags shouldBe "tags"
+    // overridden column names
+    cfg.eventJournalTableConfiguration.columnNames.ordering shouldBe "custom_ordering"
+    cfg.eventJournalTableConfiguration.columnNames.persistenceId shouldBe "custom_persistence_id"
+    // column names that fall back to the reference config
+    cfg.eventJournalTableConfiguration.columnNames.deleted shouldBe "deleted"
+    cfg.eventJournalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
+
+    cfg.eventTagTableConfiguration.tableName shouldBe "custom_event_tag"
+    cfg.eventTagTableConfiguration.legacyTagKey shouldBe false
+    cfg.eventTagTableConfiguration.columnNames.tag shouldBe "tag"
   }
 
   it should "parse SnapshotConfig" in {
     val cfg = new SnapshotConfig(config.getConfig("jdbc-snapshot-store"))
-    val slickConfiguration = new SlickConfiguration(config.getConfig("jdbc-snapshot-store.slick"))
-    slickConfiguration.jndiName shouldBe None
-    slickConfiguration.jndiDbName shouldBe None
 
-    cfg.pluginConfig.dao shouldBe "org.apache.pekko.persistence.jdbc.dao.bytea.snapshot.ByteArraySnapshotDao"
+    cfg.pluginConfig.dao shouldBe "com.example.CustomSnapshotDao"
 
-    cfg.legacySnapshotTableConfiguration.tableName shouldBe "snapshot"
-    cfg.legacySnapshotTableConfiguration.schemaName shouldBe None
-    cfg.legacySnapshotTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
-    cfg.legacySnapshotTableConfiguration.columnNames.created shouldBe "created"
-    cfg.legacySnapshotTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
-    cfg.legacySnapshotTableConfiguration.columnNames.snapshot shouldBe "snapshot"
+    cfg.snapshotTableConfiguration.tableName shouldBe "custom_snapshot"
+    cfg.snapshotTableConfiguration.schemaName shouldBe Some("custom")
+    cfg.snapshotTableConfiguration.columnNames.snapshotPayload shouldBe "custom_snapshot_payload"
+    cfg.snapshotTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
+    cfg.snapshotTableConfiguration.columnNames.created shouldBe "created"
+    cfg.snapshotTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
   }
 
   it should "parse ReadJournalConfig" in {
     val cfg = new ReadJournalConfig(config.getConfig("jdbc-read-journal"))
-    val slickConfiguration = new SlickConfiguration(config.getConfig("jdbc-read-journal.slick"))
-    slickConfiguration.jndiName shouldBe None
-    slickConfiguration.jndiDbName shouldBe None
 
-    cfg.pluginConfig.dao shouldBe "org.apache.pekko.persistence.jdbc.dao.bytea.readjournal.ByteArrayReadJournalDao"
-    cfg.pluginConfig.tagSeparator shouldBe ","
+    cfg.pluginConfig.dao shouldBe "com.example.CustomReadJournalDao"
     cfg.refreshInterval shouldBe 300.millis
     cfg.maxBufferSize shouldBe 10
 
-    cfg.journalTableConfiguration.tableName shouldBe "journal"
-    cfg.journalTableConfiguration.schemaName shouldBe None
-
-    cfg.journalTableConfiguration.columnNames.ordering shouldBe "ordering"
-    cfg.journalTableConfiguration.columnNames.created shouldBe "created"
-    cfg.journalTableConfiguration.columnNames.message shouldBe "message"
-    cfg.journalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
-    cfg.journalTableConfiguration.columnNames.sequenceNumber shouldBe "sequence_number"
-    cfg.journalTableConfiguration.columnNames.tags shouldBe "tags"
+    cfg.eventJournalTableConfiguration.tableName shouldBe "custom_event_journal"
+    cfg.eventJournalTableConfiguration.schemaName shouldBe Some("custom")
+    cfg.eventJournalTableConfiguration.columnNames.ordering shouldBe "ordering"
+    cfg.eventJournalTableConfiguration.columnNames.persistenceId shouldBe "persistence_id"
   }
 }

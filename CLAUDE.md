@@ -14,7 +14,6 @@ Before opening or updating a PR, verify:
 - `sbt +mimaReportBinaryIssues` was run for public API, binary shape, or MiMa-sensitive internal changes, and ALL reported issues were fixed before creating or updating the PR.
 - Database schema changes include migration scripts.
 - Changes are tested against at least one supported database.
-- Migrator changes preserve data integrity.
 - Commit messages follow the `AGENTS.md` format.
 - PR bodies follow the `AGENTS.md` format.
 - `Tests` and `References` are present.

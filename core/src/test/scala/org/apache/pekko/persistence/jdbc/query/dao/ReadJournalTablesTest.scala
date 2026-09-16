@@ -16,31 +16,32 @@ package org.apache.pekko.persistence.jdbc.query.dao
 
 import org.apache.pekko
 import pekko.persistence.jdbc.TablesTestSpec
-import pekko.persistence.jdbc.journal.dao.legacy.JournalTables
+import pekko.persistence.jdbc.journal.dao.JournalTables
 import slick.jdbc.JdbcProfile
 
 class ReadJournalTablesTest extends TablesTestSpec {
-  val readJournalTableConfiguration = readJournalConfig.journalTableConfiguration
+  val readJournalTableConfiguration = readJournalConfig.eventJournalTableConfiguration
 
-  object TestByteAReadJournalTables extends JournalTables {
+  object TestReadJournalTables extends JournalTables {
     override val profile: JdbcProfile = slick.jdbc.PostgresProfile
     override val journalTableCfg = readJournalTableConfiguration
+    override val tagTableCfg = readJournalConfig.eventTagTableConfiguration
   }
 
   "JournalTable" should "be configured with a schema name" in {
-    TestByteAReadJournalTables.JournalTable.baseTableRow.schemaName shouldBe readJournalTableConfiguration.schemaName
+    TestReadJournalTables.JournalTable.baseTableRow.schemaName shouldBe readJournalTableConfiguration.schemaName
   }
 
   it should "be configured with a table name" in {
-    TestByteAReadJournalTables.JournalTable.baseTableRow.tableName shouldBe readJournalTableConfiguration.tableName
+    TestReadJournalTables.JournalTable.baseTableRow.tableName shouldBe readJournalTableConfiguration.tableName
   }
 
   it should "be configured with column names" in {
     val colName = toColumnName(readJournalTableConfiguration.tableName)(_)
-    TestByteAReadJournalTables.JournalTable.baseTableRow.persistenceId.toString shouldBe colName(
-      readJournalTableConfiguration.columnNames.persistenceId)
-    TestByteAReadJournalTables.JournalTable.baseTableRow.sequenceNumber.toString shouldBe colName(
-      readJournalTableConfiguration.columnNames.sequenceNumber)
-    //    TestByteAJournalTables.JournalTable.baseTableRow.tags.toString() shouldBe colName(journalTableConfiguration.columnNames.tags)
+    val row = TestReadJournalTables.JournalTable.baseTableRow
+    row.ordering.toString shouldBe colName(readJournalTableConfiguration.columnNames.ordering)
+    row.persistenceId.toString shouldBe colName(readJournalTableConfiguration.columnNames.persistenceId)
+    row.sequenceNumber.toString shouldBe colName(readJournalTableConfiguration.columnNames.sequenceNumber)
+    row.eventPayload.toString shouldBe colName(readJournalTableConfiguration.columnNames.eventPayload)
   }
 }

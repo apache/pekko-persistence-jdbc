@@ -18,8 +18,7 @@ jobs:
       matrix:
         include:
           - { name: "Oracle", extraOpts: '' }
-          - { name: "Oracle (old dao)", extraOpts: '-Djdbc-journal.dao=org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao -Djdbc-snapshot-store.dao=org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao -Djdbc-read-journal.dao=org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao' }
-          
+
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -50,10 +49,6 @@ jobs:
 
       - name: Run Integration tests for  ${{ matrix.name }}
         run: sbt ++2.13 "integration/testOnly org.apache.pekko.persistence.jdbc.integration.Oracle*"  ${{ matrix.extraOpts }}
-
-      - name: Run Migrator Integration tests for  ${{ matrix.name }}
-        if: matrix.name == 'Oracle'
-        run: sbt ++2.13 "migratorIntegration/testOnly org.apache.pekko.persistence.jdbc.migrator.integration.Oracle*"  ${{ matrix.extraOpts }}
 
       - name: Print logs on failure
         if: ${{ failure() }}

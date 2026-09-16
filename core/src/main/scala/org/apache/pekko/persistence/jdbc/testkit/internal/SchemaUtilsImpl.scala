@@ -22,7 +22,6 @@ import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.InternalApi
 import pekko.dispatch.Dispatchers
 import pekko.persistence.jdbc.db.{ MariaDBProfile, SlickDatabase, SlickExtension }
-import com.typesafe.config.Config
 import org.slf4j.Logger
 import slick.jdbc.H2Profile
 import slick.jdbc.JdbcBackend.Database
@@ -38,9 +37,6 @@ import slick.jdbc.SQLServerProfile
 @InternalApi
 private[jdbc] object SchemaUtilsImpl {
 
-  def legacy(configKey: String, config: Config): Boolean =
-    config.getConfig(configKey).getString("dao") != "org.apache.pekko.persistence.jdbc.journal.dao.DefaultJournalDao"
-
   /**
    * INTERNAL API
    */
@@ -49,9 +45,7 @@ private[jdbc] object SchemaUtilsImpl {
       implicit actorSystem: ClassicActorSystemProvider): Future[Done] = {
     val slickDb: SlickDatabase = loadSlickDatabase(configKey)
     val (fileToLoad, separator) =
-      dropScriptFor(
-        slickProfileToSchemaType(slickDb.profile),
-        legacy(configKey, actorSystem.classicSystem.settings.config))
+      dropScriptFor(slickProfileToSchemaType(slickDb.profile))
 
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
     Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, slickDb.database))(blockingEC)
@@ -66,9 +60,7 @@ private[jdbc] object SchemaUtilsImpl {
 
     val slickDb: SlickDatabase = loadSlickDatabase(configKey)
     val (fileToLoad, separator) =
-      createScriptFor(
-        slickProfileToSchemaType(slickDb.profile),
-        legacy(configKey, actorSystem.classicSystem.settings.config))
+      createScriptFor(slickProfileToSchemaType(slickDb.profile))
 
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
     Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, slickDb.database))(blockingEC)
@@ -89,8 +81,8 @@ private[jdbc] object SchemaUtilsImpl {
    * INTERNAL API
    */
   @InternalApi
-  private[jdbc] def dropWithSlick(schemaType: SchemaType, logger: Logger, db: Database, legacy: Boolean): Done = {
-    val (fileToLoad, separator) = dropScriptFor(schemaType, legacy)
+  private[jdbc] def dropWithSlick(schemaType: SchemaType, logger: Logger, db: Database): Done = {
+    val (fileToLoad, separator) = dropScriptFor(schemaType)
     SchemaUtilsImpl.applyScriptWithSlick(SchemaUtilsImpl.fromClasspathAsString(fileToLoad), separator, logger, db)
   }
 
@@ -100,7 +92,7 @@ private[jdbc] object SchemaUtilsImpl {
   @InternalApi
   private[jdbc] def dropWithSlickButChangeSchema(schemaType: SchemaType, logger: Logger, db: Database,
       oldSchemaName: String, newSchemaName: String): Done = {
-    val (fileToLoad, separator) = dropScriptFor(schemaType, false)
+    val (fileToLoad, separator) = dropScriptFor(schemaType)
     val script = SchemaUtilsImpl.fromClasspathAsString(fileToLoad)
       .replaceAll(s"$oldSchemaName.", s"$newSchemaName.")
     SchemaUtilsImpl.applyScriptWithSlick(script, separator, logger, db)
@@ -110,8 +102,8 @@ private[jdbc] object SchemaUtilsImpl {
    * INTERNAL API
    */
   @InternalApi
-  private[jdbc] def createWithSlick(schemaType: SchemaType, logger: Logger, db: Database, legacy: Boolean): Done = {
-    val (fileToLoad, separator) = createScriptFor(schemaType, legacy)
+  private[jdbc] def createWithSlick(schemaType: SchemaType, logger: Logger, db: Database): Done = {
+    val (fileToLoad, separator) = createScriptFor(schemaType)
     SchemaUtilsImpl.applyScriptWithSlick(SchemaUtilsImpl.fromClasspathAsString(fileToLoad), separator, logger, db)
   }
 
@@ -121,7 +113,7 @@ private[jdbc] object SchemaUtilsImpl {
   @InternalApi
   private[jdbc] def createWithSlickButChangeSchema(schemaType: SchemaType, logger: Logger, db: Database,
       oldSchemaName: String, newSchemaName: String): Done = {
-    val (fileToLoad, separator) = createScriptFor(schemaType, false)
+    val (fileToLoad, separator) = createScriptFor(schemaType)
     val script = SchemaUtilsImpl.fromClasspathAsString(fileToLoad)
       .replaceAll(s"$oldSchemaName.", s"$newSchemaName.")
     val scriptWithSchemaCreate = s"CREATE SCHEMA IF NOT EXISTS $newSchemaName$separator$script"
@@ -153,33 +145,27 @@ private[jdbc] object SchemaUtilsImpl {
     }
   }
 
-  private def dropScriptFor(schemaType: SchemaType, legacy: Boolean): (String, String) = {
-    val suffix = if (legacy) "-legacy" else ""
+  private def dropScriptFor(schemaType: SchemaType): (String, String) =
     schemaType match {
-      case Postgres          => (s"schema/postgres/postgres-drop-schema$suffix.sql", ";")
-      case MySQL             => (s"schema/mysql/mysql-drop-schema$suffix.sql", ";")
-      case MariaDB if legacy => throw new IllegalArgumentException(s"Invalid legacy schema request for $schemaType")
-      case MariaDB           => (s"schema/mariadb/mariadb-drop-schema$suffix.sql", ";")
-      case Oracle            => (s"schema/oracle/oracle-drop-schema$suffix.sql", "/")
-      case SqlServer         => (s"schema/sqlserver/sqlserver-drop-schema$suffix.sql", ";")
-      case H2                => (s"schema/h2/h2-drop-schema$suffix.sql", ";")
-      case _                 => throw new UnsupportedOperationException(s"Unsupported schema request for $schemaType")
+      case Postgres  => ("schema/postgres/postgres-drop-schema.sql", ";")
+      case MySQL     => ("schema/mysql/mysql-drop-schema.sql", ";")
+      case MariaDB   => ("schema/mariadb/mariadb-drop-schema.sql", ";")
+      case Oracle    => ("schema/oracle/oracle-drop-schema.sql", "/")
+      case SqlServer => ("schema/sqlserver/sqlserver-drop-schema.sql", ";")
+      case H2        => ("schema/h2/h2-drop-schema.sql", ";")
+      case _         => throw new UnsupportedOperationException(s"Unsupported schema request for $schemaType")
     }
-  }
 
-  private def createScriptFor(schemaType: SchemaType, legacy: Boolean): (String, String) = {
-    val suffix = if (legacy) "-legacy" else ""
+  private def createScriptFor(schemaType: SchemaType): (String, String) =
     schemaType match {
-      case Postgres          => (s"schema/postgres/postgres-create-schema$suffix.sql", ";")
-      case MySQL             => (s"schema/mysql/mysql-create-schema$suffix.sql", ";")
-      case MariaDB if legacy => throw new IllegalArgumentException(s"Invalid legacy schema request for $schemaType")
-      case MariaDB           => (s"schema/mariadb/mariadb-create-schema$suffix.sql", ";")
-      case Oracle            => (s"schema/oracle/oracle-create-schema$suffix.sql", "/")
-      case SqlServer         => (s"schema/sqlserver/sqlserver-create-schema$suffix.sql", ";")
-      case H2                => (s"schema/h2/h2-create-schema$suffix.sql", ";")
-      case _                 => throw new UnsupportedOperationException(s"Unsupported schema request for $schemaType")
+      case Postgres  => ("schema/postgres/postgres-create-schema.sql", ";")
+      case MySQL     => ("schema/mysql/mysql-create-schema.sql", ";")
+      case MariaDB   => ("schema/mariadb/mariadb-create-schema.sql", ";")
+      case Oracle    => ("schema/oracle/oracle-create-schema.sql", "/")
+      case SqlServer => ("schema/sqlserver/sqlserver-create-schema.sql", ";")
+      case H2        => ("schema/h2/h2-create-schema.sql", ";")
+      case _         => throw new UnsupportedOperationException(s"Unsupported schema request for $schemaType")
     }
-  }
 
   /**
    * INTERNAL API

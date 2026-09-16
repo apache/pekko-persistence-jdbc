@@ -48,8 +48,8 @@ abstract class JdbcJournalSpec(config: Config, schemaType: SchemaType)
 
   lazy val db = SlickExtension(system).database(cfg).database
 
-  protected override def supportsSerialization: CapabilityFlag = newDao
-  protected override def supportsMetadata: CapabilityFlag = newDao
+  protected override def supportsSerialization: CapabilityFlag = true
+  protected override def supportsMetadata: CapabilityFlag = true
 
   override def beforeAll(): Unit = {
     dropAndCreate(schemaType)
@@ -70,7 +70,7 @@ abstract class JdbcJournalSchemaSpec(config: Config, schemaType: SchemaType)
 
   override def beforeAll(): Unit = {
     // need to drop the schema first, because a previous test may have left tables behind
-    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db, false)
+    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db)
     SchemaUtilsImpl.createWithSlickButChangeSchema(
       schemaType, logger, db, defaultSchemaName, schemaName)
     super.beforeAll()

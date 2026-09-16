@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS journal;
-DROP TABLE IF EXISTS snapshot;

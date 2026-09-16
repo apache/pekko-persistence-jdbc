@@ -118,8 +118,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
     }
   }
 
-  if (!isOracle && canForceInsert) {
-    // Note this test case cannot be executed for oracle, because forceInsertAll is not supported in the oracle driver.
+  if (canForceInsert) {
     it should
     "recover after the specified max number if tries if the first event has a very high sequence number and lots of large gaps exist" in {
       withActorSystem { implicit system: ActorSystem =>
@@ -168,11 +167,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
             .runWith(Sink.ignore)
             .futureValue
 
-          val highestValue = if (isOracle) {
-            // ForceInsert does not seem to work for oracle, we must delete the odd numbered events
-            db.run(JournalTable.filter(_.ordering % 2L === 1L).delete).futureValue
-            maxElement / 2
-          } else maxElement
+          val highestValue = maxElement
 
           withJournalSequenceActor(db, maxTries = 2) { actor =>
             // The actor should assume the max after 2 seconds

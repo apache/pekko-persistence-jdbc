@@ -127,12 +127,6 @@ sbt "core / Test / testOnly fully.qualified.SpecName"
 sbt "integration / test"
 ```
 
-- Run the migrator.
-
-```shell
-sbt "migrator / run"
-```
-
 - Use JDK-specific configs when relevant.
 
 ```shell
@@ -190,7 +184,6 @@ sbt docs/paradox
 - For new Pekko Streams operators, update operator docs and consistency coverage.
 - SQL queries must be parameterized to prevent injection. Never concatenate user input into SQL strings.
 - Serialization changes must consider rolling upgrade compatibility for existing persistent events.
-- Migrator changes must preserve data integrity during schema migrations.
 
 ## CI and JDK Rules
 

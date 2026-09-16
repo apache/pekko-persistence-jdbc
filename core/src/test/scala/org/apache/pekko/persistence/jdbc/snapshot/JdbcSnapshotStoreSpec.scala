@@ -43,8 +43,8 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
 
   lazy val db = SlickDatabase.database(config, new SlickConfiguration(config.getConfig("slick")), "slick.db")
 
-  protected override def supportsSerialization: CapabilityFlag = newDao
-  protected override def supportsMetadata: CapabilityFlag = newDao
+  protected override def supportsSerialization: CapabilityFlag = true
+  protected override def supportsMetadata: CapabilityFlag = true
 
   override def beforeAll(): Unit = {
     dropAndCreate(schemaType)

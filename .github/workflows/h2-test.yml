@@ -45,7 +45,7 @@ jobs:
         uses: coursier/cache-action@ee0650f98295f27a505e4bfd284c9bfaa913a465 # v9.0.1
 
       - name: Run tests with Scala ${{ matrix.scala-version }} and Java ${{ matrix.java-version }}
-        run: sbt ++${{ matrix.scala-version }} "core/test; migrator/test" ${{ matrix.sbt-opts }}
+        run: sbt ++${{ matrix.scala-version }} "core/test" ${{ matrix.sbt-opts }}
 
       - name: Print logs on failure
         if: ${{ failure() }}

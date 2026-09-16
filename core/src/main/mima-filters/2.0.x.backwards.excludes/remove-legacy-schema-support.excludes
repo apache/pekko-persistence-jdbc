@@ -1,0 +1,53 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+# Remove the legacy (pre akka-persistence-jdbc 5.0.0) schema support
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.config.JournalConfig.journalTableConfiguration")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.config.JournalPluginConfig.tagSeparator")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.config.LegacyJournalTableColumnNames")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.config.LegacyJournalTableConfiguration")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.config.LegacySnapshotTableColumnNames")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.config.LegacySnapshotTableConfiguration")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.config.ReadJournalConfig.journalTableConfiguration")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.config.ReadJournalPluginConfig.tagSeparator")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.persistence.jdbc.config.SnapshotConfig.legacySnapshotTableConfiguration")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.BaseByteArrayJournalDao")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalDao")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.ByteArrayJournalSerializer")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalQueries")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalTables")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.JournalTables$Journal")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.package")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.package$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.package$JournalRow")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.journal.dao.legacy.package$JournalRow$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.BaseByteArrayReadJournalDao")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.OracleReadJournalDao")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.ReadJournalQueries")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.TagFilterFlow")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.query.dao.legacy.TagFilterFlow$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotSerializer")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotQueries")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$OracleSnapshot")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$OracleSnapshot$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$Snapshot")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$SnapshotRow")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$SnapshotRow$")

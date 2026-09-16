@@ -35,15 +35,13 @@ private[jdbc] trait DropCreate {
   def db: Database
   def config: Config
 
-  def newDao: Boolean = !SchemaUtilsImpl.legacy("jdbc-journal", config)
-
   /**
    * INTERNAL API
    */
   @InternalApi
   private[jdbc] def drop(schemaType: SchemaType): Unit = {
     // blocking call, usually done in our before test methods
-    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db, !newDao)
+    SchemaUtilsImpl.dropWithSlick(schemaType, logger, db)
   }
 
   /**
@@ -53,7 +51,7 @@ private[jdbc] trait DropCreate {
   private[jdbc] def dropAndCreate(schemaType: SchemaType): Unit = {
     // blocking calls, usually done in our before test methods
     drop(schemaType)
-    SchemaUtilsImpl.createWithSlick(schemaType, logger, db, !newDao)
+    SchemaUtilsImpl.createWithSlick(schemaType, logger, db)
   }
 
   def withSession[A](f: Session => A): A = {

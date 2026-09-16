@@ -204,10 +204,8 @@ abstract class EventsByTagMigrationTest(config: String) extends QueryTestSpec(co
 
     // Assume that the user could alter table for the addition of the new column manually, then we don't need to maintain
     // the legacy table schema creation.
-    if (newDao) {
-      addNewColumn();
-      migrateLegacyRows();
-    }
+    addNewColumn()
+    migrateLegacyRows()
 
     // 2. write and read redundancy
     withRollingUpdateActorSystem { implicit system =>
@@ -231,12 +229,10 @@ abstract class EventsByTagMigrationTest(config: String) extends QueryTestSpec(co
     }
 
     // 3. Migrate the old constraints so that we can change read and write from the new PK.
-    if (newDao) {
-      dropLegacyFKConstraint();
-      dropLegacyPKConstraint()
-      addNewPKConstraint()
-      addNewFKConstraint()
-    }
+    dropLegacyFKConstraint()
+    dropLegacyPKConstraint()
+    addNewPKConstraint()
+    addNewFKConstraint()
 
     // 4. check the migration completed.
     withActorSystem { implicit system =>

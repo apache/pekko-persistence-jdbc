@@ -18,11 +18,11 @@ import org.apache.pekko
 import pekko.actor.{ ActorRef, ActorSystem }
 import pekko.pattern.ask
 import pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
-import pekko.persistence.jdbc.journal.dao.legacy.{ JournalRow, JournalTables }
+import pekko.persistence.jdbc.journal.dao.JournalTables
+import pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
 import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
-import pekko.persistence.jdbc.query.dao.TestProbeReadJournalDao
+import pekko.persistence.jdbc.query.dao.{ DefaultReadJournalDao, TestProbeReadJournalDao }
 import pekko.persistence.jdbc.SharedActorSystemTestSpec
-import pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
 import pekko.serialization.SerializationExtension
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.testkit.TestProbe
@@ -39,7 +39,8 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
   private val log = LoggerFactory.getLogger(classOf[JournalSequenceActorTest])
 
   val journalSequenceActorConfig = readJournalConfig.journalSequenceRetrievalConfiguration
-  val journalTableCfg = journalConfig.journalTableConfiguration
+  val journalTableCfg = journalConfig.eventJournalTableConfiguration
+  val tagTableCfg = journalConfig.eventTagTableConfiguration
 
   import profile.api._
 
@@ -47,15 +48,29 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
 
   def generateId: Int = 0
 
+  private def journalRow(ordering: Long, sequenceNumber: Long): JournalPekkoSerializationRow =
+    JournalPekkoSerializationRow(
+      ordering = ordering,
+      deleted = false,
+      persistenceId = "id",
+      sequenceNumber = sequenceNumber,
+      writer = "",
+      writeTimestamp = 0L,
+      adapterManifest = "",
+      eventPayload = Array(0.toByte),
+      eventSerId = 0,
+      eventSerManifest = "",
+      metaPayload = None,
+      metaSerId = None,
+      metaSerManifest = None)
+
   behavior.of("JournalSequenceActor")
 
   it should "recover normally" in {
-    if (newDao)
-      pending
     withActorSystem { implicit system: ActorSystem =>
       withDatabase { db =>
         val numberOfRows = 15000
-        val rows = for (i <- 1 to numberOfRows) yield JournalRow(generateId, deleted = false, "id", i, Array(0.toByte))
+        val rows = for (i <- 1 to numberOfRows) yield journalRow(generateId, i)
         db.run(JournalTable ++= rows).futureValue
         withJournalSequenceActor(db, maxTries = 100) { actor =>
           eventually {
@@ -68,7 +83,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
 
   private def canForceInsert: Boolean = profile.capabilities.contains(JdbcCapabilities.forceInsert)
 
-  if (canForceInsert && !newDao) {
+  if (canForceInsert) {
     it should
     s"recover ${if (isOracle) "one hundred thousand" else "one million"} events quickly if no ids are missing" in {
       withActorSystem { implicit system: ActorSystem =>
@@ -76,7 +91,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
           val elements = if (isOracle) 100000 else 1000000
           Source
             .fromIterator(() => (1 to elements).iterator)
-            .map(id => JournalRow(id, deleted = false, "id", id, Array(0.toByte)))
+            .map(id => journalRow(id, id))
             .grouped(10000)
             .mapAsync(4) { rows =>
               db.run(JournalTable.forceInsertAll(rows))
@@ -86,7 +101,10 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
 
           val startTime = System.currentTimeMillis()
           withJournalSequenceActor(db, maxTries = 100) { actor =>
-            val patienceConfig = PatienceConfig(10.seconds, Span(200, org.scalatest.time.Millis))
+            // The actor re-queries immediately after a full batch, so all ids are recovered in
+            // (elements / batch-size) back-to-back queries. If it waited `query-delay` (1s) between
+            // batches instead, one million events would take at least 100 seconds.
+            val patienceConfig = PatienceConfig(60.seconds, Span(200, org.scalatest.time.Millis))
             eventually(patienceConfig) {
               val currentMax = actor.ask(GetMaxOrderingId).mapTo[MaxOrderingId].futureValue.maxOrdering
               currentMax shouldBe elements
@@ -99,7 +117,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
     }
   }
 
-  if (!isOracle && canForceInsert && !newDao) {
+  if (!isOracle && canForceInsert) {
     // Note this test case cannot be executed for oracle, because forceInsertAll is not supported in the oracle driver.
     it should
     "recover after the specified max number if tries if the first event has a very high sequence number and lots of large gaps exist" in {
@@ -111,7 +129,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
           val lastElement = firstElement + (numElements * gapSize)
           Source
             .fromIterator(() => (firstElement to lastElement by gapSize).iterator)
-            .map(id => JournalRow(id, deleted = false, "id", id, Array(0.toByte)))
+            .map(id => journalRow(id, id))
             .grouped(10000)
             .mapAsync(4) { rows =>
               db.run(JournalTable.forceInsertAll(rows))
@@ -132,7 +150,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
     }
   }
 
-  if (canForceInsert && !newDao) {
+  if (canForceInsert) {
     it should s"assume that the max ordering id in the database on startup is the max after (queryDelay * maxTries)" in {
       withActorSystem { implicit system: ActorSystem =>
         withDatabase { db =>
@@ -141,7 +159,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
           val idSeq = 2 to maxElement by 2
           Source
             .fromIterator(() => idSeq.iterator)
-            .map(id => JournalRow(id, deleted = false, "id", id, Array(0.toByte)))
+            .map(id => journalRow(id, id))
             .grouped(10000)
             .mapAsync(4) { rows =>
               db.run(JournalTable.forceInsertAll(rows))
@@ -176,7 +194,7 @@ abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
   def withJournalSequenceActor(db: JdbcBackend.Database, maxTries: Int)(f: ActorRef => Unit)(
       implicit system: ActorSystem): Unit = {
     import system.dispatcher
-    val readJournalDao = new ByteArrayReadJournalDao(db, profile, readJournalConfig, SerializationExtension(system))
+    val readJournalDao = new DefaultReadJournalDao(db, profile, readJournalConfig, SerializationExtension(system))
     val actor =
       system.actorOf(JournalSequenceActor.props(readJournalDao, journalSequenceActorConfig.copy(maxTries = maxTries)))
     try f(actor)

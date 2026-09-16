@@ -16,9 +16,9 @@ package org.apache.pekko.persistence.jdbc.snapshot.dao
 
 import org.apache.pekko
 import pekko.persistence.jdbc.config.SnapshotTableConfiguration
-import pekko.persistence.jdbc.snapshot.dao.SnapshotTables.SnapshotRow
-import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.isOracleDriver
+import pekko.persistence.jdbc.snapshot.dao.SnapshotTables.{ isOracleDriver, SnapshotRow }
 import pekko.persistence.jdbc.util.BlobOps
+import slick.jdbc.JdbcProfile
 
 object SnapshotTables {
   case class SnapshotRow(
@@ -35,6 +35,12 @@ object SnapshotTables {
   object SnapshotRow {
     def tupled = (apply _).tupled
   }
+
+  def isOracleDriver(profile: JdbcProfile): Boolean =
+    profile match {
+      case _: slick.jdbc.OracleProfile => true
+      case _                           => false
+    }
 }
 
 trait SnapshotTables {

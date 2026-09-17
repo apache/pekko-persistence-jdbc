@@ -18,10 +18,12 @@ package scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ExtendedActorSystem
+import pekko.actor.Scheduler
 import pekko.persistence.jdbc.config.ReadJournalConfig
-import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
 import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.journal.dao.FlowControl
+import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
+import pekko.persistence.jdbc.query.dao.ReadJournalDao
 import pekko.persistence.query.scaladsl._
 import pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
 import pekko.persistence.{ Persistence, PersistentRepr }
@@ -37,9 +39,6 @@ import scala.collection.immutable._
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success }
-import pekko.actor.Scheduler
-import pekko.persistence.jdbc.query.dao.ReadJournalDao
-import pekko.persistence.jdbc.util.PluginVersionChecker
 
 object JdbcReadJournal {
   final val Identifier = "jdbc-read-journal"
@@ -53,8 +52,6 @@ class JdbcReadJournal(config: Config, configPath: String)(implicit val system: E
     with EventsByPersistenceIdQuery
     with CurrentEventsByTagQuery
     with EventsByTagQuery {
-
-  PluginVersionChecker.check()
 
   implicit val ec: ExecutionContext = system.dispatcher
   implicit val mat: Materializer = SystemMaterializer(system).materializer

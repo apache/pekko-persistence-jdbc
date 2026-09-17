@@ -40,7 +40,9 @@ abstract class MigratorSpec(val config: Config) extends SimpleSpec with BeforeAn
   // The db is initialized in the before and after each bocks
   var dbOpt: Option[Database] = None
 
-  implicit val pc: PatienceConfig = PatienceConfig(timeout = 10.seconds)
+  // migrating 3000 events is a few thousand sequential round trips to the database, which on the CI runners
+  // takes close to 10 seconds against SQL Server, so give the migration comfortably more time than that
+  implicit val pc: PatienceConfig = PatienceConfig(timeout = 1.minute)
   implicit val timeout: Timeout = Timeout(1.minute)
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)

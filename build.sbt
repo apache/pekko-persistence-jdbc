@@ -41,6 +41,7 @@ lazy val core = project
   .addPekkoModuleDependency("pekko-persistence-query", "", PekkoCoreDependency.default)
   .addPekkoModuleDependency("pekko-slf4j", "test", PekkoCoreDependency.default)
   .addPekkoModuleDependency("pekko-persistence-tck", "test", PekkoCoreDependency.default)
+  .addPekkoModuleDependency("pekko-persistence-typed", "test", PekkoCoreDependency.default) // Apache-2.0
   .addPekkoModuleDependency("pekko-stream-testkit", "test", PekkoCoreDependency.default)
   .addPekkoModuleDependency("pekko-testkit", "test", PekkoCoreDependency.default)
   .settings(

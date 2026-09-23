@@ -15,7 +15,7 @@
 package org.apache.pekko.persistence.jdbc.snapshot.dao.legacy
 
 import org.apache.pekko
-import pekko.persistence.SnapshotMetadata
+import pekko.persistence.{ SnapshotMetadata, SnapshotSelectionCriteria }
 import pekko.persistence.jdbc.config.SnapshotConfig
 import pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables.SnapshotRow
 import pekko.persistence.jdbc.snapshot.dao.SnapshotDao
@@ -43,6 +43,26 @@ class ByteArraySnapshotDao(
       case Success(deserialized) => deserialized
       case Failure(cause)        => throw cause
     }
+
+  override def snapshotForCriteria(
+      persistenceId: String,
+      criteria: SnapshotSelectionCriteria): Future[Option[(SnapshotMetadata, Any)]] =
+    if (criteria.minSequenceNr == 0L && criteria.minTimestamp == 0L)
+      super.snapshotForCriteria(persistenceId, criteria)
+    else
+      db.run(queries.selectOneByCriteria(
+        (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
+          criteria.minTimestamp)).result)
+        .map(_.headOption.map(toSnapshotData))
+
+  override def deleteByCriteria(persistenceId: String, criteria: SnapshotSelectionCriteria): Future[Unit] =
+    if (criteria.minSequenceNr == 0L && criteria.minTimestamp == 0L)
+      super.deleteByCriteria(persistenceId, criteria)
+    else
+      db.run(queries.selectByCriteria(
+        (persistenceId, criteria.maxSequenceNr, criteria.maxTimestamp, criteria.minSequenceNr,
+          criteria.minTimestamp)).delete)
+        .map(_ => ())(ExecutionContext.parasitic)
 
   override def latestSnapshot(persistenceId: String): Future[Option[(SnapshotMetadata, Any)]] =
     for {

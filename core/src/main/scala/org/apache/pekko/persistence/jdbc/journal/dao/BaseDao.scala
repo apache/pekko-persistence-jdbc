@@ -22,7 +22,6 @@ import pekko.stream.{ BoundedSourceQueue, Materializer, QueueOfferResult }
 
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 
-// Shared with the legacy DAO
 abstract class BaseDao[T] {
   implicit val mat: Materializer
   implicit val ec: ExecutionContext

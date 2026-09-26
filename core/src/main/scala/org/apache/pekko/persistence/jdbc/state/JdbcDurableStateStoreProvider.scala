@@ -38,6 +38,14 @@ class JdbcDurableStateStoreProvider[A](system: ExtendedActorSystem) extends Dura
     SlickExtension(system).database(config.getConfig(scaladsl.JdbcDurableStateStore.Identifier))
   def db: Database = slickDb.database
 
+  if (slickDb.allowShutdown) {
+    // the database was created for this provider only, so it must be closed when the actor system terminates,
+    // otherwise its connection pool (and the threads it owns) outlives the actor system
+    system.registerOnTermination {
+      db.close()
+    }
+  }
+
   lazy val durableStateConfig = new DurableStateTableConfiguration(
     config.getConfig(scaladsl.JdbcDurableStateStore.Identifier))
   lazy val serialization = SerializationExtension(system)

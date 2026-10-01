@@ -51,3 +51,5 @@ ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.s
 ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$Snapshot")
 ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$SnapshotRow")
 ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.persistence.jdbc.snapshot.dao.legacy.SnapshotTables$SnapshotRow$")
+ProblemFilters.exclude[ClassNoLongerCheckedProblem]("org.apache.pekko.persistence.jdbc.serialization.FlowPersistentReprSerializer")
+ProblemFilters.exclude[ClassNoLongerCheckedProblem]("org.apache.pekko.persistence.jdbc.serialization.PersistentReprSerializer")

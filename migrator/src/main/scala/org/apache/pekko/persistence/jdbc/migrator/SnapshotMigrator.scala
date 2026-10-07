@@ -19,7 +19,7 @@ import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.persistence.SnapshotMetadata
 import pekko.persistence.jdbc.config.{ ReadJournalConfig, SnapshotConfig }
-import pekko.persistence.jdbc.db.SlickExtension
+import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
 import pekko.persistence.jdbc.migrator.SnapshotMigrator.{ NoParallelism, SnapshotStoreConfig }
 import pekko.persistence.jdbc.query.dao.legacy.ByteArrayReadJournalDao
 import pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao
@@ -39,7 +39,7 @@ import scala.concurrent.Future
  *
  * @param system the actor system
  */
-case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) {
+case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) extends AutoCloseable {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
   import system.dispatcher
@@ -49,11 +49,13 @@ case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) 
   private val readJournalConfig: ReadJournalConfig = new ReadJournalConfig(
     system.settings.config.getConfig(JournalMigrator.ReadJournalConfig))
 
-  private val snapshotDB: jdbc.JdbcBackend.Database =
-    SlickExtension(system).database(system.settings.config.getConfig(SnapshotStoreConfig)).database
+  private val snapshotSlickDb: SlickDatabase =
+    SlickExtension(system).database(system.settings.config.getConfig(SnapshotStoreConfig))
+  private[jdbc] val snapshotDB: jdbc.JdbcBackend.Database = snapshotSlickDb.database
 
-  private val journalDB: JdbcBackend.Database =
-    SlickExtension(system).database(system.settings.config.getConfig(JournalMigrator.ReadJournalConfig)).database
+  private val journalSlickDb: SlickDatabase =
+    SlickExtension(system).database(system.settings.config.getConfig(JournalMigrator.ReadJournalConfig))
+  private[jdbc] val journalDB: JdbcBackend.Database = journalSlickDb.database
 
   private val serialization: Serialization = SerializationExtension(system)
   private val queries: SnapshotQueries = new SnapshotQueries(profile, snapshotConfig.legacySnapshotTableConfiguration)
@@ -98,6 +100,15 @@ case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) 
       defaultSnapshotDao.save(metadata, value)
     }
     .run()
+
+  /**
+   * Closes the databases that were opened for this migrator. Databases that are shared (configured with
+   * `use-shared-db`) are left alone, since those are owned by the actor system.
+   */
+  override def close(): Unit = {
+    if (snapshotSlickDb.allowShutdown) snapshotDB.close()
+    if (journalSlickDb.allowShutdown) journalDB.close()
+  }
 }
 
 case object SnapshotMigrator {

@@ -25,8 +25,7 @@ import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType, SchemaUtilsImpl }
 import pekko.persistence.snapshot.SnapshotStoreSpec
-import pekko.persistence.jdbc.snapshot.dao.{ DefaultSnapshotDao, SnapshotDao }
-import pekko.persistence.jdbc.snapshot.dao.legacy.ByteArraySnapshotDao
+import pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao
 import pekko.serialization.SerializationExtension
 import pekko.stream.SystemMaterializer
 import pekko.testkit.{ TestKit, TestProbe }
@@ -51,16 +50,15 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
 
   lazy val db = SlickDatabase.database(config, new SlickConfiguration(config.getConfig("slick")), "slick.db")
 
-  protected override def supportsSerialization: CapabilityFlag = newDao
-  protected override def supportsMetadata: CapabilityFlag = newDao
+  protected override def supportsSerialization: CapabilityFlag = true
+  protected override def supportsMetadata: CapabilityFlag = true
 
-  private lazy val boundsDao: SnapshotDao = {
+  private lazy val boundsDao: DefaultSnapshotDao = {
     val profile = SlickDatabase.profile(config, "slick")
     val snapshotConfig = new SnapshotConfig(system.settings.config.getConfig("jdbc-snapshot-store"))
     val serialization = SerializationExtension(system)
     implicit val mat = SystemMaterializer(system).materializer
-    if (newDao) new DefaultSnapshotDao(db, profile, snapshotConfig, serialization)
-    else new ByteArraySnapshotDao(db, profile, snapshotConfig, serialization)
+    new DefaultSnapshotDao(db, profile, snapshotConfig, serialization)
   }
 
   private def seedBoundsSnapshots(persistenceId: String): Seq[SnapshotMetadata] = {
@@ -72,14 +70,9 @@ abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
     metadata
   }
 
-  private def allSequenceNumbers(persistenceId: String): Future[Seq[Long]] = boundsDao match {
-    case dao: DefaultSnapshotDao =>
-      import dao.queries.profile.api._
-      db.run(dao.queries.selectAll(persistenceId).result).map(_.map(_.sequenceNumber))
-    case dao: ByteArraySnapshotDao =>
-      import dao.queries.profile.api._
-      db.run(dao.queries.selectAll(persistenceId).result).map(_.map(_.sequenceNumber))
-    case dao => Future.failed(new IllegalStateException(s"Unexpected snapshot DAO: ${dao.getClass.getName}"))
+  private def allSequenceNumbers(persistenceId: String): Future[Seq[Long]] = {
+    import boundsDao.queries.profile.api._
+    db.run(boundsDao.queries.selectAll(persistenceId).result).map(_.map(_.sequenceNumber))
   }
 
   private val boundsCases = Seq(

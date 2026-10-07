@@ -43,7 +43,7 @@ You should register the Fully Qualified Class Name in `application.conf` so that
 ## Snapshot selection criteria
 
 Snapshot loading and criteria-based deletion use `SnapshotDao.snapshotForCriteria` and
-`SnapshotDao.deleteByCriteria`. Both built-in snapshot DAOs apply all four bounds in
+`SnapshotDao.deleteByCriteria`. The built-in snapshot DAO applies all four bounds in
 `SnapshotSelectionCriteria`: `minSequenceNr`, `maxSequenceNr`, `minTimestamp`, and
 `maxTimestamp`. Bounds are inclusive, and both the sequence number and timestamp must
 match. Loading returns the matching snapshot with the highest sequence number; deletion
@@ -56,15 +56,15 @@ preserving safe recovery for existing custom DAOs. It may return no snapshot whe
 are not ordered by sequence number even if an older snapshot matches. The default
 `deleteByCriteria` implementation preserves the previous upper-bound deletion behavior and
 may delete snapshots below a minimum bound, including when the interval is empty. Custom DAOs
-should override both criteria methods to query all four bounds directly, as the built-in DAOs
-do.
+should override both criteria methods to query all four bounds directly, as the built-in DAO
+does.
 
-Subclasses of a built-in snapshot DAO that override its upper-bound methods must also override
+Subclasses of the built-in snapshot DAO that override its upper-bound methods must also override
 `snapshotForCriteria` and `deleteByCriteria` if they need to apply custom loading or deletion
-behavior. Criteria-based operations in the built-in DAOs execute their four-bound queries
+behavior. Criteria-based operations in the built-in DAO execute their four-bound queries
 directly.
 
-For more information please review the two default implementations `org.apache.pekko.persistence.jdbc.dao.bytea.journal.ByteArrayJournalDao` and `org.apache.pekko.persistence.jdbc.dao.bytea.snapshot.ByteArraySnapshotDao` or the demo custom DAO example from the [demo-akka-persistence](https://github.com/dnvriend/demo-akka-persistence-jdbc) site.
+For more information please review the two default implementations `org.apache.pekko.persistence.jdbc.journal.dao.DefaultJournalDao` and `org.apache.pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao` or the demo custom DAO example from the [demo-akka-persistence](https://github.com/dnvriend/demo-akka-persistence-jdbc) site.
 
 @@@warning { title="Binary compatibility" }
 

@@ -37,8 +37,6 @@ abstract class EventsByInfrequentTagTest(config: String) extends QueryTestSpec(c
   final val NoMsgTime: FiniteDuration = 100.millis
   it should "persist and find a tagged event with multiple (frequent and infrequent) tags" in withActorSystem {
     implicit system =>
-      pendingIfOracleWithLegacy()
-
       val journalOps = new ScalaJdbcReadJournalOperations(system)
       withTestActors(replyToMessages = true) { (actor1, actor2, actor3) =>
         val often = "often"

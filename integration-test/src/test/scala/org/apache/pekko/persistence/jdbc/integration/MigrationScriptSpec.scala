@@ -123,9 +123,8 @@ class MySQLMigrationScriptSpec extends MigrationScriptSpec(
   "MySQL migration script" must {
     "apply the schema and the migration without errors" in {
       drop(MySQL)
-      applyScriptWithSlick("DROP TABLE IF EXISTS journal", db)
 
-      val schemaPath = getClass.getResource("/schema/mysql/mysql-create-schema-legacy.sql").getPath
+      val schemaPath = getClass.getResource("/schema/mysql/mysql-create-schema.sql").getPath
       val schema = Using(scala.io.Source.fromFile(schemaPath))(_.mkString).get
 
       // Each statement executed as standalone
@@ -133,6 +132,10 @@ class MySQLMigrationScriptSpec extends MigrationScriptSpec(
         .map(_.trim)
         .filter(_.nonEmpty)
         .foreach(statement => applyScriptWithSlick(statement, db))
+
+      // a pre-1.2.0 database has no durable state tables, so the migration must create them
+      applyScriptWithSlick("DROP TABLE IF EXISTS durable_state_global_offset", db)
+      applyScriptWithSlick("DROP TABLE IF EXISTS durable_state", db)
 
       val migrationPath =
         getClass.getResource("/schema/mysql/migration-1.2.0/mysql-durable-state-migration.sql").getPath

@@ -19,6 +19,7 @@ sourceDistIncubating := false
 
 val mimaCompareVersion = "1.0.0"
 
+ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 ThisBuild / javafmtFormatterCompatibleJavaVersion := 17

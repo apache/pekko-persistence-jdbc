@@ -126,7 +126,7 @@ lazy val docs = project
 
 Global / onLoad := {
   sLog.value.info(
-    s"Building Pekko HTTP ${version.value} against Pekko ${PekkoCoreDependency.version} on Scala ${scalaVersion.value}")
+    s"Building Pekko Persistence JDBC ${version.value} against Pekko ${PekkoCoreDependency.version} on Scala ${scalaVersion.value}")
   (Global / onLoad).value.andThen { s =>
     val v = version.value
     if (dynverGitDescribeOutput.value.hasNoTags)

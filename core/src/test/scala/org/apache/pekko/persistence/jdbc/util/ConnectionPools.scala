@@ -17,15 +17,9 @@
 
 package org.apache.pekko.persistence.jdbc.util
 
-import org.apache.pekko
-import pekko.annotation.InternalApi
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.hikaricp.HikariCPJdbcDataSource
 
-/**
- * INTERNAL API
- */
-@InternalApi
 private[jdbc] object ConnectionPools {
 
   /**

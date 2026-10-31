@@ -17,6 +17,8 @@
 
 package org.apache.pekko.persistence.jdbc.testkit.internal
 
+import java.util.concurrent.RejectedExecutionException
+
 import scala.concurrent.duration._
 
 import org.apache.pekko
@@ -63,6 +65,26 @@ class SchemaUtilsImplSpec extends AnyWordSpecLike with Matchers with ScalaFuture
         } finally system.terminate().futureValue
 
       ConnectionPools.isClosed(database) shouldBe true
+    }
+
+    "fail the returned future and close the database when the actor system has already terminated" in {
+      RecordingSlickDatabaseProvider.clear()
+      val config = ConfigFactory
+        .parseString("""pekko-persistence-jdbc.database-provider-fqcn =
+            |  "org.apache.pekko.persistence.jdbc.util.RecordingSlickDatabaseProvider"""".stripMargin)
+        .withFallback(ConfigFactory.load("h2-application.conf"))
+
+      val system = ActorSystem("SchemaUtilsImplSpec", config)
+      // load the extension before termination, so that only the termination hook registration can fail
+      SlickExtension(system)
+      system.terminate().futureValue
+
+      val failure = SchemaUtilsImpl.createIfNotExists("jdbc-journal", logger)(system).failed.futureValue
+      failure shouldBe a[RejectedExecutionException]
+
+      val databases = RecordingSlickDatabaseProvider.databases
+      databases should have size 1
+      ConnectionPools.isClosed(databases.head) shouldBe true
     }
 
     "leave a shared database open after applying the schema script" in {

@@ -37,6 +37,9 @@ import scala.util.{ Failure, Success }
  * This will help migrate the legacy journal data onto the new journal schema with the
  * appropriate serialization
  *
+ * The migrator opens its own database connection pool unless `use-shared-db` is configured. Call `close()` once
+ * the `Future` returned by `migrate()` has completed, to release that pool.
+ *
  * @param system the actor system
  */
 final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSystem) extends AutoCloseable {

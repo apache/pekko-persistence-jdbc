@@ -24,19 +24,15 @@ import scala.jdk.CollectionConverters._
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.SlickConfiguration
 import pekko.persistence.jdbc.db.{ SlickDatabase, SlickDatabaseProvider }
 import com.typesafe.config.Config
 import slick.jdbc.JdbcBackend.Database
 
 /**
- * INTERNAL API
- *
  * A [[SlickDatabaseProvider]] that behaves like the default provider, but keeps track of every database it hands out
  * so that tests can assert on the lifecycle of those databases.
  */
-@InternalApi
 private[jdbc] class RecordingSlickDatabaseProvider(@unused system: ActorSystem) extends SlickDatabaseProvider {
   override def database(config: Config): SlickDatabase = {
     val slickDatabase =
@@ -46,10 +42,6 @@ private[jdbc] class RecordingSlickDatabaseProvider(@unused system: ActorSystem) 
   }
 }
 
-/**
- * INTERNAL API
- */
-@InternalApi
 private[jdbc] object RecordingSlickDatabaseProvider {
   private val created = new CopyOnWriteArrayList[Database]
 

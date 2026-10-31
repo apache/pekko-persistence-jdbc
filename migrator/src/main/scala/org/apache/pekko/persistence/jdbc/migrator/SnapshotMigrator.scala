@@ -37,6 +37,10 @@ import scala.concurrent.Future
  * This will help migrate the legacy snapshot data onto the new snapshot schema with the
  * appropriate serialization
  *
+ * The migrator opens its own database connection pool unless `use-shared-db` is configured. Call `close()` once
+ * the `Future` returned by `migrateLatest()` or `migrateAll()` has
+ * completed, to release that pool.
+ *
  * @param system the actor system
  */
 case class SnapshotMigrator(profile: JdbcProfile)(implicit system: ActorSystem) extends AutoCloseable {

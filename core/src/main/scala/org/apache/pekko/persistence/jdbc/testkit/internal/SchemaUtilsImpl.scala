@@ -16,6 +16,7 @@ package org.apache.pekko.persistence.jdbc.testkit.internal
 
 import java.sql.Statement
 import scala.concurrent.Future
+import scala.util.control.NonFatal
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
@@ -53,9 +54,9 @@ private[jdbc] object SchemaUtilsImpl {
         slickProfileToSchemaType(slickDb.profile),
         legacy(configKey, actorSystem.classicSystem.settings.config))
 
-    val database = closeOnTermination(slickDb)
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
-    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, database))(blockingEC)
+    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, closeOnTermination(slickDb)))(
+      blockingEC)
   }
 
   /**
@@ -71,9 +72,9 @@ private[jdbc] object SchemaUtilsImpl {
         slickProfileToSchemaType(slickDb.profile),
         legacy(configKey, actorSystem.classicSystem.settings.config))
 
-    val database = closeOnTermination(slickDb)
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
-    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, database))(blockingEC)
+    Future(applyScriptWithSlick(fromClasspathAsString(fileToLoad), separator, logger, closeOnTermination(slickDb)))(
+      blockingEC)
   }
 
   /**
@@ -83,9 +84,9 @@ private[jdbc] object SchemaUtilsImpl {
   private[jdbc] def applyScript(script: String, separator: String, configKey: String, logger: Logger)(
       implicit actorSystem: ClassicActorSystemProvider): Future[Done] = {
 
-    val database = closeOnTermination(loadSlickDatabase(configKey))
+    val slickDb = loadSlickDatabase(configKey)
     val blockingEC = actorSystem.classicSystem.dispatchers.lookup(Dispatchers.DefaultBlockingDispatcherId)
-    Future(applyScriptWithSlick(script, separator, logger, database))(blockingEC)
+    Future(applyScriptWithSlick(script, separator, logger, closeOnTermination(slickDb)))(blockingEC)
   }
 
   /**
@@ -219,12 +220,19 @@ private[jdbc] object SchemaUtilsImpl {
    * database. A database that is created for this call only (the default when `use-shared-db` is not configured)
    * would otherwise leak its connection pool, since nothing else holds on to it. The database is kept open until the
    * actor system terminates because closing it right after the script has been applied would, for an H2 in-memory
-   * database, drop the schema that was just created.
+   * database, drop the schema that was just created. This is called inside the returned `Future`, so that
+   * registering on an actor system that has already terminated fails that `Future` rather than throwing, and the
+   * database is closed right away in that case.
    */
   private def closeOnTermination(slickDb: SlickDatabase)(
       implicit actorSystem: ClassicActorSystemProvider): Database = {
     if (slickDb.allowShutdown) {
-      actorSystem.classicSystem.registerOnTermination(slickDb.database.close())
+      try actorSystem.classicSystem.registerOnTermination(slickDb.database.close())
+      catch {
+        case NonFatal(e) =>
+          slickDb.database.close()
+          throw e
+      }
     }
     slickDb.database
   }

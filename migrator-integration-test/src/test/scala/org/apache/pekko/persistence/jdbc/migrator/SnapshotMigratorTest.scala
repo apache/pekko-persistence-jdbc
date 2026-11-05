@@ -42,7 +42,9 @@ abstract class SnapshotMigratorTest(configName: String) extends MigratorSpec(con
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
         // migrate exactly once: a retry would race with a migration that is still in flight
-        SnapshotMigrator(SlickDatabase.profile(config, "slick")).migrateAll().futureValue shouldBe Done
+        val migrator = SnapshotMigrator(SlickDatabase.profile(config, "slick"))
+        try migrator.migrateAll().futureValue shouldBe Done
+        finally migrator.close()
         eventually {
           countJournal().futureValue shouldBe 0 // after migration
         }

@@ -44,7 +44,9 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
         // migrate exactly once: retrying while a migration is still in flight duplicates rows
-        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
+        val migrator = JournalMigrator(SlickDatabase.profile(config, "slick"))
+        try migrator.migrate().futureValue shouldBe Done
+        finally migrator.close()
         eventually {
           countJournal().futureValue shouldBe 9 // after migration
         }
@@ -81,7 +83,9 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
         // migrate exactly once: retrying while a migration is still in flight duplicates rows
-        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
+        val migrator = JournalMigrator(SlickDatabase.profile(config, "slick"))
+        try migrator.migrate().futureValue shouldBe Done
+        finally migrator.close()
         eventually {
           countJournal().futureValue shouldBe 3000 // after migration
         }
@@ -120,7 +124,9 @@ abstract class JournalMigratorTest(configName: String) extends MigratorSpec(conf
       withReadJournal { implicit readJournal =>
         countJournal().futureValue shouldBe 0 // before migration
         // migrate exactly once: retrying while a migration is still in flight duplicates rows
-        JournalMigrator(SlickDatabase.profile(config, "slick")).migrate().futureValue shouldBe Done
+        val migrator = JournalMigrator(SlickDatabase.profile(config, "slick"))
+        try migrator.migrate().futureValue shouldBe Done
+        finally migrator.close()
         eventually {
           countJournal().futureValue shouldBe 3000 // after migration
         }

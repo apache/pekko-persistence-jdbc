@@ -17,37 +17,30 @@ package org.apache.pekko.persistence.jdbc.state.javadsl
 import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
-import pekko.annotation.ApiMayChange
+import pekko.annotation.InternalApi
 import pekko.{ Done, NotUsed }
-import pekko.persistence.jdbc.state.DurableStateQueries
-import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.jdbc.state.scaladsl.{ JdbcDurableStateStore => ScalaJdbcDurableStateStore }
 import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.query.javadsl.DurableStateStoreQuery
 import pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
 import pekko.stream.javadsl.Source
 import pekko.util.OptionalUtil
-import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 import scala.jdk.FutureConverters._
 
 object JdbcDurableStateStore {
-  val Identifier = ScalaJdbcDurableStateStore.Identifier
+  final val Identifier = ScalaJdbcDurableStateStore.Identifier
 }
 
 /**
- * API may change
+ * Instances are created by the `JdbcDurableStateStoreProvider`; obtain one via
+ * `DurableStateStoreRegistry.get(system).getDurableStateStoreFor(...)`.
  */
-@ApiMayChange
-class JdbcDurableStateStore[A](
-    profile: JdbcProfile,
-    durableStateConfig: DurableStateTableConfiguration,
+class JdbcDurableStateStore[A] @InternalApi private[jdbc] (
     scalaStore: ScalaJdbcDurableStateStore[A])(implicit ec: ExecutionContext)
     extends DurableStateUpdateStore[A]
     with DurableStateStoreQuery[A] {
-
-  val queries = new DurableStateQueries(profile, durableStateConfig)
 
   def getObject(persistenceId: String): CompletionStage[GetObjectResult[A]] =
     scalaStore

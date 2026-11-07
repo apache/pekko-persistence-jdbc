@@ -56,7 +56,5 @@ class JdbcDurableStateStoreProvider[A](system: ExtendedActorSystem) extends Dura
 
   override def javadslDurableStateStore(): JDurableStateStore[AnyRef] =
     new javadsl.JdbcDurableStateStore[AnyRef](
-      profile,
-      durableStateConfig,
       new scaladsl.JdbcDurableStateStore[AnyRef](db, profile, durableStateConfig, serialization)(system))
 }

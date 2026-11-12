@@ -36,6 +36,9 @@ object ProjectAutoPlugin extends AutoPlugin {
   override val trigger: PluginTrigger = allRequirements
 
   override val projectSettings: Seq[Setting[?]] = Seq(
+    releaseNotesURL := (
+      if ((ThisBuild / isSnapshot).value) None
+      else Some(url("https://pekko.apache.org/docs/pekko-persistence-jdbc/current/release-notes/index.html"))),
     crossVersion := CrossVersion.binary,
     crossScalaVersions := Dependencies.ScalaVersions,
     scalaVersion := Dependencies.Scala213,

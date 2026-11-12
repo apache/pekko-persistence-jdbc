@@ -1,5 +1,9 @@
 # Release Notes (2.0.x)
 
+## Unreleased
+
+* Fix legacy Oracle events-by-tag queries to compare the numeric `deleted` column with `0` instead of a boolean string.
+
 ## 2.0.0-M1
 
 Release notes for Apache Pekko Persistence JDBC 2.0.0-M1. See [GitHub Milestone](https://github.com/apache/pekko-persistence-jdbc/milestone/7?closed=1) for a fuller list of changes.

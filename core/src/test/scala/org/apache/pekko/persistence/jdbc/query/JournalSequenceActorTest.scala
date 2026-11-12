@@ -14,24 +14,27 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
+import scala.concurrent.Future
+import scala.concurrent.duration._
+
+import slick.jdbc.{ JdbcBackend, JdbcCapabilities }
+
 import org.apache.pekko
 import pekko.actor.{ ActorRef, ActorSystem }
 import pekko.pattern.ask
+import pekko.persistence.jdbc.SharedActorSystemTestSpec
 import pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
 import pekko.persistence.jdbc.journal.dao.JournalTables
 import pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
 import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
 import pekko.persistence.jdbc.query.dao.{ DefaultReadJournalDao, TestProbeReadJournalDao }
-import pekko.persistence.jdbc.SharedActorSystemTestSpec
 import pekko.serialization.SerializationExtension
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.testkit.TestProbe
-import org.slf4j.LoggerFactory
-import slick.jdbc.{ JdbcBackend, JdbcCapabilities }
 
-import scala.concurrent.Future
-import scala.concurrent.duration._
 import org.scalatest.time.Span
+
+import org.slf4j.LoggerFactory
 
 abstract class JournalSequenceActorTest(configFile: String, isOracle: Boolean)
     extends QueryTestSpec(configFile)

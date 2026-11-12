@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration, ReadJournalConfig }
 import pekko.persistence.jdbc.journal.dao.JournalTables
-import slick.jdbc.JdbcProfile
 
 class ReadJournalQueries(val profile: JdbcProfile, val readJournalConfig: ReadJournalConfig) extends JournalTables {
   override val journalTableCfg: EventJournalTableConfiguration = readJournalConfig.eventJournalTableConfiguration

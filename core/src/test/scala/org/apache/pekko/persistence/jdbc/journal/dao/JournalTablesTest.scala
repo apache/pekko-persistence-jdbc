@@ -17,8 +17,9 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.persistence.jdbc.TablesTestSpec
 import slick.jdbc.JdbcProfile
+
+import org.apache.pekko.persistence.jdbc.TablesTestSpec
 
 class JournalTablesTest extends TablesTestSpec {
   val journalTableConfiguration = journalConfig.eventJournalTableConfiguration

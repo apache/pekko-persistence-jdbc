@@ -14,6 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.Try
+
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.persistence.PersistentRepr
@@ -23,11 +29,6 @@ import pekko.persistence.jdbc.journal.dao.{ BaseJournalDaoWithReadMessages, H2Co
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Source
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcProfile
-
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.Try
 
 class DefaultReadJournalDao(
     val db: Database,

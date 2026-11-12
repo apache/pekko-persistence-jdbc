@@ -14,14 +14,14 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
+import scala.concurrent.Future
+import scala.util.Try
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.journal.dao.JournalDaoWithReadMessages
 import pekko.stream.scaladsl.Source
-
-import scala.concurrent.Future
-import scala.util.Try
 
 trait ReadJournalDao extends JournalDaoWithReadMessages {
 

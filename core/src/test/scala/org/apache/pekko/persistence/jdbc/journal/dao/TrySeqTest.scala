@@ -14,11 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko
-import pekko.persistence.jdbc.util.TrySeq
-import pekko.persistence.jdbc.SimpleSpec
-
 import scala.util.{ Failure, Success }
+
+import org.apache.pekko
+import pekko.persistence.jdbc.SimpleSpec
+import pekko.persistence.jdbc.util.TrySeq
 
 class TrySeqTest extends SimpleSpec {
   def failure(text: String) = Failure(new RuntimeException(text))

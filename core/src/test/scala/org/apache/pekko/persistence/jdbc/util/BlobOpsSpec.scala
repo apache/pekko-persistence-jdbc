@@ -18,7 +18,6 @@
 package org.apache.pekko.persistence.jdbc.util
 
 import java.io.{ ByteArrayInputStream, InputStream }
-
 import javax.sql.rowset.serial.SerialBlob
 
 import org.scalatest.matchers.should.Matchers

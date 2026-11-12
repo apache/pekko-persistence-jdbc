@@ -14,21 +14,22 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
 import slick.jdbc.{ JdbcBackend, JdbcProfile }
+
 import org.apache.pekko
-import pekko.{ Done, NotUsed }
 import pekko.actor.ExtendedActorSystem
 import pekko.annotation.ApiMayChange
 import pekko.pattern.ask
 import pekko.persistence.jdbc.PekkoSerialization
-import pekko.persistence.jdbc.state.DurableStateQueries
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import pekko.persistence.jdbc.state.{ DurableStateTables, OffsetSyntax }
 import pekko.persistence.jdbc.journal.dao.FlowControl
+import pekko.persistence.jdbc.state.DurableStateQueries
+import pekko.persistence.jdbc.state.DurableStateTables
+import org.apache.pekko.persistence.jdbc.state.OffsetSyntax._
 import pekko.persistence.jdbc.state.{ scaladsl => jdbcStateScalaDsl }
 import pekko.persistence.query.{ DurableStateChange, Offset, UpdatedDurableState }
 import pekko.persistence.query.{ scaladsl => queryScalaDsl }
@@ -37,7 +38,7 @@ import pekko.serialization.Serialization
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.Timeout
-import OffsetSyntax._
+import pekko.{ Done, NotUsed }
 
 object JdbcDurableStateStore {
   val Identifier = "jdbc-durable-state-store"

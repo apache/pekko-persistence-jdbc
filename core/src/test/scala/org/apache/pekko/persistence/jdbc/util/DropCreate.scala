@@ -16,14 +16,17 @@ package org.apache.pekko.persistence.jdbc.util
 
 import java.sql.Statement
 
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcBackend.Session
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.testkit.internal.SchemaType
 import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
-import com.typesafe.config.Config
+
 import org.slf4j.LoggerFactory
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcBackend.Session
+
+import com.typesafe.config.Config
 
 /**
  * INTERNAL API

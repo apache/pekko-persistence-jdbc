@@ -14,9 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.Done
-
 import scala.concurrent.Future
+
+import org.apache.pekko.Done
 
 /**
  * A [[JournalDao]] with extended capabilities, such as updating payloads and tags of existing events.

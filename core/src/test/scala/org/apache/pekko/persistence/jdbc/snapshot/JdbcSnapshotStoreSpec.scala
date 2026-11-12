@@ -14,29 +14,30 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
 import org.apache.pekko
-import pekko.persistence.{ CapabilityFlag, SelectedSnapshot, SnapshotMetadata, SnapshotSelectionCriteria }
-import pekko.persistence.SnapshotProtocol.{ DeleteSnapshots, LoadSnapshot, LoadSnapshotResult }
 import pekko.persistence.DeleteSnapshotsSuccess
+import pekko.persistence.SnapshotProtocol.{ DeleteSnapshots, LoadSnapshot, LoadSnapshotResult }
 import pekko.persistence.jdbc.config._
-import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
 import pekko.persistence.jdbc.db.SlickDatabase
-import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType, SchemaUtilsImpl }
-import pekko.persistence.snapshot.SnapshotStoreSpec
 import pekko.persistence.jdbc.snapshot.dao.DefaultSnapshotDao
+import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType, SchemaUtilsImpl }
+import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
+import pekko.persistence.snapshot.SnapshotStoreSpec
+import pekko.persistence.{ CapabilityFlag, SelectedSnapshot, SnapshotMetadata, SnapshotSelectionCriteria }
 import pekko.serialization.SerializationExtension
 import pekko.stream.SystemMaterializer
 import pekko.testkit.{ TestKit, TestProbe }
 
-import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
+
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext
+import com.typesafe.config.{ Config, ConfigFactory }
 
 abstract class JdbcSnapshotStoreSpec(config: Config, schemaType: SchemaType)
     extends SnapshotStoreSpec(config)

@@ -22,10 +22,12 @@ import scala.concurrent.duration._
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ExtendedActorSystem }
 import pekko.persistence.jdbc.util.ConnectionPools
-import com.typesafe.config.ConfigFactory
+
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+
+import com.typesafe.config.ConfigFactory
 
 class JdbcDurableStateStoreProviderSpec extends AnyWordSpecLike with Matchers with ScalaFutures {
 

@@ -14,12 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
+import scala.concurrent.ExecutionContext
+
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.persistence.jdbc.config.{ EventJournalTableConfiguration, EventTagTableConfiguration }
 import pekko.persistence.jdbc.journal.dao.JournalTables.{ JournalPekkoSerializationRow, TagRow }
-import slick.jdbc.JdbcProfile
-
-import scala.concurrent.ExecutionContext
 
 class JournalQueries(
     val profile: JdbcProfile,

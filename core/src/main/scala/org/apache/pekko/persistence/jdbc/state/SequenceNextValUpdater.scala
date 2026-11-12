@@ -14,12 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.state
 
+import slick.dbio.Effect
+import slick.jdbc.JdbcProfile
+import slick.sql.SqlStreamingAction
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import slick.jdbc.JdbcProfile
-import slick.dbio.Effect
-import slick.sql.SqlStreamingAction
 
 /**
  * INTERNAL API

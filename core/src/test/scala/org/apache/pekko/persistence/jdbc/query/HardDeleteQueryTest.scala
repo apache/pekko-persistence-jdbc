@@ -14,11 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko
-import pekko.persistence.query.NoOffset
-import pekko.pattern._
-
 import scala.concurrent.duration._
+
+import org.apache.pekko
+import pekko.pattern._
+import pekko.persistence.query.NoOffset
+
 import org.scalatest.matchers.should.Matchers
 
 abstract class HardDeleteQueryTest(config: String) extends QueryTestSpec(config) with Matchers {

@@ -14,13 +14,13 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
+import scala.concurrent.{ ExecutionContext, Future, Promise }
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.persistence.jdbc.config.BaseDaoConfig
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.{ BoundedSourceQueue, Materializer, QueueOfferResult }
-
-import scala.concurrent.{ ExecutionContext, Future, Promise }
 
 abstract class BaseDao[T] {
   implicit val mat: Materializer

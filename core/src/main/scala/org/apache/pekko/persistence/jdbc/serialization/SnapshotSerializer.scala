@@ -14,9 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.serialization
 
-import org.apache.pekko.persistence.SnapshotMetadata
-
 import scala.util.Try
+
+import org.apache.pekko.persistence.SnapshotMetadata
 
 trait SnapshotSerializer[T] {
   def serialize(metadata: SnapshotMetadata, snapshot: Any): Try[T]

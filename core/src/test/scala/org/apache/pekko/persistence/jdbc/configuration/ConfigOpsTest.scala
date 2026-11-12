@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.configuration
 
-import com.typesafe.config.ConfigFactory
 import org.apache.pekko
 import pekko.persistence.jdbc.SimpleSpec
 import pekko.persistence.jdbc.util.ConfigOps.ConfigOperations
+
+import com.typesafe.config.ConfigFactory
 
 class ConfigOpsTest extends SimpleSpec {
   it should "parse field values to Options" in {

@@ -15,15 +15,10 @@
 package org.apache.pekko.persistence.jdbc.testkit.internal
 
 import java.sql.Statement
+
 import scala.concurrent.Future
 import scala.util.control.NonFatal
-import org.apache.pekko
-import pekko.Done
-import pekko.actor.ClassicActorSystemProvider
-import pekko.annotation.InternalApi
-import pekko.dispatch.Dispatchers
-import pekko.persistence.jdbc.db.{ MariaDBProfile, SlickDatabase, SlickExtension }
-import org.slf4j.Logger
+
 import slick.jdbc.H2Profile
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
@@ -31,6 +26,15 @@ import slick.jdbc.MySQLProfile
 import slick.jdbc.OracleProfile
 import slick.jdbc.PostgresProfile
 import slick.jdbc.SQLServerProfile
+
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.dispatch.Dispatchers
+import pekko.persistence.jdbc.db.{ MariaDBProfile, SlickDatabase, SlickExtension }
+
+import org.slf4j.Logger
 
 /**
  * INTERNAL API

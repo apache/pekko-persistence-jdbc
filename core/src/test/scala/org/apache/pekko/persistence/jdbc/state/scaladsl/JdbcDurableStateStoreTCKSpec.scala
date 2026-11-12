@@ -9,7 +9,6 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import com.typesafe.config.Config
 import org.apache.pekko
 import pekko.persistence.CapabilityFlag
 import pekko.persistence.jdbc.config.SlickConfiguration
@@ -17,7 +16,10 @@ import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.SchemaType
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.persistence.state.DurableStateStoreSpec
+
 import org.scalatest.BeforeAndAfterAll
+
+import com.typesafe.config.Config
 
 abstract class JdbcDurableStateStoreTCKSpec(config: Config, schemaType: SchemaType)
     extends DurableStateStoreSpec(config)

@@ -14,6 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.Try
+
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.persistence.jdbc.PekkoSerialization
@@ -24,11 +30,6 @@ import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Source
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcProfile
-
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.Try
 
 /**
  * A [[JournalDao]] that uses Apache Pekko serialization to serialize the payload and store

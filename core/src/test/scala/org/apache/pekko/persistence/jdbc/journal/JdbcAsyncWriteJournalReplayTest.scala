@@ -14,24 +14,26 @@
 
 package org.apache.pekko.persistence.jdbc.journal
 
-import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
+
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.Scheduler
-import pekko.persistence.{ JournalProtocol, Persistence, PersistentRepr }
 import pekko.persistence.jdbc.SingleActorSystemPerTestSpec
 import pekko.persistence.jdbc.config.JournalConfig
 import pekko.persistence.jdbc.journal.dao.DefaultJournalDao
+import pekko.persistence.{ JournalProtocol, Persistence, PersistentRepr }
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Source
 import pekko.testkit.TestProbe
+
 import com.typesafe.config.ConfigValueFactory
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcProfile
 
 /**
  * A journal dao whose replay stream contains a failed element between two successful ones.

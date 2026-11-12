@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.config
 
-import org.apache.pekko.persistence.jdbc.util.ConfigOps._
-import com.typesafe.config.Config
-
 import scala.concurrent.duration._
+
+import org.apache.pekko.persistence.jdbc.util.ConfigOps._
+
+import com.typesafe.config.Config
 
 object ConfigKeys {
   val useSharedDb = "use-shared-db"

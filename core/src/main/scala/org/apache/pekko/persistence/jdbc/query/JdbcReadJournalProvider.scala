@@ -17,6 +17,7 @@ package org.apache.pekko.persistence.jdbc.query
 import org.apache.pekko
 import pekko.actor.ExtendedActorSystem
 import pekko.persistence.query.ReadJournalProvider
+
 import com.typesafe.config.Config
 
 class JdbcReadJournalProvider(system: ExtendedActorSystem, config: Config, configPath: String)

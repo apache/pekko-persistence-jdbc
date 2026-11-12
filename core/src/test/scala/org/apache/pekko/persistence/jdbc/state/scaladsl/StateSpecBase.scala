@@ -14,25 +14,26 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import com.typesafe.config.{ Config, ConfigFactory }
-
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time._
+
 import org.apache.pekko
 import pekko.actor._
-import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.config._
+import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.testkit.internal.{ H2, MariaDB, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.jdbc.util.DropCreate
 import pekko.serialization.SerializationExtension
 import pekko.util.Timeout
 
-import scala.concurrent.ExecutionContext
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.time._
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
+
+import com.typesafe.config.{ Config, ConfigFactory }
 
 abstract class StateSpecBase(val config: Config, schemaType: SchemaType)
     extends AnyWordSpecLike

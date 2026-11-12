@@ -16,6 +16,9 @@ package org.apache.pekko.persistence.jdbc.state.scaladsl
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+
+import slick.jdbc.{ JdbcBackend, JdbcProfile }
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ExtendedActorSystem
@@ -24,11 +27,10 @@ import pekko.persistence.jdbc.config.DurableStateTableConfiguration
 import pekko.persistence.query.DurableStateChange
 import pekko.persistence.query.Offset
 import pekko.persistence.state.scaladsl.GetObjectResult
+import pekko.serialization.Serialization
 import pekko.stream.scaladsl.Source
 import pekko.testkit.TestProbe
 import pekko.util.Timeout
-import slick.jdbc.{ JdbcBackend, JdbcProfile }
-import pekko.serialization.Serialization
 
 object TestProbeDurableStateStoreQuery {
   case class StateInfoSequence(offset: Long, limit: Long)

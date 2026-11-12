@@ -17,6 +17,13 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
+import java.util.concurrent.ConcurrentLinkedQueue
+
+import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.CollectionConverters._
+import scala.util.{ Failure, Success, Try }
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
@@ -26,12 +33,6 @@ import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.TestSubscriber
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, SystemMaterializer }
-
-import java.util.concurrent.ConcurrentLinkedQueue
-import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.jdk.CollectionConverters._
-import scala.util.{ Failure, Success, Try }
 
 /**
  * Specifies the batched message stream against an in-memory journal, where a missing

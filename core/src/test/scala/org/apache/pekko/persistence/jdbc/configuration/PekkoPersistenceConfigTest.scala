@@ -14,12 +14,14 @@
 
 package org.apache.pekko.persistence.jdbc.configuration
 
-import com.typesafe.config.{ Config, ConfigFactory }
+import scala.concurrent.duration._
+
 import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration, SnapshotConfig }
+
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.concurrent.duration._
+import com.typesafe.config.{ Config, ConfigFactory }
 
 class PekkoPersistenceConfigTest extends AnyFlatSpec with Matchers {
   private val referenceConfig: Config = ConfigFactory.load("reference")

@@ -121,3 +121,6 @@ Global / onLoad := {
 
 addCommandAlias("checkCodeStyle", "scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll; +headerCheckAll")
 addCommandAlias("applyCodeStyle", "+headerCreateAll; scalafmtAll; scalafmtSbt; javafmtAll")
+
+// Enable SemanticDB only for import organization, not for ordinary builds.
+addCommandAlias("sortImports", ";scalafixEnable; scalafixAll OrganizeImports; scalafmtAll")

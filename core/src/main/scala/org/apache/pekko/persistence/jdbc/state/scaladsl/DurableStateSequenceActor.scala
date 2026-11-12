@@ -14,17 +14,17 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
+import scala.concurrent.duration.FiniteDuration
+
 import org.apache.pekko
 import pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
+import pekko.annotation.InternalApi
 import pekko.pattern.pipe
-import pekko.persistence.jdbc.config.DurableStateSequenceRetrievalConfig
 import pekko.persistence.jdbc.MissingElements
+import pekko.persistence.jdbc.config.DurableStateSequenceRetrievalConfig
 import pekko.persistence.jdbc.state.scaladsl
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Sink
-import scala.concurrent.duration.FiniteDuration
-
-import pekko.annotation.InternalApi
 
 /**
  * INTERNAL API

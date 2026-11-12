@@ -14,17 +14,17 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
+import scala.concurrent.Future
+import scala.concurrent.duration._
+
 import org.apache.pekko
 import pekko.Done
-import pekko.persistence.query.{ EventEnvelope, NoOffset, Sequence }
 import pekko.pattern.ask
 import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, EventRestored, TaggedAsyncEvent, TaggedEvent }
-import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
-
-import scala.concurrent.duration._
-import scala.concurrent.Future
-
 import EventsByTagTest._
+import pekko.persistence.query.{ EventEnvelope, NoOffset, Sequence }
+
+import com.typesafe.config.{ ConfigValue, ConfigValueFactory }
 
 object EventsByTagTest {
   val maxBufferSize = 20

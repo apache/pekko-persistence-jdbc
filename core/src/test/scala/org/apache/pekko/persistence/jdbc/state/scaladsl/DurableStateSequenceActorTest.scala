@@ -17,16 +17,17 @@ package org.apache.pekko.persistence.jdbc.state.scaladsl
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
-import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.pekko
 import pekko.actor.{ ActorRef, ActorSystem, ExtendedActorSystem }
 import pekko.pattern.ask
-import pekko.persistence.jdbc.{ CrossEventually, SharedActorSystemTestSpec }
 import pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.VisitedElement
 import pekko.persistence.jdbc.state.scaladsl.DurableStateSequenceActor.{ GetMaxGlobalOffset, MaxGlobalOffset }
 import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType }
+import pekko.persistence.jdbc.{ CrossEventually, SharedActorSystemTestSpec }
 import pekko.testkit.TestProbe
 import pekko.util.Timeout
+
+import com.typesafe.config.{ Config, ConfigFactory }
 
 abstract class DurableStateSequenceActorTest(config: Config, schemaType: SchemaType)
     extends StateSpecBase(config, schemaType)

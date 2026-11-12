@@ -18,6 +18,7 @@ import org.apache.pekko
 import pekko.actor.{ ActorRef, ActorSystem }
 import pekko.persistence.jdbc.util.ClasspathResources
 import pekko.testkit.TestProbe
+
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec

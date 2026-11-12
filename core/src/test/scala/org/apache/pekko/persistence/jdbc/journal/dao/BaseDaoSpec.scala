@@ -19,8 +19,8 @@ package org.apache.pekko.persistence.jdbc.journal.dao
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
-import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 
 import org.apache.pekko
@@ -28,11 +28,13 @@ import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.config.BaseDaoConfig
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.testkit.TestKit
-import com.typesafe.config.ConfigFactory
+
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+
+import com.typesafe.config.ConfigFactory
 
 object BaseDaoSpec {
   class TestDao(override val baseDaoConfig: BaseDaoConfig)(

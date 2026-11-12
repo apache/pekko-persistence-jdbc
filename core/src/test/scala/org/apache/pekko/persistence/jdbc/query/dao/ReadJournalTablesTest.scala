@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.query.dao
 
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.persistence.jdbc.TablesTestSpec
 import pekko.persistence.jdbc.journal.dao.JournalTables
-import slick.jdbc.JdbcProfile
 
 class ReadJournalTablesTest extends TablesTestSpec {
   val readJournalTableConfiguration = readJournalConfig.eventJournalTableConfiguration

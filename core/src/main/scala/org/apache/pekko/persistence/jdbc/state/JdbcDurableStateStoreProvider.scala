@@ -15,15 +15,17 @@
 package org.apache.pekko.persistence.jdbc.state
 
 import scala.concurrent.ExecutionContext
-import slick.jdbc.JdbcProfile
+
 import slick.jdbc.JdbcBackend._
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.actor.ExtendedActorSystem
 import pekko.persistence.jdbc.config.DurableStateTableConfiguration
-import pekko.persistence.state.scaladsl.DurableStateStore
-import pekko.persistence.state.javadsl.{ DurableStateStore => JDurableStateStore }
-import pekko.persistence.state.DurableStateStoreProvider
 import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
+import pekko.persistence.state.DurableStateStoreProvider
+import pekko.persistence.state.javadsl.{ DurableStateStore => JDurableStateStore }
+import pekko.persistence.state.scaladsl.DurableStateStore
 import pekko.serialization.SerializationExtension
 import pekko.stream.{ Materializer, SystemMaterializer }
 

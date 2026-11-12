@@ -15,12 +15,16 @@ It is recommended that you read the section about DB Schema Changes in the @ref[
 Release `2.0.0` removes support for the legacy `journal` and `snapshot` tables that were used by
 akka-persistence-jdbc before version 5.0.0. The `ByteArrayJournalDao`, `ByteArrayReadJournalDao` and
 `ByteArraySnapshotDao` classes, the `legacy_journal` and `legacy_snapshot` table configuration sections,
-the `tagSeparator` settings and the `*-legacy.sql` schema scripts are gone. The unpublished migrator
-module has also been removed.
+the `tagSeparator` settings and the `*-legacy.sql` schema scripts are gone. The migrator module has also been
+removed; it is last available in 1.4.x.
 
-If you still store data in the legacy tables, migrate it to the current schema with a
-[1.3.x release](https://github.com/apache/pekko-persistence-jdbc/tree/1.3.x) before upgrading to `2.0.0`.
-The `migrator` module on the `1.3.x` branch can be run from a source checkout with `sbt "migrator / run"`.
+If you still store data in the legacy tables, migrate it to the current schema with the
+`pekko-persistence-jdbc-migrator` module from a 1.4.x release before upgrading to `2.0.0`. You can use the published
+artifact, or build the module from an Apache source release or the
+[1.4.x branch](https://github.com/apache/pekko-persistence-jdbc/tree/1.4.x). The migrator is a library with no main
+class: you call `JournalMigrator` and `SnapshotMigrator` from a small program of your own. The
+[1.4.x migration guide](https://pekko.apache.org/docs/pekko-persistence-jdbc/1.4/migration.html#migrating-from-the-legacy-schema)
+describes the steps and includes an example.
 
 ### `event_tag` schema change
 

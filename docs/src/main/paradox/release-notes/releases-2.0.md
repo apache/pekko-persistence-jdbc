@@ -19,4 +19,4 @@ by early adopters. This is experimental. This release should not be used in prod
 
 ### Main changes
 
-* Support for the legacy pre-5.0.0 akka-persistence-jdbc schema has been removed, along with the unpublished migrator module. See @ref[Migration](../migration.md#legacy-schema-support-removed).
+* Support for the legacy pre-5.0.0 akka-persistence-jdbc schema has been removed, along with the migrator module, which is last available in 1.4.x. See @ref[Migration](../migration.md#legacy-schema-support-removed).

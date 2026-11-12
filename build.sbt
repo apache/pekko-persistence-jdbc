@@ -61,12 +61,12 @@ lazy val integration = project
 
 lazy val migrator = project
   .in(file("migrator"))
-  .disablePlugins(SitePlugin, MimaPlugin, ReproducibleBuildsPlugin)
+  .enablePlugins(ReproducibleBuildsPlugin)
+  // TODO enable MiMa once the first release that includes the migrator is out
+  .disablePlugins(SitePlugin, MimaPlugin)
   .settings(
     name := "pekko-persistence-jdbc-migrator",
-    libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries,
-    // TODO remove this when ready to publish it
-    publish / skip := true)
+    libraryDependencies ++= Dependencies.Migration ++ Dependencies.Libraries)
   .dependsOn(core % "compile->compile;test->test")
 
 lazy val migratorIntegration = project

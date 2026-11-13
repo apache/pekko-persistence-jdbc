@@ -120,8 +120,10 @@ abstract class MigratorSpec(val config: Config) extends SimpleSpec with BeforeAn
 
   def withActorSystem(f: ActorSystem => Unit): Unit = {
     implicit val system: ActorSystem = ActorSystem("migrator-test", config)
-    f(system)
-    system.terminate().futureValue
+    // terminate in a finally block: a failing test must not leak a running migration
+    // stream into the next test, which recreates the tables in its beforeEach
+    try f(system)
+    finally system.terminate().futureValue
   }
 
   def withLegacyActorSystem(f: ActorSystem => Unit): Unit = {
@@ -139,8 +141,8 @@ abstract class MigratorSpec(val config: Config) extends SimpleSpec with BeforeAn
     }
 
     implicit val system: ActorSystem = ActorSystem("migrator-test", legacyDAOConfig)
-    f(system)
-    system.terminate().futureValue
+    try f(system)
+    finally system.terminate().futureValue
   }
 
   def withReadJournal(f: JdbcReadJournal => Unit)(implicit system: ActorSystem): Unit = {

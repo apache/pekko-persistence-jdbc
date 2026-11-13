@@ -87,3 +87,13 @@ Example:
 1. [Github Actions CI builds](https://github.com/apache/pekko-persistence-jdbc/actions) builds artifacts, runs the tests and sets Pull Request status accordingly of results in GitHub.
 2. [Scalafmt](https://scalameta.org/scalafmt/) enforces some of the code style rules.
 3. [sbt-header plugin](https://github.com/sbt/sbt-header) manages consistent copyright headers in every source file.
+
+## Formatter configuration
+
+Formatting follows Apache Pekko core: Scalafmt wraps long grouped import
+selectors one per line, and Javafmt targets Java 17 without sorting imports.
+Keep repository-specific source exclusions when updating these settings. Import organization is handled
+separately from this formatter configuration.
+
+Run `sbt scalafmtAll scalafmtSbt javafmtAll` to apply formatting and
+`sbt scalafmtCheckAll scalafmtSbtCheck javafmtCheckAll` to verify it.

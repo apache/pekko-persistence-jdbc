@@ -72,8 +72,12 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
 
   private val bufferSize: Int = journalConfig.daoConfig.bufferSize
 
+  // read the legacy events in their original order, so that the new journal assigns its ordering values in the same
+  // order. Without the sort, the database is free to return the rows in any order, for example primary key order.
   private val query =
-    legacyJournalQueries.JournalTable.result
+    legacyJournalQueries.JournalTable
+      .sortBy(_.ordering.asc)
+      .result
       .withStatementParameters(
         rsType = ResultSetType.ForwardOnly,
         rsConcurrency = ResultSetConcurrency.ReadOnly,
@@ -105,7 +109,8 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
           priorStmt.andThen(nextStmt)
         })
 
-      journalDB.run(stmt)
+      // write each page in a transaction, so that a failure does not leave part of a page behind
+      journalDB.run(stmt.transactionally)
     })
     .run()
 
@@ -125,8 +130,9 @@ final case class JournalMigrator(profile: JdbcProfile)(implicit system: ActorSys
     val serializedPayload: PekkoSerialization.PekkoSerialized =
       PekkoSerialization.serialize(serialization, repr.payload).get
 
+    // fail the migration rather than silently dropping metadata that cannot be serialized
     val serializedMetadata: Option[PekkoSerialization.PekkoSerialized] =
-      repr.metadata.flatMap(m => PekkoSerialization.serialize(serialization, m).toOption)
+      repr.metadata.map(m => PekkoSerialization.serialize(serialization, m).get)
     val row: JournalPekkoSerializationRow = JournalPekkoSerializationRow(
       ordering,
       repr.deleted,

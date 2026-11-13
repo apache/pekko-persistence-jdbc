@@ -49,11 +49,33 @@ The JDBC driver for your database is not a transitive dependency of the migrator
     implicit val system: ActorSystem = ActorSystem("migration")
     val profile = slick.jdbc.PostgresProfile
 
-    Await.result(JournalMigrator(profile).migrate(), Duration.Inf)
-    Await.result(SnapshotMigrator(profile).migrateAll(), Duration.Inf)
+    val journalMigrator = JournalMigrator(profile)
+    try Await.result(journalMigrator.migrate(), Duration.Inf)
+    finally journalMigrator.close()
+
+    val snapshotMigrator = SnapshotMigrator(profile)
+    try Await.result(snapshotMigrator.migrateAll(), Duration.Inf)
+    finally snapshotMigrator.close()
+
     Await.result(system.terminate(), Duration.Inf)
     ```
+
+    Each migrator opens its own connection pool unless `use-shared-db` is configured; `close()` releases it.
 
     `SnapshotMigrator.migrateLatest()` migrates only the most recent snapshot of each persistence id instead of all of
     them.
 5. Configure the applications to use the default DAOs (the default configuration) and start them again.
+
+## Things to know before migrating
+
+* **Ordering values change.** The journal migrator copies the events in the order of the legacy `ordering` column,
+  but the new `event_journal` table assigns its own `ordering` values. Offsets that were stored against the legacy
+  table, for example by projections that use `eventsByTag`, do not carry over: reset them after the migration.
+* **Rerunning the journal migration.** The journal migration expects empty `event_journal` and `event_tag` tables and
+  writes each batch of events in its own transaction. If it fails part way, fix the cause, delete the rows from the
+  new `event_tag` and `event_journal` tables and run it again; running it over already migrated rows fails with
+  duplicate key errors.
+* **Rerunning the snapshot migration** is safe: snapshots are written with an upsert.
+* **Large journals on MySQL.** The migrators stream the legacy rows instead of loading them into memory. The MySQL
+  driver only streams with a fetch size when `useCursorFetch=true` is set on the JDBC URL, so add it to the URL of
+  the migration program when the legacy tables are large.

@@ -48,14 +48,12 @@ class MigratorCloseTest extends SimpleSpec {
     ConnectionPools.isClosed(migrator.journalDB) shouldBe true
   }
 
-  it should "close the databases that the snapshot migrator opened" in withActorSystem { implicit system =>
+  it should "close the database that the snapshot migrator opened" in withActorSystem { implicit system =>
     val migrator = SnapshotMigrator(profile)
     ConnectionPools.isClosed(migrator.snapshotDB) shouldBe false
-    ConnectionPools.isClosed(migrator.journalDB) shouldBe false
 
     migrator.close()
 
     ConnectionPools.isClosed(migrator.snapshotDB) shouldBe true
-    ConnectionPools.isClosed(migrator.journalDB) shouldBe true
   }
 }

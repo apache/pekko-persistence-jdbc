@@ -14,18 +14,21 @@
 
 package org.apache.pekko.persistence.jdbc
 
+import scala.concurrent.duration._
+
+import slick.jdbc.JdbcBackend.Database
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.util.Timeout
-import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
 import pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SlickConfiguration }
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import pekko.persistence.jdbc.util.DropCreate
-import org.scalatest.BeforeAndAfterEach
-import slick.jdbc.JdbcBackend.Database
+import pekko.util.Timeout
 
-import scala.concurrent.duration._
+import org.scalatest.BeforeAndAfterEach
+
+import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
 
 abstract class SingleActorSystemPerTestSpec(val config: Config)
     extends SimpleSpec

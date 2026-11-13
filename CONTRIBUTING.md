@@ -97,3 +97,30 @@ separately from this formatter configuration.
 
 Run `sbt scalafmtAll scalafmtSbt javafmtAll` to apply formatting and
 `sbt scalafmtCheckAll scalafmtSbtCheck javafmtCheckAll` to verify it.
+
+### Organizing Scala imports
+
+Run `sbt sortImports` using the default Scala 2.13 version to organize imports.
+This enables SemanticDB for the sbt session, applies Scalafix `OrganizeImports`
+to the root project and its aggregated compile and test sources, then runs Scalafmt. Import organization is
+separate from `applyCodeStyle` because it requires compilation.
+The `integration` project is not aggregated by the root project. To organize
+it explicitly, run:
+
+```sh
+sbt 'scalafixEnable' 'integration/scalafixAll OrganizeImports' 'integration/scalafmtAll'
+```
+
+The configuration preserves relative imports, groups imports by their resolved
+package and removes unused imports using compiler diagnostics. Scalafmt no
+longer sorts imports independently.
+
+Run `scripts/check-organize-imports.sh` for a focused regression check of
+grouping, relative imports, unused import removal and idempotence. It creates
+an isolated temporary build and accepts an alternative sbt launcher as arguments.
+Set `SCALA_VERSION` to exercise another supported Scala version.
+
+Imports of members such as `OffsetSyntax._` should use the complete package
+path, for example `org.apache.pekko.persistence.jdbc.state.OffsetSyntax._`,
+rather than relying on a preceding import of `OffsetSyntax`. Sorting such
+dependent relative imports can otherwise put the member import before its owner.

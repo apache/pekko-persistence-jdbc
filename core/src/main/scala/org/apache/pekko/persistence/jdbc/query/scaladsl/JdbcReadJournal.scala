@@ -15,13 +15,20 @@
 package org.apache.pekko.persistence.jdbc.query
 package scaladsl
 
+import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success }
+
+import slick.jdbc.JdbcBackend._
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.{ ExtendedActorSystem, Scheduler }
 import pekko.persistence.jdbc.config.ReadJournalConfig
-import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
 import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.journal.dao.FlowControl
+import pekko.persistence.jdbc.query.JournalSequenceActor.{ GetMaxOrderingId, MaxOrderingId }
 import pekko.persistence.jdbc.query.dao.ReadJournalDao
 import pekko.persistence.query.scaladsl._
 import pekko.persistence.query.{ EventEnvelope, Offset, Sequence }
@@ -30,13 +37,8 @@ import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.Timeout
-import com.typesafe.config.Config
-import slick.jdbc.JdbcBackend._
-import slick.jdbc.JdbcProfile
 
-import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success }
+import com.typesafe.config.Config
 
 object JdbcReadJournal {
   final val Identifier = "jdbc-read-journal"

@@ -17,7 +17,8 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import com.typesafe.config.{ ConfigFactory, ConfigValue, ConfigValueFactory }
+import scala.concurrent.duration._
+
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.pattern.ask
 import org.apache.pekko.persistence.jdbc.query.EventsByTagMigrationTest.{
@@ -26,7 +27,7 @@ import org.apache.pekko.persistence.jdbc.query.EventsByTagMigrationTest.{
 }
 import org.apache.pekko.persistence.query.{ EventEnvelope, Sequence }
 
-import scala.concurrent.duration._
+import com.typesafe.config.{ ConfigFactory, ConfigValue, ConfigValueFactory }
 
 object EventsByTagMigrationTest {
   val maxBufferSize = 20

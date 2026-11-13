@@ -14,19 +14,21 @@
 
 package org.apache.pekko.persistence.jdbc
 
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.serialization.SerializationExtension
-import pekko.util.Timeout
-import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
 import pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig }
 import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import pekko.persistence.jdbc.util.DropCreate
+import pekko.serialization.SerializationExtension
+import pekko.util.Timeout
+
 import org.scalatest.BeforeAndAfterAll
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
+import com.typesafe.config.{ Config, ConfigFactory, ConfigValue }
 
 abstract class SharedActorSystemTestSpec(val config: Config) extends SimpleSpec with DropCreate with BeforeAndAfterAll {
   def this(config: String = "postgres-application.conf", configOverrides: Map[String, ConfigValue] = Map.empty) =

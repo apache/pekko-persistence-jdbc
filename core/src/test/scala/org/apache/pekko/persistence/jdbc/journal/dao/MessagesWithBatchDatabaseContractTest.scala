@@ -17,6 +17,12 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
+import java.io.NotSerializableException
+import java.util.UUID
+
+import scala.concurrent.duration._
+import scala.concurrent.{ ExecutionContext, Future }
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
@@ -24,11 +30,6 @@ import pekko.persistence.jdbc.query.{ H2Cleaner, QueryTestSpec }
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
-
-import java.io.NotSerializableException
-import java.util.UUID
-import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Covers the database-coupled side of the batched message stream: hard deletes as a

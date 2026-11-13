@@ -14,21 +14,23 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot
 
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success }
+
+import slick.jdbc.JdbcBackend._
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ExtendedActorSystem }
 import pekko.persistence.jdbc.config.SnapshotConfig
-import pekko.persistence.jdbc.snapshot.dao.SnapshotDao
 import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
+import pekko.persistence.jdbc.snapshot.dao.SnapshotDao
 import pekko.persistence.snapshot.SnapshotStore
 import pekko.persistence.{ SelectedSnapshot, SnapshotMetadata, SnapshotSelectionCriteria }
 import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.{ Materializer, SystemMaterializer }
-import com.typesafe.config.Config
-import slick.jdbc.JdbcProfile
-import slick.jdbc.JdbcBackend._
 
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success }
+import com.typesafe.config.Config
 
 object JdbcSnapshotStore {
   def toSelectedSnapshot(tupled: (SnapshotMetadata, Any)): SelectedSnapshot =

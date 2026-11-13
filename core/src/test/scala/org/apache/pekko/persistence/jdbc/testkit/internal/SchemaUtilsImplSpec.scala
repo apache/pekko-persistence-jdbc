@@ -26,11 +26,14 @@ import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.util.{ ConnectionPools, RecordingSlickDatabaseProvider }
-import com.typesafe.config.{ Config, ConfigFactory }
+
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+
 import org.slf4j.LoggerFactory
+
+import com.typesafe.config.{ Config, ConfigFactory }
 
 class SchemaUtilsImplSpec extends AnyWordSpecLike with Matchers with ScalaFutures {
 

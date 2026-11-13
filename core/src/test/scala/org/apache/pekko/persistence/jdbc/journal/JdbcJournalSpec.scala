@@ -14,20 +14,23 @@
 
 package org.apache.pekko.persistence.jdbc.journal
 
-import com.typesafe.config.{ Config, ConfigFactory }
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+
 import org.apache.pekko
 import pekko.persistence.CapabilityFlag
-import pekko.persistence.journal.JournalSpec
 import pekko.persistence.jdbc.config.JournalConfig
 import pekko.persistence.jdbc.db.SlickExtension
 import pekko.persistence.jdbc.testkit.internal.{ H2, SchemaType, SchemaUtilsImpl }
 import pekko.persistence.jdbc.util.{ ClasspathResources, DropCreate }
-import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
+import pekko.persistence.journal.JournalSpec
+
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
+
 import org.slf4j.LoggerFactory
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
+import com.typesafe.config.{ Config, ConfigFactory }
 
 abstract class JdbcJournalSpec(config: Config, schemaType: SchemaType)
     extends JournalSpec(config)

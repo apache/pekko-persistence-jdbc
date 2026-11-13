@@ -17,8 +17,9 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao
 
-import org.apache.pekko.persistence.jdbc.TablesTestSpec
 import slick.jdbc.JdbcProfile
+
+import org.apache.pekko.persistence.jdbc.TablesTestSpec
 
 class SnapshotTablesTest extends TablesTestSpec {
   val snapshotTableConfiguration = snapshotConfig.snapshotTableConfiguration

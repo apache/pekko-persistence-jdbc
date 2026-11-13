@@ -22,6 +22,9 @@ import java.util.concurrent.CopyOnWriteArrayList
 import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters._
 
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.persistence.Persistence
 import pekko.persistence.jdbc.SingleActorSystemPerTestSpec
@@ -29,9 +32,8 @@ import pekko.persistence.jdbc.config.JournalConfig
 import pekko.persistence.jdbc.journal.dao.DefaultJournalDao
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
+
 import com.typesafe.config.ConfigValueFactory
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcProfile
 
 /**
  * A journal dao that publishes the instances that the journal plugin creates, so that a test can look at the state of

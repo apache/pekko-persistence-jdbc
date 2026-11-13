@@ -16,14 +16,15 @@ package org.apache.pekko.persistence.jdbc.testkit.javadsl
 
 import java.util.concurrent.CompletionStage
 
+import scala.jdk.FutureConverters._
+
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.ApiMayChange
 import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
-import org.slf4j.LoggerFactory
 
-import scala.jdk.FutureConverters._
+import org.slf4j.LoggerFactory
 
 object SchemaUtils {
 

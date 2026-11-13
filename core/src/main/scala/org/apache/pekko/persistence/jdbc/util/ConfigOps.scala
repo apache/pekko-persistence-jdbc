@@ -14,10 +14,11 @@
 
 package org.apache.pekko.persistence.jdbc.util
 
-import com.typesafe.config.Config
-
 import java.util.concurrent.TimeUnit
+
 import scala.concurrent.duration.FiniteDuration
+
+import com.typesafe.config.Config
 
 object ConfigOps {
 

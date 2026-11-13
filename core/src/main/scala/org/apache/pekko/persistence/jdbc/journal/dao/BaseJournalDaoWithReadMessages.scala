@@ -14,6 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success, Try }
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.Scheduler
@@ -21,10 +25,6 @@ import pekko.annotation.InternalApi
 import pekko.persistence.PersistentRepr
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Sink, Source }
-
-import scala.concurrent.duration.FiniteDuration
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success, Try }
 
 trait BaseJournalDaoWithReadMessages extends JournalDaoWithReadMessages {
   import BaseJournalDaoWithReadMessages._

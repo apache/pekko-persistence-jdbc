@@ -19,7 +19,15 @@ package org.apache.pekko.persistence.jdbc.snapshot
 
 import scala.concurrent.{ ExecutionContext, Future }
 
+import slick.jdbc.{ JdbcBackend, JdbcProfile }
+
 import org.apache.pekko
+import pekko.persistence.SnapshotProtocol.{ DeleteSnapshots, LoadSnapshot, LoadSnapshotResult }
+import pekko.persistence.jdbc.SharedActorSystemTestSpec
+import pekko.persistence.jdbc.config.SnapshotConfig
+import pekko.persistence.jdbc.db.SlickDatabase
+import pekko.persistence.jdbc.snapshot.dao.{ DefaultSnapshotDao, SnapshotDao }
+import pekko.persistence.jdbc.testkit.internal.H2
 import pekko.persistence.{
   DeleteSnapshotsSuccess,
   Persistence,
@@ -27,17 +35,11 @@ import pekko.persistence.{
   SnapshotMetadata,
   SnapshotSelectionCriteria
 }
-import pekko.persistence.SnapshotProtocol.{ DeleteSnapshots, LoadSnapshot, LoadSnapshotResult }
-import pekko.persistence.jdbc.SharedActorSystemTestSpec
-import pekko.persistence.jdbc.config.SnapshotConfig
-import pekko.persistence.jdbc.db.SlickDatabase
-import pekko.persistence.jdbc.snapshot.dao.{ DefaultSnapshotDao, SnapshotDao }
-import pekko.persistence.jdbc.testkit.internal.H2
 import pekko.serialization.Serialization
 import pekko.stream.Materializer
 import pekko.testkit.TestProbe
+
 import com.typesafe.config.ConfigValueFactory
-import slick.jdbc.{ JdbcBackend, JdbcProfile }
 
 // Models an existing custom DAO that implements only the pre-criteria API.
 class UpperBoundSnapshotDao(

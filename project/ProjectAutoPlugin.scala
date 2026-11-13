@@ -45,6 +45,8 @@ object ProjectAutoPlugin extends AutoPlugin {
     Test / fork := false,
     Test / parallelExecution := false,
     Test / logBuffered := true,
+    // OrganizeImports needs unused-import diagnostics only while SemanticDB is enabled.
+    scalacOptions ++= (if (semanticdbEnabled.value) Seq("-Wunused:imports") else Nil),
     scalacOptions ++= Seq(
       "-encoding",
       "UTF-8",

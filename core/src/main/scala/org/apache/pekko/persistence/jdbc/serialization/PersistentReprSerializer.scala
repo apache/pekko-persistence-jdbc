@@ -14,14 +14,14 @@
 
 package org.apache.pekko.persistence.jdbc.serialization
 
+import scala.util.Try
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.persistence.jdbc.util.TrySeq
 import pekko.persistence.journal.Tagged
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.stream.scaladsl.Flow
-
-import scala.util.Try
 
 // package private since 2.0.0
 private[jdbc] trait PersistentReprSerializer[T] {

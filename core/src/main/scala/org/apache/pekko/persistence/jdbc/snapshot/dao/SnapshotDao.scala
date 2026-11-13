@@ -16,10 +16,11 @@ package org.apache.pekko.persistence.jdbc.snapshot.dao
 
 import java.util.concurrent.ConcurrentHashMap
 
-import org.apache.pekko.persistence.{ SnapshotMetadata, SnapshotSelectionCriteria }
-import org.slf4j.LoggerFactory
-
 import scala.concurrent.{ ExecutionContext, Future }
+
+import org.apache.pekko.persistence.{ SnapshotMetadata, SnapshotSelectionCriteria }
+
+import org.slf4j.LoggerFactory
 
 private object SnapshotDaoWarnings {
   private val warnedDaoClasses = ConcurrentHashMap.newKeySet[String]()

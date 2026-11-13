@@ -14,14 +14,14 @@
 
 package org.apache.pekko.persistence.jdbc
 
+import scala.annotation.nowarn
+import scala.concurrent.Future
+
 import org.apache.pekko
-import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
 import pekko.persistence.jdbc.testkit.scaladsl.SchemaUtils
-
-import scala.annotation.nowarn
-import scala.concurrent.Future
+import pekko.{ Done, NotUsed }
 
 @nowarn("msg=is never used")
 object ScaladslSnippets {

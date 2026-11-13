@@ -17,12 +17,13 @@
 
 package org.apache.pekko.persistence.jdbc.snapshot.dao
 
+import scala.concurrent.Future
+
 import org.apache.pekko.persistence.{ SnapshotMetadata, SnapshotSelectionCriteria }
+
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import scala.concurrent.Future
 
 class SnapshotDaoSpec extends AnyWordSpec with Matchers with ScalaFutures {
   private class CustomSnapshotDao extends SnapshotDao {

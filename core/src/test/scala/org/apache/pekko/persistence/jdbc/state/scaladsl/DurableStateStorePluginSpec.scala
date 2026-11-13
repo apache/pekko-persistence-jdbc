@@ -9,7 +9,10 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import com.typesafe.config.{ Config, ConfigFactory }
+import scala.concurrent.duration.DurationInt
+
+import slick.jdbc.{ H2Profile, JdbcProfile, MySQLProfile }
+
 import org.apache.pekko
 import pekko.actor._
 import pekko.persistence.jdbc.config.SlickConfiguration
@@ -18,16 +21,17 @@ import pekko.persistence.jdbc.testkit.internal.SchemaUtilsImpl
 import pekko.persistence.state.DurableStateStoreRegistry
 import pekko.testkit.TestKit
 import pekko.util.Timeout
+
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.BeforeAndAfterAll
-import org.slf4j.LoggerFactory
-import slick.jdbc.{ H2Profile, JdbcProfile, MySQLProfile }
 
-import scala.concurrent.duration.DurationInt
+import org.slf4j.LoggerFactory
+
+import com.typesafe.config.{ Config, ConfigFactory }
 
 abstract class DurableStateStorePluginSpec(config: Config, profile: JdbcProfile)
     extends AnyWordSpecLike

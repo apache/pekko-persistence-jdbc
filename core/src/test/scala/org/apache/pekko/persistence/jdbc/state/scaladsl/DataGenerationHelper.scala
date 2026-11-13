@@ -14,8 +14,9 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.{ ExecutionContext, Future }
+
+import org.scalatest.concurrent.ScalaFutures
 
 trait DataGenerationHelper extends ScalaFutures {
 

@@ -16,24 +16,26 @@ package org.apache.pekko.persistence.jdbc.journal
 
 import java.util.{ HashMap => JHMap, Map => JMap }
 
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Failure, Success, Try }
+
+import slick.jdbc.JdbcBackend._
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.{ ActorSystem, ExtendedActorSystem }
+import pekko.pattern.pipe
 import pekko.persistence.jdbc.config.JournalConfig
+import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
 import pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal.{ InPlaceUpdateEvent, WriteFinished }
 import pekko.persistence.jdbc.journal.dao.{ BaseDao, JournalDao, JournalDaoWithUpdates }
-import pekko.persistence.jdbc.db.{ SlickDatabase, SlickExtension }
 import pekko.persistence.journal.AsyncWriteJournal
 import pekko.persistence.{ AtomicWrite, PersistentRepr }
 import pekko.serialization.{ Serialization, SerializationExtension }
 import pekko.stream.{ Materializer, SystemMaterializer }
-import com.typesafe.config.Config
-import slick.jdbc.JdbcProfile
-import slick.jdbc.JdbcBackend._
 
-import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Failure, Success, Try }
-import pekko.pattern.pipe
+import com.typesafe.config.Config
 
 object JdbcAsyncWriteJournal {
   private case class WriteFinished(pid: String, f: Future[?])

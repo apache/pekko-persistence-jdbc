@@ -18,6 +18,7 @@
 package org.apache.pekko.persistence.jdbc
 
 import org.scalactic.source
+
 import org.scalatest.concurrent.Eventually
 import org.scalatest.enablers.Retrying
 

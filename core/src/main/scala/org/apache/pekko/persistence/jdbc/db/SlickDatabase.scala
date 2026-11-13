@@ -14,14 +14,17 @@
 
 package org.apache.pekko.persistence.jdbc.db
 
+import javax.naming.InitialContext
+
+import slick.basic.DatabaseConfig
+import slick.jdbc.JdbcBackend._
+import slick.jdbc.JdbcProfile
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import javax.naming.InitialContext
 import pekko.persistence.jdbc.config.SlickConfiguration
+
 import com.typesafe.config.Config
-import slick.basic.DatabaseConfig
-import slick.jdbc.JdbcProfile
-import slick.jdbc.JdbcBackend._
 
 /**
  * INTERNAL API

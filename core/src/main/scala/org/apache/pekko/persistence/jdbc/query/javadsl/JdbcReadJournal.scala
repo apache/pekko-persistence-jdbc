@@ -17,15 +17,15 @@ package org.apache.pekko.persistence.jdbc.query.javadsl
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 
+import scala.jdk.FutureConverters._
+import scala.jdk.OptionConverters._
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.persistence.jdbc.query.scaladsl.{ JdbcReadJournal => ScalaJdbcReadJournal }
-import pekko.persistence.query.{ EventEnvelope, Offset }
 import pekko.persistence.query.javadsl._
+import pekko.persistence.query.{ EventEnvelope, Offset }
 import pekko.stream.javadsl.Source
-
-import scala.jdk.FutureConverters._
-import scala.jdk.OptionConverters._
 
 object JdbcReadJournal {
   final val Identifier = ScalaJdbcReadJournal.Identifier

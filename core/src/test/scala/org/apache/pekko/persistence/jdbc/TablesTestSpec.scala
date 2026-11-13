@@ -14,10 +14,12 @@
 
 package org.apache.pekko.persistence.jdbc
 
-import com.typesafe.config.ConfigFactory
 import org.apache.pekko.persistence.jdbc.config.{ JournalConfig, ReadJournalConfig, SnapshotConfig }
+
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+
+import com.typesafe.config.ConfigFactory
 
 abstract class TablesTestSpec extends AnyFlatSpec with Matchers {
   def toColumnName[A](tableName: String)(columnName: String): String = s"$tableName.$columnName"

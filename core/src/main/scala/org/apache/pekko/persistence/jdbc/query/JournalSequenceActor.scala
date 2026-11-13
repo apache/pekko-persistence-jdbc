@@ -15,6 +15,8 @@
 package org.apache.pekko.persistence.jdbc
 package query
 
+import scala.concurrent.duration.FiniteDuration
+
 import org.apache.pekko
 import pekko.actor.{ Actor, ActorLogging, Props, Status, Timers }
 import pekko.pattern.pipe
@@ -22,8 +24,6 @@ import pekko.persistence.jdbc.config.JournalSequenceRetrievalConfig
 import pekko.persistence.jdbc.query.dao.ReadJournalDao
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.Sink
-
-import scala.concurrent.duration.FiniteDuration
 
 object JournalSequenceActor {
   def props(readJournalDao: ReadJournalDao, config: JournalSequenceRetrievalConfig)(

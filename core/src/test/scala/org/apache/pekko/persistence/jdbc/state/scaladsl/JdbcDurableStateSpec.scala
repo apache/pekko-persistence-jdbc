@@ -14,17 +14,19 @@
 
 package org.apache.pekko.persistence.jdbc.state.scaladsl
 
-import com.typesafe.config.{ Config, ConfigFactory }
+import scala.concurrent.Future
+
 import org.apache.pekko
 import pekko.actor._
-import pekko.persistence.jdbc.state.{ MyPayload, OffsetSyntax }
-import OffsetSyntax._
+import pekko.persistence.jdbc.state.MyPayload
+import org.apache.pekko.persistence.jdbc.state.OffsetSyntax._
 import pekko.persistence.jdbc.testkit.internal.{ H2, MariaDB, MySQL, Oracle, Postgres, SchemaType, SqlServer }
 import pekko.persistence.query.{ NoOffset, Offset, Sequence, UpdatedDurableState }
 import pekko.stream.scaladsl.Sink
+
 import org.scalatest.time.{ Millis, Seconds, Span }
 
-import scala.concurrent.Future
+import com.typesafe.config.{ Config, ConfigFactory }
 
 abstract class JdbcDurableStateSpec(config: Config, schemaType: SchemaType) extends StateSpecBase(config, schemaType) {
 

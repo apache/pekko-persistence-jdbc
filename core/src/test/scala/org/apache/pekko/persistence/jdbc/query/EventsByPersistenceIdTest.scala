@@ -14,15 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
-import org.apache.pekko
-import pekko.Done
-import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent }
-import pekko.persistence.query.{ EventEnvelope, Sequence }
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
+import org.apache.pekko
+import pekko.Done
 import pekko.pattern.ask
+import pekko.persistence.jdbc.query.EventAdapterTest.{ Event, TaggedAsyncEvent }
 import pekko.persistence.query.Offset
+import pekko.persistence.query.{ EventEnvelope, Sequence }
 
 abstract class EventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps

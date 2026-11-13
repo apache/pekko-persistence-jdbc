@@ -14,9 +14,10 @@
 
 package org.apache.pekko.persistence.jdbc.journal.dao
 
-import org.apache.pekko.persistence.AtomicWrite
 import scala.concurrent.Future
 import scala.util.Try
+
+import org.apache.pekko.persistence.AtomicWrite
 
 trait JournalDao extends JournalDaoWithReadMessages {
 

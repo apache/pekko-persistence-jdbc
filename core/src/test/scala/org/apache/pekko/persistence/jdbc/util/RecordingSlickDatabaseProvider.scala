@@ -22,12 +22,14 @@ import java.util.concurrent.CopyOnWriteArrayList
 import scala.annotation.unused
 import scala.jdk.CollectionConverters._
 
+import slick.jdbc.JdbcBackend.Database
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.persistence.jdbc.config.SlickConfiguration
 import pekko.persistence.jdbc.db.{ SlickDatabase, SlickDatabaseProvider }
+
 import com.typesafe.config.Config
-import slick.jdbc.JdbcBackend.Database
 
 /**
  * A [[SlickDatabaseProvider]] that behaves like the default provider, but keeps track of every database it hands out

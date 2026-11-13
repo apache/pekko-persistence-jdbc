@@ -14,14 +14,15 @@
 
 package org.apache.pekko.persistence.jdbc.db
 
+import scala.jdk.CollectionConverters._
+import scala.util.{ Failure, Success }
+
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import pekko.persistence.jdbc.config.{ ConfigKeys, SlickConfiguration }
 import pekko.persistence.jdbc.util.ConfigOps._
-import com.typesafe.config.{ Config, ConfigObject }
 
-import scala.jdk.CollectionConverters._
-import scala.util.{ Failure, Success }
+import com.typesafe.config.{ Config, ConfigObject }
 
 object SlickExtension extends ExtensionId[SlickExtensionImpl] with ExtensionIdProvider {
   override def lookup: SlickExtension.type = SlickExtension

@@ -11,9 +11,11 @@ package org.apache.pekko.persistence.jdbc.state
 
 import scala.annotation.nowarn
 import scala.concurrent.{ ExecutionContext, Future }
+
 import org.apache.pekko
-import pekko.actor.ActorSystem
 import pekko.Done
+import pekko.actor.ActorSystem
+
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 

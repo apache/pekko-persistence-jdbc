@@ -14,6 +14,8 @@
 
 package org.apache.pekko.persistence.jdbc.query
 
+import scala.concurrent.Future
+
 import org.apache.pekko
 import pekko.Done
 import pekko.persistence.Persistence
@@ -21,8 +23,6 @@ import pekko.persistence.jdbc.journal.JdbcAsyncWriteJournal
 import pekko.persistence.query.Offset
 import pekko.persistence.query.{ EventEnvelope, Sequence }
 import pekko.testkit.TestProbe
-
-import scala.concurrent.Future
 
 abstract class CurrentEventsByPersistenceIdTest(config: String) extends QueryTestSpec(config) {
   import QueryTestSpec.EventEnvelopeProbeOps

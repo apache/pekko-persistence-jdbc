@@ -16,18 +16,18 @@ package org.apache.pekko.persistence.jdbc.state.javadsl
 
 import java.util.concurrent.CompletionStage
 
+import scala.concurrent.ExecutionContext
+import scala.jdk.FutureConverters._
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.{ Done, NotUsed }
 import pekko.persistence.jdbc.state.scaladsl.{ JdbcDurableStateStore => ScalaJdbcDurableStateStore }
-import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.query.javadsl.DurableStateStoreQuery
+import pekko.persistence.query.{ DurableStateChange, Offset }
 import pekko.persistence.state.javadsl.{ DurableStateUpdateStore, GetObjectResult }
 import pekko.stream.javadsl.Source
 import pekko.util.OptionalUtil
-
-import scala.concurrent.ExecutionContext
-import scala.jdk.FutureConverters._
+import pekko.{ Done, NotUsed }
 
 object JdbcDurableStateStore {
   final val Identifier = ScalaJdbcDurableStateStore.Identifier

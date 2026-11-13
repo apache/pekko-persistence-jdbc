@@ -40,9 +40,9 @@ trait SnapshotDao {
    * Load the snapshot with the highest sequence number matching all inclusive criteria bounds.
    * The default delegates to the existing upper-bound methods for custom DAO compatibility,
    * then filters the returned snapshot against all bounds. Custom DAOs should override this
-   * method to query all four bounds directly, as the built-in DAOs do; otherwise a snapshot
+   * method to query all four bounds directly, as the built-in DAO does; otherwise a snapshot
    * matching the criteria may be missed when timestamps are not ordered by sequence number.
-   * Subclasses of a built-in DAO that override upper-bound loading methods are bypassed by
+   * Subclasses of the built-in DAO that override upper-bound loading methods are bypassed by
    * the built-in implementation and must also override this method to apply their behavior.
    */
   def snapshotForCriteria(
@@ -65,8 +65,8 @@ trait SnapshotDao {
    * Delete only snapshots matching all inclusive criteria bounds for this persistence ID.
    * The default delegates to the existing upper-bound methods for custom DAO compatibility,
    * ignoring minimum bounds. Custom DAOs must override this method to apply all four bounds,
-   * as the built-in DAOs do; otherwise snapshots below a minimum bound may also be deleted.
-   * Subclasses of a built-in DAO that override upper-bound deletion methods are bypassed by
+   * as the built-in DAO does; otherwise snapshots below a minimum bound may also be deleted.
+   * Subclasses of the built-in DAO that override upper-bound deletion methods are bypassed by
    * the built-in implementation and must also override this method to apply their behavior.
    */
   def deleteByCriteria(persistenceId: String, criteria: SnapshotSelectionCriteria): Future[Unit] = {

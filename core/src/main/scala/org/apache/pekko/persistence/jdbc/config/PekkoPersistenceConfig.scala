@@ -29,18 +29,6 @@ class SlickConfiguration(config: Config) {
   override def toString: String = s"SlickConfiguration($jndiName,$jndiDbName)"
 }
 
-class LegacyJournalTableColumnNames(config: Config) {
-  private val cfg = config.getConfig("tables.legacy_journal.columnNames")
-  val ordering: String = cfg.getString("ordering")
-  val deleted: String = cfg.getString("deleted")
-  val persistenceId: String = cfg.getString("persistenceId")
-  val sequenceNumber: String = cfg.getString("sequenceNumber")
-  val created: String = cfg.getString("created")
-  val tags: String = cfg.getString("tags")
-  val message: String = cfg.getString("message")
-  override def toString: String = s"JournalTableColumnNames($persistenceId,$sequenceNumber,$created,$tags,$message)"
-}
-
 class EventJournalTableColumnNames(config: Config) {
   private val cfg = config.getConfig("tables.event_journal.columnNames")
   val ordering: String = cfg.getString("ordering")
@@ -69,14 +57,6 @@ class EventTagTableColumnNames(config: Config) {
   val tag: String = cfg.getString("tag")
 }
 
-class LegacyJournalTableConfiguration(config: Config) {
-  private val cfg = config.getConfig("tables.legacy_journal")
-  val tableName: String = cfg.getString("tableName")
-  val schemaName: Option[String] = cfg.asStringOption("schemaName")
-  val columnNames: LegacyJournalTableColumnNames = new LegacyJournalTableColumnNames(config)
-  override def toString: String = s"LegacyJournalTableConfiguration($tableName,$schemaName,$columnNames)"
-}
-
 class EventJournalTableConfiguration(config: Config) {
   private val cfg = config.getConfig("tables.event_journal")
   val tableName: String = cfg.getString("tableName")
@@ -91,15 +71,6 @@ class EventTagTableConfiguration(config: Config) {
   val legacyTagKey: Boolean = cfg.getBoolean("legacy-tag-key")
   val columnNames: EventTagTableColumnNames = new EventTagTableColumnNames(config)
 }
-class LegacySnapshotTableColumnNames(config: Config) {
-  private val cfg = config.getConfig("tables.legacy_snapshot.columnNames")
-  val persistenceId: String = cfg.getString("persistenceId")
-  val sequenceNumber: String = cfg.getString("sequenceNumber")
-  val created: String = cfg.getString("created")
-  val snapshot: String = cfg.getString("snapshot")
-  override def toString: String = s"SnapshotTableColumnNames($persistenceId,$sequenceNumber,$created,$snapshot)"
-}
-
 class SnapshotTableColumnNames(config: Config) {
   private val cfg = config.getConfig("tables.snapshot.columnNames")
   val persistenceId: String = cfg.getString("persistenceId")
@@ -115,14 +86,6 @@ class SnapshotTableColumnNames(config: Config) {
   val metaSerManifest: String = cfg.getString("metaSerManifest")
 }
 
-class LegacySnapshotTableConfiguration(config: Config) {
-  private val cfg = config.getConfig("tables.legacy_snapshot")
-  val tableName: String = cfg.getString("tableName")
-  val schemaName: Option[String] = cfg.asStringOption("schemaName")
-  val columnNames: LegacySnapshotTableColumnNames = new LegacySnapshotTableColumnNames(config)
-  override def toString: String = s"LegacySnapshotTableConfiguration($tableName,$schemaName,$columnNames)"
-}
-
 class SnapshotTableConfiguration(config: Config) {
   private val cfg = config.getConfig("tables.snapshot")
   val tableName: String = cfg.getString("tableName")
@@ -132,9 +95,8 @@ class SnapshotTableConfiguration(config: Config) {
 }
 
 class JournalPluginConfig(config: Config) {
-  val tagSeparator: String = config.getString("tagSeparator")
   val dao: String = config.getString("dao")
-  override def toString: String = s"JournalPluginConfig($tagSeparator,$dao)"
+  override def toString: String = s"JournalPluginConfig($dao)"
 }
 
 class BaseDaoConfig(config: Config) {
@@ -146,9 +108,8 @@ class BaseDaoConfig(config: Config) {
 }
 
 class ReadJournalPluginConfig(config: Config) {
-  val tagSeparator: String = config.getString("tagSeparator")
   val dao: String = config.getString("dao")
-  override def toString: String = s"ReadJournalPluginConfig($tagSeparator,$dao)"
+  override def toString: String = s"ReadJournalPluginConfig($dao)"
 }
 
 class SnapshotPluginConfig(config: Config) {
@@ -159,17 +120,15 @@ class SnapshotPluginConfig(config: Config) {
 // aggregations
 
 class JournalConfig(config: Config) {
-  val journalTableConfiguration = new LegacyJournalTableConfiguration(config)
   val eventJournalTableConfiguration = new EventJournalTableConfiguration(config)
   val eventTagTableConfiguration = new EventTagTableConfiguration(config)
   val pluginConfig = new JournalPluginConfig(config)
   val daoConfig = new BaseDaoConfig(config)
   val useSharedDb: Option[String] = config.asStringOption(ConfigKeys.useSharedDb)
-  override def toString: String = s"JournalConfig($journalTableConfiguration,$pluginConfig,$useSharedDb)"
+  override def toString: String = s"JournalConfig($eventJournalTableConfiguration,$pluginConfig,$useSharedDb)"
 }
 
 class SnapshotConfig(config: Config) {
-  val legacySnapshotTableConfiguration = new LegacySnapshotTableConfiguration(config)
   val snapshotTableConfiguration = new SnapshotTableConfiguration(config)
   val pluginConfig = new SnapshotPluginConfig(config)
   val useSharedDb: Option[String] = config.asStringOption(ConfigKeys.useSharedDb)
@@ -193,7 +152,6 @@ case class JournalSequenceRetrievalConfig(
     askTimeout: FiniteDuration)
 
 class ReadJournalConfig(config: Config) {
-  val journalTableConfiguration = new LegacyJournalTableConfiguration(config)
   val eventJournalTableConfiguration = new EventJournalTableConfiguration(config)
   val eventTagTableConfiguration = new EventTagTableConfiguration(config)
   val journalSequenceRetrievalConfiguration = JournalSequenceRetrievalConfig(config)
@@ -205,7 +163,7 @@ class ReadJournalConfig(config: Config) {
   val addShutdownHook: Boolean = config.getBoolean("add-shutdown-hook")
 
   override def toString: String =
-    s"ReadJournalConfig($journalTableConfiguration,$pluginConfig,$refreshInterval,$maxBufferSize,$addShutdownHook)"
+    s"ReadJournalConfig($eventJournalTableConfiguration,$pluginConfig,$refreshInterval,$maxBufferSize,$addShutdownHook)"
 }
 
 class DurableStateTableColumnNames(config: Config) {

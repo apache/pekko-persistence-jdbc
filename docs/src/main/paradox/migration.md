@@ -10,6 +10,29 @@ It is recommended that you read the section about DB Schema Changes in the @ref[
 
 ## Migrating to version 2.0.0
 
+### Legacy schema support removed
+
+Release `2.0.0` removes support for the legacy `journal` and `snapshot` tables that were used by
+akka-persistence-jdbc before version 5.0.0. The `ByteArrayJournalDao`, `ByteArrayReadJournalDao` and
+`ByteArraySnapshotDao` classes, the `legacy_journal` and `legacy_snapshot` table configuration sections,
+the `tagSeparator` settings and the `*-legacy.sql` schema scripts are gone. The migrator module has also been
+removed; it is available in 1.4.0 and later 1.x releases.
+
+If you still store data in the legacy tables, migrate it to the current schema with the
+`pekko-persistence-jdbc-migrator` module from version 1.4.0 or a later 1.x release before upgrading to `2.0.0`.
+You can depend on the published artifact, or build the module from source. Apache source releases are available
+from the [Pekko download page](https://pekko.apache.org/download.html#pekko-persistence-jdbc), along with their
+signatures and checksums; releases that are no longer listed there are kept in the
+[Apache archive](https://archive.apache.org/dist/pekko/). The source is also in git, for example on the
+[1.4.x branch](https://github.com/apache/pekko-persistence-jdbc/tree/1.4.x).
+
+The migrator is a library with no main class: you call `JournalMigrator` and `SnapshotMigrator` from a small
+program of your own. The
+[1.4.x migration guide](https://pekko.apache.org/docs/pekko-persistence-jdbc/1.4/migration.html#migrating-from-the-legacy-schema)
+describes the steps and includes an example.
+
+### `event_tag` schema change
+
 Release `2.0.0` changes the schema of the `event_tag` table.
 
 The previous version was using an auto-increment column as a primary key and foreign key on the `event_tag` table. As a result, the insert of multiple events in batch was not performant.

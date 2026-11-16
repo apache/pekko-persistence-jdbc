@@ -14,7 +14,7 @@ import pekko.actor.{ ActorRef, ActorSystem, Props, Stash }
 import pekko.event.LoggingReceive
 import pekko.pattern.ask
 import pekko.persistence.jdbc.SimpleSpec
-import pekko.persistence.jdbc.config.{ JournalConfig, SlickConfiguration }
+import pekko.persistence.jdbc.config.{ JournalConfig, SlickConfiguration, SnapshotConfig }
 import pekko.persistence.jdbc.db.SlickDatabase
 import pekko.persistence.jdbc.migrator.MigratorSpec._
 import pekko.persistence.jdbc.query.scaladsl.JdbcReadJournal
@@ -53,9 +53,17 @@ abstract class MigratorSpec(val config: Config) extends SimpleSpec with BeforeAn
   protected val newJournalTableName: String = journalConfig.eventJournalTableConfiguration.tableName
   protected val legacyJournalTableName: String = journalConfig.journalTableConfiguration.tableName
 
+  private val snapshotConfig: SnapshotConfig = new SnapshotConfig(config.getConfig("jdbc-snapshot-store"))
+
+  // the cleaners that empty tables instead of recreating the schema must also clear the snapshots,
+  // or a snapshot from one test is recovered by the actor with the same persistence id in the next
   protected val newTables: Seq[String] =
-    List(journalConfig.eventTagTableConfiguration.tableName, journalConfig.eventJournalTableConfiguration.tableName)
-  protected val legacyTables: Seq[String] = List(journalConfig.journalTableConfiguration.tableName)
+    List(
+      journalConfig.eventTagTableConfiguration.tableName,
+      journalConfig.eventJournalTableConfiguration.tableName,
+      snapshotConfig.snapshotTableConfiguration.tableName)
+  protected val legacyTables: Seq[String] =
+    List(journalConfig.journalTableConfiguration.tableName, snapshotConfig.legacySnapshotTableConfiguration.tableName)
   protected val tables: Seq[String] = legacyTables ++ newTables
 
   def this(config: String = "postgres-application.conf", configOverrides: Map[String, ConfigValue] = Map.empty) =
@@ -120,8 +128,10 @@ abstract class MigratorSpec(val config: Config) extends SimpleSpec with BeforeAn
 
   def withActorSystem(f: ActorSystem => Unit): Unit = {
     implicit val system: ActorSystem = ActorSystem("migrator-test", config)
-    f(system)
-    system.terminate().futureValue
+    // terminate in a finally block: a failing test must not leak a running migration
+    // stream into the next test, which recreates the tables in its beforeEach
+    try f(system)
+    finally system.terminate().futureValue
   }
 
   def withLegacyActorSystem(f: ActorSystem => Unit): Unit = {
@@ -139,8 +149,8 @@ abstract class MigratorSpec(val config: Config) extends SimpleSpec with BeforeAn
     }
 
     implicit val system: ActorSystem = ActorSystem("migrator-test", legacyDAOConfig)
-    f(system)
-    system.terminate().futureValue
+    try f(system)
+    finally system.terminate().futureValue
   }
 
   def withReadJournal(f: JdbcReadJournal => Unit)(implicit system: ActorSystem): Unit = {

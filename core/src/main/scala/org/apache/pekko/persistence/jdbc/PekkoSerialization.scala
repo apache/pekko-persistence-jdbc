@@ -18,9 +18,9 @@ import scala.util.{ Success, Try }
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.persistence.PersistentRepr
 import pekko.persistence.jdbc.journal.dao.JournalTables.JournalPekkoSerializationRow
 import pekko.persistence.jdbc.state.DurableStateTables
+import pekko.persistence.{ PersistentRepr, SerializedEvent }
 import pekko.serialization.{ Serialization, Serializers }
 
 /**
@@ -31,12 +31,16 @@ object PekkoSerialization {
 
   case class PekkoSerialized(serId: Int, serManifest: String, payload: Array[Byte])
 
-  def serialize(serialization: Serialization, payload: Any): Try[PekkoSerialized] = {
-    val p2 = payload.asInstanceOf[AnyRef]
-    val serializer = serialization.findSerializerFor(p2)
-    val serManifest = Serializers.manifestFor(serializer, p2)
-    val serialized = serialization.serialize(p2)
-    serialized.map(payload => PekkoSerialized(serializer.identifier, serManifest, payload))
+  def serialize(serialization: Serialization, payload: Any): Try[PekkoSerialized] = payload match {
+    case s: SerializedEvent =>
+      // already serialized, store the wrapped event's serialization information as is
+      Success(PekkoSerialized(s.serializerId, s.serializerManifest, s.bytes))
+    case _ =>
+      val p2 = payload.asInstanceOf[AnyRef]
+      val serializer = serialization.findSerializerFor(p2)
+      val serManifest = Serializers.manifestFor(serializer, p2)
+      val serialized = serialization.serialize(p2)
+      serialized.map(payload => PekkoSerialized(serializer.identifier, serManifest, payload))
   }
 
   def fromRow(serialization: Serialization)(row: JournalPekkoSerializationRow): Try[(PersistentRepr, Long)] = {

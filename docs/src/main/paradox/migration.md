@@ -27,6 +27,21 @@ It is recommended that you read the section about DB Schema Changes in the @ref[
 
 ## Migrating to version 2.0.0
 
+Release `2.0.0` is a new major version. Upgrade to the latest 1.x release first, then work through this checklist.
+The @ref[2.0.0 Release Notes](release-notes/releases-2.0.md) list all the changes.
+
+1. **Platform**: Java 17 or later, Scala 2.13 or Scala 3, and Pekko 2.0 are required. Scala 2.12 is no longer supported.
+   Follow the [Pekko 2.0 migration guide](https://pekko.apache.org/docs/pekko/current/project/migration-guides.html)
+   for the changes in Pekko itself.
+2. **Legacy schema**: if you still have data in the pre-5.0.0 `journal` and `snapshot` tables, migrate it with the
+   1.x migrator *before* upgrading. See [Legacy schema support removed](#legacy-schema-support-removed).
+3. **Removed APIs**: code that was deprecated in 1.x has been removed, as has the `PluginVersionChecker`. The
+   constructor of the javadsl `JdbcDurableStateStore` is no longer public; obtain the store via
+   `DurableStateStoreRegistry`. Fix any deprecation warnings while still on 1.x to make this step easier.
+4. **Schema changes**: the `migration-2.0.0` scripts are optional for existing databases, but recommended. See
+   [`event_tag` schema change](#event-tag-schema-change) and [Other schema changes](#other-schema-changes).
+   Back up your database and test the scripts in a test environment before applying them in production.
+
 ### Legacy schema support removed
 
 Release `2.0.0` removes support for the legacy `journal` and `snapshot` tables that were used by
@@ -54,7 +69,7 @@ Release `2.0.0` changes the schema of the `event_tag` table.
 
 The previous version was using an auto-increment column as a primary key and foreign key on the `event_tag` table. As a result, the insert of multiple events in batch was not performant.
 
-While in `2.0.0`, the primary key and foreign key on the `event_tag` table have been replaced with a primary key from the `event_journal` table. In order to migrate to the new schema, we made a [**migration script**](https://github.com/apache/pekko-persistence-jdbc/tree/master/core/src/main/resources/schema) which is capable of creating the new column, migrating the rows and adding the new constraints.
+While in `2.0.0`, the primary key and foreign key on the `event_tag` table have been replaced with a primary key from the `event_journal` table. In order to migrate to the new schema, we made a **migration script** (see the `migration-2.0.0` directory for your database type in our [git repo](https://github.com/apache/pekko-persistence-jdbc/tree/main/core/src/main/resources/schema) or the source release) which is capable of creating the new column, migrating the rows and adding the new constraints.
 
 By default, the plugin will behave as in previous version. If you want to use the new `event_tag` keys, you need to run a multiple-phase rollout:
 
@@ -76,3 +91,13 @@ jdbc-journal {
 // or simply configure via flattened style
 jdbc-journal.tables.event_tag.legacy-tag-key = false
 ```
+
+### Other schema changes
+
+The `migration-2.0.0` directories also contain these scripts. They are not applied automatically.
+
+* `*-event-tag-index-migration.sql` (Oracle, PostgreSQL and SQL Server): adds an index on the `tag` column of the
+  `event_tag` table. The primary key of `event_tag` does not start with `tag`, so it cannot be used efficiently by
+  tag queries such as `eventsByTag`. New databases created from the 2.0.0 schema scripts already have this index.
+* `oracle-durable-state-tag-nullable-migration.sql` (Oracle): makes the `TAG` column of the `DURABLE_STATE` table
+  nullable, so that Oracle behaves like the other databases when durable state is stored without a tag.

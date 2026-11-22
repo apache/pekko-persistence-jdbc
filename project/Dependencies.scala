@@ -14,7 +14,9 @@ object Dependencies {
   val Scala213 = "2.13.18"
   val Scala3 = "3.3.9"
   val Scala3Next = "3.9.0"
-  val ScalaVersions = Seq(Scala213, Scala3, Scala3Next)
+  // Scala3Next is only used for CI testing (`sbt ++3.9.0!` in h2-test.yml). It must not be in
+  // ScalaVersions: `+publish` would publish it over the Scala 3.3 `_3` artifacts.
+  val ScalaVersions = Seq(Scala213, Scala3)
 
   val PekkoVersion = PekkoCoreDependency.version
 
